@@ -95,18 +95,24 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Contains the profile supported by the OpenCL platform.
         /// </summary>
-        private string profile;
+        private Nullable<Profile> profile;
 
         /// <summary>
         /// Gets the profile supported by the OpenCL platform.
         /// </summary>
-        public string Profile
+        public Profile Profile
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.profile))
-                    this.profile = this.GetPlatformInformation(PlatformInfo.Profile);
-                return this.profile;
+                if (!this.profile.HasValue)
+                {
+                    string profileName = this.GetPlatformInformation(PlatformInfo.Profile);
+                    if (profileName == "FULL_PROFILE")
+                        this.profile = Profile.Full;
+                    else
+                        this.profile = Profile.Embedded;
+                }
+                return this.profile.Value;
             }
         }
 
