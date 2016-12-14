@@ -64,8 +64,8 @@ namespace OpenCl.DotNetCore
         /// Retrieves the specified information about the OpenCL platform.
         /// </summary>
         /// <param name="platformInfo">The kind of information that is to be retrieved.</param>
-        /// <exception cref="InvalidOperationException">
-        /// If the information could not be retrieved, then an <see cref="InvalidOperationException"/> exception is thrown.
+        /// <exception cref="OpenClException">
+        /// If the information could not be retrieved, then an <see cref="OpenClException"/> exception is thrown.
         /// </exception>
         /// <returns>Returns the specified information.</returns>
         private string GetPlatformInformation(PlatformInfo platformInfo)
@@ -74,13 +74,13 @@ namespace OpenCl.DotNetCore
             IntPtr returnValueSize;
             Result result = NativeMethods.GetPlatformInfo(this.handle, PlatformInfo.Name, IntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
-                throw new InvalidOperationException("The platform information could not be retrieved.");
+                throw new OpenClException("The platform information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToInt32() + 1];
             result = NativeMethods.GetPlatformInfo(this.handle, PlatformInfo.Name, new IntPtr(output.Length), output, out returnValueSize);
             if (result != Result.Success)
-                throw new InvalidOperationException("The platform information could not be retrieved.");
+                throw new OpenClException("The platform information could not be retrieved.", result);
 
             // The return value is an ASCII encoded byte array, so it is decoded to a string and returned
             return Encoding.ASCII.GetString(output);
@@ -103,13 +103,13 @@ namespace OpenCl.DotNetCore
             uint numberOfAvailablePlatforms;
             Result result = NativeMethods.GetPlatformIds(0, null, out numberOfAvailablePlatforms);
             if (result != Result.Success)
-                throw new InvalidOperationException("The number of platforms could not be queried.");
+                throw new OpenClException("The number of platforms could not be queried.", result);
             
             // Gets pointers to all the platforms
             IntPtr[] platformPointers = new IntPtr[numberOfAvailablePlatforms];
             result = NativeMethods.GetPlatformIds(numberOfAvailablePlatforms, platformPointers, out numberOfAvailablePlatforms);
             if (result != Result.Success)
-                throw new InvalidOperationException("The number of platforms could not be retrieved.");
+                throw new OpenClException("The number of platforms could not be retrieved.", result);
 
             // Converts the pointers to platform structures
             List<Platform> platforms = new List<Platform>();
