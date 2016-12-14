@@ -35,11 +35,6 @@ namespace OpenCl.DotNetCore
         /// Returns a space-separated list of extension names (the extension names themselves do not contain any spaces) supported
         /// by the platform. Extensions defined here must be supported by all devices associated with this platform.
         /// </summary>
-        Extensions = 0x0904,
-
-        /// <summary>
-        /// The host timer resolution.
-        /// </summary>
-        HostTimerResolution = 0x0905
+        Extensions = 0x0904
     }
 }

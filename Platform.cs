@@ -56,6 +56,78 @@ namespace OpenCl.DotNetCore
             }
         }
 
+        /// <summary>
+        /// Contains the name of the vendor of the OpenCL platform.
+        /// </summary>
+        private string vendor;
+
+        /// <summary>
+        /// Gets the name of the vendor of the OpenCL platform.
+        /// </summary>
+        public string Vendor
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.vendor))
+                    this.vendor = this.GetPlatformInformation(PlatformInfo.Vendor);
+                return this.vendor;
+            }
+        }
+
+        /// <summary>
+        /// Contains the version of the OpenCL platform.
+        /// </summary>
+        private string version;
+
+        /// <summary>
+        /// Gets the version of the OpenCL platform.
+        /// </summary>
+        public string Version
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.version))
+                    this.version = this.GetPlatformInformation(PlatformInfo.Version);
+                return this.version;
+            }
+        }
+
+        /// <summary>
+        /// Contains the profile supported by the OpenCL platform.
+        /// </summary>
+        private string profile;
+
+        /// <summary>
+        /// Gets the profile supported by the OpenCL platform.
+        /// </summary>
+        public string Profile
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.profile))
+                    this.profile = this.GetPlatformInformation(PlatformInfo.Profile);
+                return this.profile;
+            }
+        }
+
+        /// <summary>
+        /// Contains the extensions supported by the OpenCL platform.
+        /// </summary>
+        private string extensions;
+
+        /// <summary>
+        /// Gets the extensions support by the OpenCL platform.
+        /// </summary>
+        public string Extensions
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.extensions))
+                    this.extensions = this.GetPlatformInformation(PlatformInfo.Extensions);
+                return this.extensions;
+            }
+        }
+
         #endregion
 
         #region Private Methods
@@ -72,13 +144,13 @@ namespace OpenCl.DotNetCore
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             IntPtr returnValueSize;
-            Result result = NativeMethods.GetPlatformInfo(this.handle, PlatformInfo.Name, IntPtr.Zero, null, out returnValueSize);
+            Result result = NativeMethods.GetPlatformInfo(this.handle, platformInfo, IntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The platform information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToInt32() + 1];
-            result = NativeMethods.GetPlatformInfo(this.handle, PlatformInfo.Name, new IntPtr(output.Length), output, out returnValueSize);
+            result = NativeMethods.GetPlatformInfo(this.handle, platformInfo, new IntPtr(output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The platform information could not be retrieved.", result);
 

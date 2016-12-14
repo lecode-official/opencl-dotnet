@@ -69,8 +69,6 @@ namespace OpenCl.DotNetCore
         /// <c>PlatformInfo.Extensions</c>: Returns a space-separated list of extension names (the extension names themselves do
         /// not contain any spaces) supported by the platform. Extensions defined here must be supported by all devices associated
         /// with this platform.
-        /// 
-        /// <c>PlatformInfo.HostTimerResolution</c>: The host timer resolution.
         /// </param>
         /// <param name="param_value_size">
         /// Specifies the size in bytes of memory pointed to by <see cref="param_value"/>. This size in bytes must be greater than
@@ -97,6 +95,12 @@ namespace OpenCl.DotNetCore
             [In] IntPtr param_value_size,
             [Out] byte[] param_value,
             [Out] out IntPtr param_value_size_ret);
+
+        #endregion
+
+        #region Device API Methods
+
+        
 
         #endregion
     }
