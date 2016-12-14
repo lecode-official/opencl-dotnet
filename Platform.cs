@@ -64,7 +64,9 @@ namespace OpenCl.DotNetCore
         /// Retrieves the specified information about the OpenCL platform.
         /// </summary>
         /// <param name="platformInfo">The kind of information that is to be retrieved.</param>
-        /// <exception cref="InvalidOperationException">If the information could not be retrieved, then an <see cref="InvalidOperationException"/> exception is thrown.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// If the information could not be retrieved, then an <see cref="InvalidOperationException"/> exception is thrown.
+        /// </exception>
         /// <returns>Returns the specified information.</returns>
         private string GetPlatformInformation(PlatformInfo platformInfo)
         {
@@ -91,7 +93,9 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Gets all the available platforms.
         /// </summary>
-        /// <exception cref="InvalidOperationException">If the platforms could not be queried, then an <see cref="InvalidOperationException"/> exception is thrown.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// If the platforms could not be queried, then an <see cref="InvalidOperationException"/> exception is thrown.
+        /// </exception>
         /// <returns>Returns a list with all the availabe platforms.</returns>
         public static IEnumerable<Platform> GetPlatforms()
         {

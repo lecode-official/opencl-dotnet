@@ -1,6 +1,6 @@
 {
   "title": "OpenCL.NET Core",
-  "description": "This is a .NET Core wrapper doe OpenCL 2.1.",
+  "description": "This is a .NET Core wrapper for OpenCL 2.1.",
   "version": "0.1.0-alpha1",
   "copyright": "Copyright © 2016 David Neumann",
   "authors": [

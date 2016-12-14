@@ -7,15 +7,17 @@ namespace OpenCl.DotNetCore
     public enum PlatformInfo : uint
     {
         /// <summary>
-        /// OpenCL profile string. Returns the profile name supported by the implementation. The profile name returned can be one of the following strings: FULL_PROFILE - if the
-        /// implementation supports the OpenCL specification (functionality defined as part of the core specification and does not require any extensions to be supported).
-        /// EMBEDDED_PROFILE - if the implementation supports the OpenCL embedded profile. The embedded profile is defined to be a subset for each version of OpenCL.
+        /// OpenCL profile string. Returns the profile name supported by the implementation. The profile name returned can be one
+        /// of the following strings: FULL_PROFILE - if the implementation supports the OpenCL specification (functionality defined
+        /// as part of the core specification and does not require any extensions to be supported). EMBEDDED_PROFILE - if the
+        /// implementation supports the OpenCL embedded profile. The embedded profile is defined to be a subset for each version of
+        /// OpenCL.
         /// </summary>
         Profile = 0x0900,
 
         /// <summary>
-        /// OpenCL version string. Returns the OpenCL version supported by the implementation. This version string has the following format:
-        /// "OpenCL[space][major_version.minor_version][space][platform-specific information].
+        /// OpenCL version string. Returns the OpenCL version supported by the implementation. This version string has the following
+        /// format: "OpenCL[space][major_version.minor_version][space][platform-specific information].
         /// </summary>
         Version = 0x0901,
 
@@ -30,8 +32,8 @@ namespace OpenCl.DotNetCore
         Vendor = 0x0903,
 
         /// <summary>
-        /// Returns a space-separated list of extension names (the extension names themselves do not contain any spaces) supported by the platform. Extensions defined here must
-        /// be supported by all devices associated with this platform.
+        /// Returns a space-separated list of extension names (the extension names themselves do not contain any spaces) supported
+        /// by the platform. Extensions defined here must be supported by all devices associated with this platform.
         /// </summary>
         Extensions = 0x0904,
 
