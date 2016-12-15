@@ -14,7 +14,7 @@ namespace OpenCl.DotNetCore
         Success = 0,
 
         /// <summary>
-        /// The device was not found.
+        /// No device that matched the specified device type could be found.
         /// </summary>
         DeviceNotFound = -1,
 
@@ -34,12 +34,12 @@ namespace OpenCl.DotNetCore
         MemObjectAllocationFailure = -4,
 
         /// <summary>
-        /// 
+        /// There was a failure to allocate resources required by the OpenCL implementation on the on the device.
         /// </summary>
         OutOfResources = -5,
 
         /// <summary>
-        /// There is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// There was a failure to allocate resources required by the OpenCL implementation on the host.
         /// </summary>
         OutOfHostMemory = -6,
 
@@ -79,12 +79,12 @@ namespace OpenCl.DotNetCore
         InvalidValue = -30,
 
         /// <summary>
-        /// 
+        /// The specified device type is not a valid device type.
         /// </summary>
         InvalidDeviceType = -31,
 
         /// <summary>
-        /// 
+        /// The specified platform is not a valid platform.
         /// </summary>
         InvalidPlatform = -32,
 
