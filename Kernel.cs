@@ -52,7 +52,7 @@ namespace OpenCl.DotNetCore
             // Checks if the kernel has already been disposed of
             if (!this.isDisposed)
             {
-                // Releases the OpenCL prokernelgram
+                // Releases the OpenCL kernel
                 NativeMethods.ReleaseKernel(this.Handle);
                 this.Handle = IntPtr.Zero;
 

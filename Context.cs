@@ -103,7 +103,8 @@ namespace OpenCl.DotNetCore
         {
             // Creates the new context for the specified devices
             Result result;
-            IntPtr contextPointer = NativeMethods.CreateContext(null,
+            IntPtr contextPointer = NativeMethods.CreateContext(
+                null,
                 (uint)devices.Count(),
                 devices.Select(device => device.Handle).ToArray(),
                 IntPtr.Zero,

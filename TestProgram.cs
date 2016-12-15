@@ -38,14 +38,20 @@ namespace OpenCl.DotNetCore
                         result[i] = dot(matrix[i], vector[0]);
                     }";
 
-                // Creates a program and then the kernel from it, which is to be executed
+                // Creates a program and then the kernel from it, which is then executed on a command queue
                 using (Program program = context.CreateAndBuildProgramFromString(code))
                 {
                     using (Kernel kernel = program.CreateKernel("matvec_mult"))
                     {
+                        using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, device))
+                        {
 
+                        }
                     }
                 }
+
+                // Prints out a success message
+                Console.WriteLine("Finished successfully");
             }
         }
 

@@ -1,9 +1,16 @@
 
+#region Using Directives
+
+using System;
+
+#endregion
+
 namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents the different device types that can be supported by an OpenCL platform.
     /// </summary>
+    [Flags]
     public enum DeviceType : uint
     {
         /// <summary>

@@ -99,7 +99,7 @@ namespace OpenCl.DotNetCore
         InvalidContext = -34,
 
         /// <summary>
-        /// 
+        /// The specified queue properties are not valid.
         /// </summary>
         InvalidQueueProperties = -35,
 
