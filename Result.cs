@@ -6,66 +6,302 @@ namespace OpenCl.DotNetCore
     /// </summary>
     public enum Result : int
     {
+        #region OpenCL Error Codes
+
+        /// <summary>
+        /// The function is executed successfully.
+        /// </summary>
         Success = 0,
+
+        /// <summary>
+        /// The device was not found.
+        /// </summary>
         DeviceNotFound = -1,
+
+        /// <summary>
+        /// The device is currently not available.
+        /// </summary>
         DeviceNotAvailable = -2,
+
+        /// <summary>
+        /// The compiler is not available for the current platform.
+        /// </summary>
         CompilerNotAvailable = -3,
+
+        /// <summary>
+        /// 
+        /// </summary>
         MemObjectAllocationFailure = -4,
+
+        /// <summary>
+        /// 
+        /// </summary>
         OutOfResources = -5,
+
+        /// <summary>
+        /// There is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </summary>
         OutOfHostMemory = -6,
+
+        /// <summary>
+        /// 
+        /// </summary>
         ProfilingInfoNotAvailable = -7,
+
+        /// <summary>
+        /// 
+        /// </summary>
         MemCopyOverlap = -8,
+
+        /// <summary>
+        /// 
+        /// </summary>
         ImageFormatMismatch = -9,
-        ImageFormatNotSUPPORTED = -10,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        ImageFormatNotSupported = -10,
+
+        /// <summary>
+        /// If there is a failure to build the program executable.
+        /// </summary>
         BuildProgramFailure = -11,
+
+        /// <summary>
+        /// 
+        /// </summary>
         MapFailure = -12,
+
+        /// <summary>
+        /// One or more of the provided arguments has an invalid value.
+        /// </summary>
         InvalidValue = -30,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidDeviceType = -31,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidPlatform = -32,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidDevice = -33,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidContext = -34,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidQueueProperties = -35,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidCommandQueue = -36,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidHostPtr = -37,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidMemObject = -38,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidImageFormatDescriptor = -39,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidImageSize = -40,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidSampler = -41,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidBinary = -42,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidBuildOptions = -43,
+
+        /// <summary>
+        /// The program is not a valid program object.
+        /// </summary>
         InvalidProgram = -44,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidProgramExecutable = -45,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidKernelName = -46,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidKernelDefinition = -47,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidKernel = -48,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidArgIndex = -49,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidArgValue = -50,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidArgSize = -51,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidKernelArgs = -52,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidWorkDimension = -53,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidWorkGroupSize = -54,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidWorkItemSize = -55,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidGlobalOffset = -56,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidEventWaitList = -57,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidEvent = -58,
+
+        /// <summary>
+        /// The operation performed is invalid.
+        /// </summary>
         InvalidOperation = -59,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidGLObject = -60,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidBufferSize = -61,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidMipLevel = -62,
+
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidGlobalWorkSize = -63,
 
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidProperty = -64,
 
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidImageDescriptor = -65,
 
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidCompilerOptions = -66,
         
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidLinkerOptions = -67,
         
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidDevicePartitionCount = -68,
         
+        /// <summary>
+        /// 
+        /// </summary>
         InvalidPipeSize = -69,
 
-        InvalidDeviceQueue = -70
+        /// <summary>
+        /// 
+        /// </summary>
+        InvalidDeviceQueue = -70,
+
+        #endregion
+
+        #region OpenCL Extension Additional Error Codes
+
+        /// <summary>
+        /// If the cl_khr_icd extension is enabled and no platforms are found.
+        /// </summary>
+        PlatformNotFoundKhr = -1001,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        DevicePartitionFailedExt = -1057,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        InvalidPartitionCoundExt = -1058,
+
+        /// <summary>
+        /// 
+        /// </summary>
+        InvalidPartitionNameExt = -1059
+
+        #endregion
     }
 }
