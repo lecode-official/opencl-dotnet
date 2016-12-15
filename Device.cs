@@ -21,17 +21,17 @@ namespace OpenCl.DotNetCore
         /// <param name="handle">The handle to the OpenCL device.</param>
         internal Device(IntPtr handle)
         {
-            this.handle = handle;
+            this.Handle = handle;
         }
 
         #endregion
 
-        #region Private Fields
+        #region Internal Properties
 
         /// <summary>
-        /// Contains the handle to the OpenCL device.
+        /// Gets the handle to the OpenCL device.
         /// </summary>
-        private IntPtr handle;
+        internal IntPtr Handle { get; private set; }
 
         #endregion
 
@@ -89,13 +89,13 @@ namespace OpenCl.DotNetCore
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             IntPtr returnValueSize;
-            Result result = NativeMethods.GetDeviceInfo(this.handle, deviceInfo, IntPtr.Zero, null, out returnValueSize);
+            Result result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, IntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToInt32() + 1];
-            result = NativeMethods.GetDeviceInfo(this.handle, deviceInfo, new IntPtr(output.Length), output, out returnValueSize);
+            result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, new IntPtr(output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
 
