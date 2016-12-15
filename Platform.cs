@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 #endregion
@@ -119,17 +120,17 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Contains the extensions supported by the OpenCL platform.
         /// </summary>
-        private string extensions;
+        private IEnumerable<string> extensions;
 
         /// <summary>
         /// Gets the extensions support by the OpenCL platform.
         /// </summary>
-        public string Extensions
+        public IEnumerable<string> Extensions
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.extensions))
-                    this.extensions = this.GetPlatformInformation(PlatformInfo.Extensions);
+                if (this.extensions == null)
+                    this.extensions = this.GetPlatformInformation(PlatformInfo.Extensions).Split(' ').ToList();
                 return this.extensions;
             }
         }

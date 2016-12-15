@@ -27,11 +27,13 @@ namespace OpenCl.DotNetCore
             // Gets the information about all available platforms
             foreach (Platform platform in platforms)
             {
-                Console.WriteLine(platform.Name);
-                Console.WriteLine(platform.Vendor);
-                Console.WriteLine(platform.Version);
-                Console.WriteLine(platform.Profile);
-                Console.WriteLine(platform.Extensions);
+                Console.WriteLine($"Name: {platform.Name}");
+                Console.WriteLine($"Vendor: {platform.Vendor}");
+                Console.WriteLine($"Version: {platform.Version}");
+                Console.WriteLine($"Profile: {platform.Profile}");
+                Console.WriteLine("Extensions:");
+                foreach (string extension in platform.Extensions)
+                    Console.WriteLine($" - {extension}");
             }
         }
 
