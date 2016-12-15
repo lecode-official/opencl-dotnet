@@ -184,7 +184,7 @@ namespace OpenCl.DotNetCore
         /// </summary>
         /// <param name="platformInfo">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">
-        /// If the information could not be retrieved, then an <see cref="OpenClException"/> exception is thrown.
+        /// If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.
         /// </exception>
         /// <returns>Returns the specified information.</returns>
         private byte[] GetPlatformInformation(PlatformInfo platformInfo)
@@ -209,6 +209,14 @@ namespace OpenCl.DotNetCore
 
         #region Public Methods
 
+        /// <summary>
+        /// Gets all devices of the platform that match the specified device type.
+        /// </summary>
+        /// <param name="deviceType">The type of devices that is to be retrieved.</param>
+        /// <exception cref="OpenClException">
+        /// If the devices could not be retrieved, then a <see cref="OpenClException"/> is thrown.
+        /// </exception>
+        /// <returns>Returns a list of all devices that matched the specified device type.</returns>
         public IEnumerable<Device> GetDevices(DeviceType deviceType)
         {
             // Gets the number of available devices of the specified type
@@ -236,7 +244,7 @@ namespace OpenCl.DotNetCore
         /// Gets all the available platforms.
         /// </summary>
         /// <exception cref="InvalidOperationException">
-        /// If the platforms could not be queried, then an <see cref="InvalidOperationException"/> exception is thrown.
+        /// If the platforms could not be queried, then an <see cref="InvalidOperationException"/> is thrown.
         /// </exception>
         /// <returns>Returns a list with all the availabe platforms.</returns>
         public static IEnumerable<Platform> GetPlatforms()

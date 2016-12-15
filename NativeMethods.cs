@@ -58,40 +58,14 @@ namespace OpenCl.DotNetCore
         /// The platform ID returned by <see cref="GetPlatformIds"/> or can be <c>null</c>. If <see cref="platform"/> is <c>null</c>,
         /// the behavior is implementation-defined.
         /// </param>
-        /// <param name="param_name">
-        /// An enumeration constant that identifies the platform information being queried. It can be one of the following values:
-        /// 
-        /// <c>PlatformInfo.Profile</c>: OpenCL profile string. Returns the profile name supported by the implementation. The
-        /// profile name returned can be one of the following strings:
-        /// FULL_PROFILE - if the implementation supports the OpenCL specification (functionality defined as part of the core
-        /// specification and does not require any extensions to be supported).
-        /// EMBEDDED_PROFILE - if the implementation supports the OpenCL embedded profile. The embedded profile is defined to be a
-        /// subset for each version of OpenCL. The embedded profile for OpenCL 2.1 is described in section 7.
-        /// 
-        /// <c>PlatformInfo.Version</c>: OpenCL version string. Returns the OpenCL version supported by the implementation. This
-        /// version string has the following format: "OpenCL[space][major_version.minor_version][space][platform-specific information]".
-        /// 
-        /// <c>PlatformInfo.Name</c>: Platform name string.
-        /// 
-        /// <c>PlatformInfo.Vendor</c>: Platform vendor string.
-        /// 
-        /// <c>PlatformInfo.Extensions</c>: Returns a space-separated list of extension names (the extension names themselves do
-        /// not contain any spaces) supported by the platform. Extensions defined here must be supported by all devices associated
-        /// with this platform.
-        /// 
-        /// <c>PlatformInfo.PlatformHostTimerResolution</c>: Returns the resolution of the host timer in nanoseconds as used by
-        /// <see cref="GetDeviceAndHostTimer"/>.
-        /// 
-        /// <c>PlatformInfo.PlatformIcdSuffixKhr</c>: If the cl_khr_icd extension is enabled, the function name suffix used to
-        /// identify extension functions to be directed to this platform by the ICD Loader.
-        /// </param>
+        /// <param name="param_name">An enumeration constant that identifies the platform information being queried.</param>
         /// <param name="param_value_size">
         /// Specifies the size in bytes of memory pointed to by <see cref="param_value"/>. This size in bytes must be greater than
         /// or equal to size of return type specified above.
         /// </param>
         /// <param name="param_value">
-        /// A pointer to memory location where appropriate values for a given <see cref="param_value"/> will be returned. Possible
-        /// <see cref="param_value"/> values are listed above. If <see cref="param_value"/> is <c>null</c>, it is ignored.
+        /// A pointer to memory location where appropriate values for a given <see cref="param_value"/> will be returned. If
+        /// <see cref="param_value"/> is <c>null</c>, it is ignored.
         /// </param>
         /// <param name="param_value_size_ret">
         /// Returns the actual size in bytes of data being queried by <see cref="param_value"/>. If <see cref="param_value_size_ret"/>
@@ -131,24 +105,7 @@ namespace OpenCl.DotNetCore
         /// </param>
         /// <param name="device_type">
         /// A bitfield that identifies the type of OpenCL device. The <see cref="device_type"/> can be used to query specific OpenCL
-        /// devices or all OpenCL devices available. The valid values for <see cref="device_type"/> are specified in the following
-        /// list:
-        /// 
-        /// <c>DeviceType.Default</c>: The default OpenCL device in the system. The default device cannot be a <c>DeviceType.Custom</c>
-        /// device.
-        /// 
-        /// <c>DeviceType.Cpu</c>: An OpenCL device that is the host processor. The host processor runs the OpenCL implementations and
-        /// is a single or multi-core CPU.
-        /// 
-        /// <c>DeviceType.Gpu</c>: An OpenCL device that is a GPU. By this we mean that the device can also be used to accelerate a
-        /// 3D API such as OpenGL or DirectX.
-        /// 
-        /// <c>DeviceType.Accelerator</c>: Dedicated OpenCL accelerators (for example the IBM CELL Blade). These devices communicate
-        /// with the host processor using a peripheral interconnect such as PCIe.
-        /// 
-        /// <c>DeviceType.Custom</c>: Dedicated accelerators that do not support programs written in OpenCL C.
-        /// 
-        /// <c>DeviceType.All</c>: All OpenCL devices available in the system except <c>DeviceType.Custom</c> devices.
+        /// devices or all OpenCL devices available.
         /// </param>
         /// <param name="num_entries">
         /// The number of device entries that can be added to <see cref="devices"/>. If <see cref="devices"/> is not <c>null</c>,
@@ -189,6 +146,51 @@ namespace OpenCl.DotNetCore
             [In] [MarshalAs(UnmanagedType.U4)] uint num_entries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] devices,
             [Out] [MarshalAs(UnmanagedType.U4)] out uint num_devices);
+
+        /// <summary>
+        /// Get information about an OpenCL device.
+        /// </summary>
+        /// <param name="device">
+        /// A device returned by <see cref="GetDeviceIds"/>. May be a device returned by <see cref="GetDeviceIds"/> or a sub-device
+        /// created by <see cref="CreateSubDevices"/>. If device is a sub-device, the specific information for the sub-device will
+        /// be returned.
+        /// </param>
+        /// <param name="param_name">An enumeration constant that identifies the device information being queried.</param>
+        /// <param name="param_value_size">
+        /// Specifies the size in bytes of memory pointed to by <see cref="param_value"/>. This size in bytes must be greater than
+        /// or equal to the size of return type specified.
+        /// </param>
+        /// <param name="param_value">
+        /// A pointer to memory location where appropriate values for a given <see cref="param_name"/>. If <see cref="param_value"/>
+        /// is <c>null</c>, it is ignored.
+        /// </param>
+        /// <param name="param_value_size_ret">
+        /// Returns the actual size in bytes of data being queried by <see cref="param_value"/>. If <see cref="param_value_size_ret"/>
+        /// is <c>null</c>, it is ignored.
+        /// </param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not valid.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="param_name"/> is not one of the supported values or if size in bytes specified
+        /// by <see cref="param_value_size"/> is less than size of return type and <see cref="param_value"/> is not a <c>null</c>
+        /// value or if <see cref="param_name"/> is a value that is available as an extension and the corresponding extension is
+        /// not supported by the device.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c>  if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetDeviceInfo")]
+        public static extern Result GetDeviceInfo(
+            [In] IntPtr device,
+            [In] [MarshalAs(UnmanagedType.U4)] DeviceInfo param_name,
+            [In] IntPtr param_value_size,
+            [Out] byte[] param_value,
+            [Out] out IntPtr param_value_size_ret);
 
         #endregion
     }

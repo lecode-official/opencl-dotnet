@@ -38,9 +38,7 @@ namespace OpenCl.DotNetCore
                 // Gets all devices of the platform and prints out information about them
                 Console.WriteLine("Devices:");
                 foreach (Device device in platform.GetDevices(DeviceType.All))
-                {
-                    Console.WriteLine("    - Device found");
-                }
+                    Console.WriteLine($"    - {device.Name} ({device.Vendor})");
             }
         }
 
