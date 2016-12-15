@@ -207,6 +207,29 @@ namespace OpenCl.DotNetCore
 
         #endregion
 
+        #region Public Methods
+
+        public IEnumerable<Device> GetDevices(DeviceType deviceType)
+        {
+            // Gets the number of available devices of the specified type
+            uint numberOfAvailableDevices;
+            Result result = NativeMethods.GetDeviceIds(this.handle, deviceType, 0, null, out numberOfAvailableDevices);
+            if (result != Result.Success)
+                throw new OpenClException("The number of available devices could not be queried.", result);
+
+            // Gets the pointers to the devices of the specified type
+            IntPtr[] devicePointers = new IntPtr[numberOfAvailableDevices];
+            result = NativeMethods.GetDeviceIds(this.handle, deviceType, numberOfAvailableDevices, devicePointers, out numberOfAvailableDevices);
+            if (result != Result.Success)
+                throw new OpenClException("The devices could not be retrieved.", result);
+
+            // Converts the pointer to device objects
+            foreach (IntPtr devicePointer in devicePointers)
+                yield return new Device(devicePointer);
+        }
+
+        #endregion
+
         #region Public Static Methods
 
         /// <summary>
@@ -228,10 +251,9 @@ namespace OpenCl.DotNetCore
             IntPtr[] platformPointers = new IntPtr[numberOfAvailablePlatforms];
             result = NativeMethods.GetPlatformIds(numberOfAvailablePlatforms, platformPointers, out numberOfAvailablePlatforms);
             if (result != Result.Success)
-                throw new OpenClException("The number of platforms could not be retrieved.", result);
+                throw new OpenClException("The platforms could not be retrieved.", result);
 
-            // Converts the pointers to platform structures
-            List<Platform> platforms = new List<Platform>();
+            // Converts the pointers to platform objects
             foreach (IntPtr platformPointer in platformPointers)
                 yield return new Platform(platformPointer);
         }

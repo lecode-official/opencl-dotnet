@@ -2,7 +2,6 @@
 #region Using Directives
 
 using System;
-using System.Collections.Generic;
 
 #endregion
 
@@ -21,12 +20,10 @@ namespace OpenCl.DotNetCore
         /// <param name="args">The command line arguments that have been passed to the program.</param>
         public static void Main(string[] args)
         {
-            // Gets all available platforms
-            IEnumerable<Platform> platforms = Platform.GetPlatforms();
-
-            // Gets the information about all available platforms
-            foreach (Platform platform in platforms)
+            // Gets all available platforms and prints out information about them
+            foreach (Platform platform in Platform.GetPlatforms())
             {
+                // Prints out the information about the platform
                 Console.WriteLine($"Name: {platform.Name}");
                 Console.WriteLine($"Vendor: {platform.Vendor}");
                 Console.WriteLine("Version:");
@@ -37,6 +34,13 @@ namespace OpenCl.DotNetCore
                 Console.WriteLine("Extensions:");
                 foreach (string extension in platform.Extensions)
                     Console.WriteLine($"    - {extension}");
+
+                // Gets all devices of the platform and prints out information about them
+                Console.WriteLine("Devices:");
+                foreach (Device device in platform.GetDevices(DeviceType.All))
+                {
+                    Console.WriteLine("    - Device found");
+                }
             }
         }
 
