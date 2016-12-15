@@ -38,7 +38,7 @@ namespace OpenCl.DotNetCore
         Extensions = 0x0904,
 
         /// <summary>
-        /// Returns the resolution of the host timer in nanoseconds as used by <see cref="GetDeviceAndHostTimer"/>.
+        /// Returns the resolution of the host timer in nanoseconds as used by <see cref="NativeMethods.GetDeviceAndHostTimer"/>.
         /// </summary>
         PlatformHostTimerResolution = 0x0905,
 
@@ -46,6 +46,6 @@ namespace OpenCl.DotNetCore
         /// If the cl_khr_icd extension is enabled, the function name suffix used to identify extension functions to be directed to
         /// this platform by the ICD Loader.
         /// </summary>
-        PlatformIcdSuffixKhr = 0x0920
+        PlatformIcdSuffix = 0x0920
     }
 }

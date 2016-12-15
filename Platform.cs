@@ -52,7 +52,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = this.GetPlatformInformation(PlatformInfo.Name);
+                    this.name = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Name));
                 return this.name;
             }
         }
@@ -70,7 +70,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = this.GetPlatformInformation(PlatformInfo.Vendor);
+                    this.vendor = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Vendor));
                 return this.vendor;
             }
         }
@@ -88,7 +88,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.version == null)
-                    this.version = new Version(this.GetPlatformInformation(PlatformInfo.Version));
+                    this.version = new Version(Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Version)));
                 return this.version;
             }
         }
@@ -107,7 +107,7 @@ namespace OpenCl.DotNetCore
             {
                 if (!this.profile.HasValue)
                 {
-                    string profileName = this.GetPlatformInformation(PlatformInfo.Profile);
+                    string profileName = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Profile));
                     if (profileName == "FULL_PROFILE")
                         this.profile = Profile.Full;
                     else
@@ -130,8 +130,48 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.extensions == null)
-                    this.extensions = this.GetPlatformInformation(PlatformInfo.Extensions).Split(' ').ToList();
+                    this.extensions = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Extensions)).Split(' ').ToList();
                 return this.extensions;
+            }
+        }
+
+        /// <summary>
+        /// Contains the the resolution of the host timer in nanoseconds.
+        /// </summary>
+        private Nullable<long> platformHostTimerResolution;
+
+        /// <summary>
+        /// Gets the the resolution of the host timer in nanoseconds.
+        /// </summary>
+        public long PlatformHostTimerResolution
+        {
+            get
+            {
+                if (!this.platformHostTimerResolution.HasValue)
+                {
+                    byte[] rawPlatformInformation = this.GetPlatformInformation(PlatformInfo.PlatformHostTimerResolution);
+                    ulong retrievedPlatformHostTimerResolution = Convert.ToUInt64(rawPlatformInformation);
+                    this.platformHostTimerResolution = (long)retrievedPlatformHostTimerResolution;
+                }
+                return this.platformHostTimerResolution.Value;
+            }
+        }
+
+        /// <summary>
+        /// Contains the function name suffix used to identify extension functions to be directed to this platform by the ICD Loader.
+        /// </summary>
+        private string platformIcdSuffix;
+
+        /// <summary>
+        /// Gets the function name suffix used to identify extension functions to be directed to this platform by the ICD Loader.
+        /// </summary>
+        public string PlatformIcdSuffix
+        {
+            get
+            {
+                if (this.platformIcdSuffix == null)
+                    this.platformIcdSuffix = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.PlatformIcdSuffix));
+                return this.platformIcdSuffix;
             }
         }
 
@@ -147,7 +187,7 @@ namespace OpenCl.DotNetCore
         /// If the information could not be retrieved, then an <see cref="OpenClException"/> exception is thrown.
         /// </exception>
         /// <returns>Returns the specified information.</returns>
-        private string GetPlatformInformation(PlatformInfo platformInfo)
+        private byte[] GetPlatformInformation(PlatformInfo platformInfo)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             IntPtr returnValueSize;
@@ -161,8 +201,8 @@ namespace OpenCl.DotNetCore
             if (result != Result.Success)
                 throw new OpenClException("The platform information could not be retrieved.", result);
 
-            // The return value is an ASCII encoded byte array, so it is decoded to a string and returned
-            return Encoding.ASCII.GetString(output);
+            // Returns the output
+            return output;
         }
 
         #endregion
