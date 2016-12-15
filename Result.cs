@@ -52,6 +52,20 @@ namespace OpenCl.DotNetCore
         InvalidGLObject = -60,
         InvalidBufferSize = -61,
         InvalidMipLevel = -62,
-        InvalidGlobalWorkSize = -63
+        InvalidGlobalWorkSize = -63,
+
+        InvalidProperty = -64,
+
+        InvalidImageDescriptor = -65,
+
+        InvalidCompilerOptions = -66,
+        
+        InvalidLinkerOptions = -67,
+        
+        InvalidDevicePartitionCount = -68,
+        
+        InvalidPipeSize = -69,
+
+        InvalidDeviceQueue = -70
     }
 }
