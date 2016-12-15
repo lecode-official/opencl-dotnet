@@ -297,6 +297,25 @@ namespace OpenCl.DotNetCore
             [Out] out Result errcode_ret
         );
 
+        /// <summary>
+        /// Decrement the context reference count.
+        /// </summary>
+        /// <param name="context">The context to release.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        /// errors:
+        /// 
+        /// <c>Result.InvalidContext</c> if <see cref="context"/> is not a valid OpenCL context.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
+        public static extern Result ReleaseContext(IntPtr context);
+
         #endregion
     }
 }
