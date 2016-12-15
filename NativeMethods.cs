@@ -49,7 +49,8 @@ namespace OpenCl.DotNetCore
         public static extern Result GetPlatformIds(
             [In] [MarshalAs(UnmanagedType.U4)] uint num_entries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] platforms,
-            [Out] [MarshalAs(UnmanagedType.U4)] out uint num_platforms);
+            [Out] [MarshalAs(UnmanagedType.U4)] out uint num_platforms
+        );
 
         /// <summary>
         /// Get specific information about the OpenCL platform.
@@ -90,7 +91,8 @@ namespace OpenCl.DotNetCore
             [In] [MarshalAs(UnmanagedType.U4)] PlatformInfo param_name,
             [In] IntPtr param_value_size,
             [Out] byte[] param_value,
-            [Out] out IntPtr param_value_size_ret);
+            [Out] out IntPtr param_value_size_ret
+        );
 
         #endregion
 
@@ -145,7 +147,8 @@ namespace OpenCl.DotNetCore
             [In] [MarshalAs(UnmanagedType.U4)] DeviceType device_type,
             [In] [MarshalAs(UnmanagedType.U4)] uint num_entries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] devices,
-            [Out] [MarshalAs(UnmanagedType.U4)] out uint num_devices);
+            [Out] [MarshalAs(UnmanagedType.U4)] out uint num_devices
+        );
 
         /// <summary>
         /// Get information about an OpenCL device.
@@ -181,7 +184,7 @@ namespace OpenCl.DotNetCore
         /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
         /// device.
         /// 
-        /// <c>Result.OutOfHostMemory</c>  if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
         /// host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetDeviceInfo")]
@@ -190,7 +193,109 @@ namespace OpenCl.DotNetCore
             [In] [MarshalAs(UnmanagedType.U4)] DeviceInfo param_name,
             [In] IntPtr param_value_size,
             [Out] byte[] param_value,
-            [Out] out IntPtr param_value_size_ret);
+            [Out] out IntPtr param_value_size_ret
+        );
+
+        #endregion
+
+        #region Context API Methods
+
+        /// <summary>
+        /// Creates an OpenCL context.
+        /// </summary>
+        /// <param name="properties">
+        /// Specifies a list of context property names and their corresponding values. Each property name is immediately followed
+        /// by the corresponding desired value. The list is terminated with 0. <see cref="properties"/> can be <c>null</c> in which
+        /// case the platform that is selected is implementation-defined.
+        /// </param>
+        /// <param name="num_devices">The number of devices specified in the <see cref="devices"/> argument.</param>
+        /// <param name="devices">
+        /// A pointer to a list of unique devices returned by <see cref="GetDeviceIds"/> or sub-devices created by
+        /// <see cref="CreateSubDevices"/> for a platform. Duplicate devices specified in <see cref="devices"/> are ignored.
+        /// </param>
+        /// <param name="pfn_notify">
+        /// A callback function that can be registered by the application. This callback function will be used by the OpenCL
+        /// implementation to report information on errors during context creation as well as errors that occur at runtime in this
+        /// context. This callback function may be called asynchronously by the OpenCL implementation. It is the application's
+        /// responsibility to ensure that the callback function is thread-safe. If <see cref="pfn_notify"/> is <c>null</c>, no
+        /// callback function is registered. The parameters to this callback function are:
+        /// 
+        /// errinfo is a pointer to an error string.
+        /// 
+        /// private_info and cb represent a pointer to binary data that is returned by the OpenCL implementation that can be used
+        /// to log additional information helpful in debugging the error.
+        /// 
+        /// user_data is a pointer to user supplied data.
+        /// 
+        /// Note: There are a number of cases where error notifications need to be delivered due to an error that occurs outside a
+        /// context. Such notifications may not be delivered through the <see cref="pfn_notify"/> callback. Where these
+        /// notifications go is implementation-defined.
+        /// </param>
+        /// <param name="user_data">
+        /// Passed as the user_data argument when <see cref="pfn_notify"/> is called. <see cref="user_data"/> can be <c>null</c>.
+        /// </param>
+        /// <param name="errcode_ret">
+        /// Returns an appropriate error code. If <see cref="errcode_ret"/> is <c>null</c>, no error code is returned.
+        /// </param>
+        /// <returns>
+        /// Returns a valid non-zero context and <see cref="errcode_ret"/> is set to <c>Result.Success</c> if the context is created
+        /// successfully. Otherwise, it returns a <c>null</c> value with an error value returned in <see cref="errcode_ret"/>.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateContext")]
+        public static extern IntPtr CreateContext(
+            [In] IntPtr[] properties,
+            [In] [MarshalAs(UnmanagedType.U4)] uint num_devices,
+            [In] IntPtr[] devices,
+            [In] IntPtr pfn_notify,
+            [In] IntPtr user_data,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errcode_ret
+        );
+
+        #endregion
+
+        #region Program Object API Methods
+
+        /// <summary>
+        /// Creates a program object for a context, and loads the source code specified by the text strings in the
+        /// <see cref="strings"/> array into the program object.
+        /// </summary>
+        /// <param name="context">Must be a valid OpenCL context.</param>
+        /// <param name="count">The number of source code strings that are provided.</param>
+        /// <param name="strings">
+        /// An array of <see cref="count"/> pointers to optionally null-terminated character strings that make up the source code.
+        /// </param>
+        /// <param name="lengths">
+        /// An array with the number of chars in each string (the string length). If an element in <see cref="lengths"/> is zero,
+        /// its accompanying string is null-terminated. If lengths is <c>null</c>, all strings in the strings argument are
+        /// considered null-terminated. Any length value passed in that is greater than zero excludes the null terminator in its
+        /// count.
+        /// </param>
+        /// <param name="errcode_ret">
+        /// Returns an appropriate error code. If errcode_ret is <c>null</c>, no error code is returned.
+        /// </param>
+        /// <returns>
+        /// Returns a valid non-zero program object and <see cref="errcode_ret"/> is set to <c>Result.Success</c> if the program
+        /// object is created successfully. Otherwise, it returns a <c>null</c> value with one of the following error values
+        /// returned in <see cref="errcode_ret"/>:
+        /// 
+        /// <c>Result.InvalidContext</c> if <see cref="context"/> is not a valid context.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="count"/> is zero or if strings or any entry in strings is <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateProgramWithSource")]
+        public static extern IntPtr CreateProgramWithSource(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U4)] uint count,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] strings,
+            [In] [MarshalAs(UnmanagedType.LPArray)] uint[] lengths,
+            [Out] out Result errcode_ret
+        );
 
         #endregion
     }
