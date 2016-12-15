@@ -29,11 +29,14 @@ namespace OpenCl.DotNetCore
             {
                 Console.WriteLine($"Name: {platform.Name}");
                 Console.WriteLine($"Vendor: {platform.Vendor}");
-                Console.WriteLine($"Version: {platform.Version}");
+                Console.WriteLine("Version:");
+                Console.WriteLine($"    Major Version: {platform.Version.MajorVersion}");
+                Console.WriteLine($"    Minor Version: {platform.Version.MinorVersion}");
+                Console.WriteLine($"    Platform-Specific Information: {platform.Version.PlatformSpecificInformation}");
                 Console.WriteLine($"Profile: {platform.Profile}");
                 Console.WriteLine("Extensions:");
                 foreach (string extension in platform.Extensions)
-                    Console.WriteLine($" - {extension}");
+                    Console.WriteLine($"    - {extension}");
             }
         }
 

@@ -60,7 +60,7 @@ namespace OpenCl.DotNetCore
         /// defined to be a subset for each version of OpenCL.
         /// 
         /// <c>PlatformInfo.Version</c>: OpenCL version string. Returns the OpenCL version supported by the implementation. This
-        /// version string has the following format: "OpenCL[space][major_version.minor_version][space][platform-specific information].
+        /// version string has the following format: "OpenCL[space][major_version.minor_version][space][platform-specific information]".
         /// 
         /// <c>PlatformInfo.Name</c>: Platform name string.
         /// 

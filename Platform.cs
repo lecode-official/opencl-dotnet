@@ -78,17 +78,17 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Contains the version of the OpenCL platform.
         /// </summary>
-        private string version;
+        private Version version;
 
         /// <summary>
         /// Gets the version of the OpenCL platform.
         /// </summary>
-        public string Version
+        public Version Version
         {
             get
             {
-                if (string.IsNullOrWhiteSpace(this.version))
-                    this.version = this.GetPlatformInformation(PlatformInfo.Version);
+                if (this.version == null)
+                    this.version = new Version(this.GetPlatformInformation(PlatformInfo.Version));
                 return this.version;
             }
         }
