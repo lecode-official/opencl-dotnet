@@ -35,6 +35,17 @@ namespace OpenCl.DotNetCore
         /// Returns a space-separated list of extension names (the extension names themselves do not contain any spaces) supported
         /// by the platform. Extensions defined here must be supported by all devices associated with this platform.
         /// </summary>
-        Extensions = 0x0904
+        Extensions = 0x0904,
+
+        /// <summary>
+        /// Returns the resolution of the host timer in nanoseconds as used by <see cref="GetDeviceAndHostTimer"/>.
+        /// </summary>
+        PlatformHostTimerResolution = 0x0905,
+
+        /// <summary>
+        /// If the cl_khr_icd extension is enabled, the function name suffix used to identify extension functions to be directed to
+        /// this platform by the ICD Loader.
+        /// </summary>
+        PlatformIcdSuffixKhr = 0x0920
     }
 }
