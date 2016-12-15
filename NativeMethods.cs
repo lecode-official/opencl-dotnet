@@ -245,11 +245,72 @@ namespace OpenCl.DotNetCore
         public static extern IntPtr CreateContext(
             [In] IntPtr[] properties,
             [In] [MarshalAs(UnmanagedType.U4)] uint num_devices,
-            [In] IntPtr[] devices,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] devices,
             [In] IntPtr pfn_notify,
             [In] IntPtr user_data,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errcode_ret
         );
+
+        /// <summary>
+        /// Builds (compiles and links) a program executable from the program source or binary.
+        /// </summary>
+        /// <param name="program">The program object.</param>
+        /// <param name="num_devices">The number of devices listed in <see cref="device_list"/>.</param>
+        /// <param name="device_list">
+        /// A pointer to a list of devices associated with <see cref="program"/>. If <see cref="device_list"/> is a <c>null</c>
+        /// value, the program executable is built for all devices associated with <see cref="program"/> for which a source or
+        /// binary has been loaded. If <see cref="device_list"/> is a non-<c>null</c> value, the program executable is built for
+        /// devices specified in this list for which a source or binary has been loaded.
+        /// </param>
+        /// <param name="options">
+        /// A pointer to a null-terminated string of characters that describes the build options to be used for building the
+        /// program executable. Certain options are ignored when program is created with IL.
+        /// </param>
+        /// <param name="pfn_notify">
+        /// A function pointer to a notification routine. The notification routine is a callback function that an application can
+        /// register and which will be called when the program executable has been built (successfully or unsuccessfully). If
+        /// <see cref="pfn_notify"/> is not <c>null</c>, <see cref="BuildProgram"/> does not need to wait for the build to complete
+        /// and can return immediately once the build operation can begin. The build operation can begin if the context, program
+        /// whose sources are being compiled and linked, list of devices and build options specified are all valid and appropriate
+        /// host and device resources needed to perform the build are available. If <see cref="pfn_notify"/> is <c>null</c>,
+        /// <see cref="BuildProgram"/> does not return until the build has completed. This callback function may be called
+        /// asynchronously by the OpenCL implementation. It is the application’s responsibility to ensure that the callback
+        /// function is thread-safe.
+        /// </param>
+        /// <param name="user_data">
+        /// Passed as an argument when <see cref="pfn_notify"/> is called. <see cref="user_data"/> can be <c>null</c>.
+        /// </param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clBuildProgram")]
+        public static extern Result BuildProgram(
+            [In] IntPtr program,
+            [In] [MarshalAs(UnmanagedType.U4)] uint num_devices,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] device_list,
+            [In] [MarshalAs(UnmanagedType.LPStr)] string options,
+            [In] IntPtr pfn_notify,
+            [In] IntPtr user_data
+        );
+
+        /// <summary>
+        /// Decrements the program reference count.
+        /// </summary>
+        /// <param name="program">The program to release.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        /// errors:
+        /// 
+        /// <c>Result.InvalidProgram</c> if <see cref="program"/> is not a valid program object.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clReleaseProgram")]
+        public static extern Result ReleaseProgram([In] IntPtr program);
 
         #endregion
 
@@ -314,7 +375,7 @@ namespace OpenCl.DotNetCore
         /// host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
-        public static extern Result ReleaseContext(IntPtr context);
+        public static extern Result ReleaseContext([In] IntPtr context);
 
         #endregion
     }
