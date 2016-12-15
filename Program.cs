@@ -2,6 +2,7 @@
 #region Using Directives
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 #endregion
@@ -9,24 +10,78 @@ using System.Linq;
 namespace OpenCl.DotNetCore
 {
     /// <summary>
-    /// Represents a test program, that is used to test the OpenCL native interop wrapper.
+    /// Represents an OpenCL program.
     /// </summary>
-    public class Program
+    public class Program : IDisposable
     {
-        #region Public Static Methods
+        #region Constructors
 
         /// <summary>
-        /// This is the entrypoint to the application.
+        /// Initializes a new <see cref="Program"/> instance.
         /// </summary>
-        /// <param name="args">The command line arguments that have been passed to the program.</param>
-        public static void Main(string[] args)
+        /// <param name="handle">The handle to the OpenCL program.</param>
+        internal Program(IntPtr handle)
         {
-            // Gets the first available platform and selects the first device offered by the platform
-            Platform platform = Platform.GetPlatforms().FirstOrDefault();
-            Device device = platform.GetDevices(DeviceType.All).FirstOrDefault();
+            this.Handle = handle;
+        }
 
-            // Prints out information about the selected device
-            Console.WriteLine($"Using {device.Name} ({device.Vendor})");
+        #endregion
+
+        #region Internal Properties
+
+        /// <summary>
+        /// Gets the handle to the OpenCL program.
+        /// </summary>
+        internal IntPtr Handle { get; private set; }
+
+        #endregion
+        
+        #region IDisposable Implementation
+
+        /// <summary>
+        /// Contains a value that determines whether the program has alread been disposed of.
+        /// </summary>
+        private bool isDisposed;
+
+        /// <summary>
+        /// Disposes of the resources that have been acquired by the program.
+        /// </summary>
+        /// <param name="disposing">
+        /// Determines whether managed object or managed and unmanaged resources should be disposed of.
+        /// </param>
+        protected virtual void Dispose(bool disposing)
+        {
+            // Checks if the program has already been disposed of
+            if (!this.isDisposed)
+            {
+                // Releases the OpenCL program
+                NativeMethods.ReleaseProgram(this.Handle);
+                this.Handle = IntPtr.Zero;
+
+                // Since the program has been disposed of, the is disposed flag is set to true, so that it is not called twice
+                this.isDisposed = true;
+            }
+        }
+
+        /// <summary>
+        /// Destructs the <see cref="Program"/> instance.
+        /// </summary>
+        ~Program()
+        {
+            // Makes sure that unmanaged resources get disposed of eventually
+            this.Dispose(false);
+        }
+
+        /// <summary>
+        /// Disposes of all resources acquired by the program.
+        /// </summary>
+        public void Dispose()
+        {
+            // Disposes of the resources acquired by the program
+            this.Dispose(true);
+            
+            // Since the resources have already been disposed of, the destructor does not need to be called anymore
+            GC.SuppressFinalize(this);
         }
 
         #endregion

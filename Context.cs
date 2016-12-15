@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 
 #endregion
 
@@ -33,6 +34,48 @@ namespace OpenCl.DotNetCore
         /// Gets the handle to the OpenCL context.
         /// </summary>
         internal IntPtr Handle { get; private set; }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Creates a program from the provided source code. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="source">The source code from which the program is to be created.</param>
+        /// <exception cref="OpenClException">
+        /// If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.
+        /// </exception>
+        /// <returns>Returns the created program.</returns>
+        public Program CreateAndBuildProgramFromString(string source)
+        {
+            // Loads the program from the specified source string
+            Result result;
+            IntPtr[] sourceList = new IntPtr[] { Marshal.StringToHGlobalAnsi(source) };
+            uint[] sourceLengths = new uint[] { (uint)source.Length };
+            IntPtr programPointer = NativeMethods.CreateProgramWithSource(
+                this.Handle,
+                1,
+                sourceList,
+                sourceLengths,
+                out result
+            );
+
+            // Checks if the program creation was successful, if not, then an exception is thrown
+            if (result != Result.Success)
+                throw new OpenClException("The program could not be created.", result);
+
+            // Creates the new program
+            Program program = new Program(programPointer);
+
+            // Builds (compiles and links) the program and checks if it was successful, if not, then an exception is thrown
+            result = NativeMethods.BuildProgram(program.Handle, 0, null, null, IntPtr.Zero, IntPtr.Zero);
+            if (result != Result.Success)
+                throw new OpenClException("The program could not be compiled and linked.", result);
+
+            // Returns the created program
+            return program;
+        }
 
         #endregion
         
@@ -118,7 +161,7 @@ namespace OpenCl.DotNetCore
         /// </summary>
         public void Dispose()
         {
-            // Do not change this code. Put cleanup code in Dispose(bool disposing) above.
+            // Disposes of the resources acquired by the context
             this.Dispose(true);
             
             // Since the resources have already been disposed of, the destructor does not need to be called anymore
