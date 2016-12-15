@@ -149,17 +149,18 @@ namespace OpenCl.DotNetCore
         InvalidProgram = -44,
 
         /// <summary>
-        /// 
+        /// There is no successfully built executable program.
         /// </summary>
         InvalidProgramExecutable = -45,
 
         /// <summary>
-        /// 
+        /// The specified kernel name was not found in the program.
         /// </summary>
         InvalidKernelName = -46,
 
         /// <summary>
-        /// 
+        /// The function definition for the __kernel function such as the number of arguments or the argument types are not the same
+        /// for all devices for which the program executable has been built.
         /// </summary>
         InvalidKernelDefinition = -47,
 

@@ -2,8 +2,6 @@
 #region Using Directives
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 #endregion
 
@@ -33,6 +31,30 @@ namespace OpenCl.DotNetCore
         /// Gets the handle to the OpenCL program.
         /// </summary>
         internal IntPtr Handle { get; private set; }
+
+        #endregion
+
+        #region Public Methods
+
+        /// <summary>
+        /// Creates a kernel with the specified name from the program.
+        /// </summary>
+        /// <param name="kernelName">The name of the kernel that is defined in the program.</param>
+        /// <exception cref="OpenClException">
+        /// If the kernel could not be created, then an <see cref="OpenClException"/> is thrown.
+        /// </exception>
+        /// <returns>Returns the created kernel.</returns>
+        public Kernel CreateKernel(string kernelName)
+        {
+            // Allocates enough memory for the return value and retrieves it
+            Result result;
+            IntPtr kernelPointer = NativeMethods.CreateKernel(this.Handle, kernelName, out result);
+            if (result != Result.Success)
+                throw new OpenClException("The kernel could not be created.", result);
+
+            // Creates a new kernel object from the kernel pointer and returns it
+            return new Kernel(kernelPointer);
+        }
 
         #endregion
         

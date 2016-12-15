@@ -378,5 +378,64 @@ namespace OpenCl.DotNetCore
         public static extern Result ReleaseContext([In] IntPtr context);
 
         #endregion
+
+        #region Kernel Object API Methods
+
+        /// <summary>
+        /// Creates a kernel object.
+        /// </summary>
+        /// <param name="program">A <see cref="program"/> object with a successfully built executable.</param>
+        /// <param name="kernel_name">A function name in the program declared with the __kernel qualifier.</param>
+        /// <param name="errcode_ret">
+        /// Returns an appropriate error code. If <see cref="errcode_ret"/> is <c>null</c>, no error code is returned.
+        /// </param>
+        /// <returns>
+        /// Returns a valid non-zero kernel object and <see cref="errcode_ret"/> is set to <c>Result.Success</c> if the kernel
+        /// object is created successfully. Otherwise, it returns a <c>null</c> value with one of the following error values
+        /// returned in <see cref="errcode_ret"/>:
+        /// 
+        /// <c>Result.InvalidProgram</c> if <see cref="program"/> is not a valid program object.
+        /// 
+        /// <c>Result.InvalidProgramExecutable</c> if there is no successfully built executable for <see cref="program"/>.
+        /// 
+        /// <c>Result.InvalidKernelName</c> if the function definition for __kernel function given by <see cref="kernel_name"/>
+        /// such as the number of arguments, the argument types are not the same for all devices for which the program executable
+        /// has been built.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="kernel_name"/> is <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateKernel")]
+        public static extern IntPtr CreateKernel(
+            [In] IntPtr program,
+            [In] [MarshalAs(UnmanagedType.LPStr)] string kernel_name,
+            [Out] out Result errcode_ret
+        );
+
+        /// <summary>
+        /// Decrements the kernel reference count.
+        /// </summary>
+        /// <param name="kernel">The kernel to release.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        /// errors:
+        /// 
+        /// <c>Result.InvalidContext</c> if <see cref="context"/> is not a valid kernel object.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clReleaseKernel")]
+        public static extern Result ReleaseKernel([In] IntPtr kernel);
+
+        #endregion
     }
 }
