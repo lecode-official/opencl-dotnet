@@ -350,9 +350,38 @@ namespace OpenCl.DotNetCore
         [DllImport("OpenCL", EntryPoint = "clSetKernelArg")]
         public static extern Result SetKernelArgument(
             [In] IntPtr kernel,
-            [In] [MarshalAsAttribute(UnmanagedType.U4)] uint arg_index,
+            [In] [MarshalAs(UnmanagedType.U4)] uint arg_index,
             [In] UIntPtr arg_size,
             [In] IntPtr arg_value
+        );
+
+        /// <summary>
+        /// Returns information about the kernel object.
+        /// </summary>
+        /// <param name="kernel">Specifies the kernel object being queried.</param>
+        /// <param name="param_name">Specifies the information to query.</param>
+        /// <param name="param_value_size">Used to specify the size in bytes of memory pointed to by <see cref="param_value"/>. This size must be greater or equal to the size of the return type.</param>
+        /// <param name="param_value">A pointer to memory where the appropriate result being queried is returned. If <see cref="param_value"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="param_value_size_ret">The actual size in bytes of data copied to <see cref="param_value"/>. If <see cref="param_value_size_ret"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidKernel</c> if <see cref="kerlen"/> is not a valid kernel object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="param_name"/> is not one of the supported values or if size in bytes specified by <see cref="param_value_size"/> is less than size of return type and <see cref="param_value"/> is not a
+        /// <c>null</c> value or if <see cref="param_name"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetKernelInfo")]
+        public static extern Result GetKernelInfo(
+            [In] IntPtr kernel,
+            [In] [MarshalAs(UnmanagedType.U4)] KernelInfo param_name,
+            [In] UIntPtr param_value_size,
+            [Out] byte[] param_value,
+            [Out] out UIntPtr param_value_size_ret
         );
 
         #endregion
