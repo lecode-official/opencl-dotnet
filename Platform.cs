@@ -150,7 +150,7 @@ namespace OpenCl.DotNetCore
                 if (!this.platformHostTimerResolution.HasValue)
                 {
                     byte[] rawPlatformInformation = this.GetPlatformInformation(PlatformInfo.PlatformHostTimerResolution);
-                    ulong retrievedPlatformHostTimerResolution = Convert.ToUInt64(rawPlatformInformation);
+                    ulong retrievedPlatformHostTimerResolution = BitConverter.ToUInt64(rawPlatformInformation, 0);
                     this.platformHostTimerResolution = (long)retrievedPlatformHostTimerResolution;
                 }
                 return this.platformHostTimerResolution.Value;
