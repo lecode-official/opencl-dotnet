@@ -93,7 +93,7 @@ namespace OpenCl.DotNetCore
                 throw new OpenClException("The memory object could not be created.", result);
 
             // Creates the memory object from the pointer to the memory object and returns it
-            MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
+            MemoryObject memoryObject = new MemoryObject(memoryObjectPointer, size);
             return memoryObject;
         }
 
@@ -104,7 +104,7 @@ namespace OpenCl.DotNetCore
         /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf(typeof(T)));
+        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>());
 
         public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T value) where T : struct
         {
@@ -113,7 +113,7 @@ namespace OpenCl.DotNetCore
             try
             {
                 // Determines the size of the specified value and creates a pointer that points to the data inside the structure
-                IntPtr size = new IntPtr(Marshal.SizeOf(typeof(T)));
+                IntPtr size = new IntPtr(Marshal.SizeOf<T>());
                 hostMemoryObjectPointer = Marshal.AllocHGlobal(size);
                 Marshal.StructureToPtr(value, hostMemoryObjectPointer, false);
 
@@ -126,7 +126,7 @@ namespace OpenCl.DotNetCore
                     throw new OpenClException("The memory object could not be created.", result);
 
                 // Creates the memory object from the pointer to the memory object and returns it
-                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
+                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer, size.ToInt32());
                 return memoryObject;
             }
             finally

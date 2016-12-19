@@ -18,9 +18,11 @@ namespace OpenCl.DotNetCore
         /// Initializes a new <see cref="MemoryObject"/> instance.
         /// </summary>
         /// <param name="handle">The handle to the OpenCL memory object.</param>
-        internal MemoryObject(IntPtr handle)
+        /// <param name="size">The size of the content of the memory object.</param>
+        internal MemoryObject(IntPtr handle, int size)
         {
             this.Handle = handle;
+            this.Size = size;
         }
 
         #endregion
@@ -31,6 +33,15 @@ namespace OpenCl.DotNetCore
         /// Gets the handle to the OpenCL memory object.
         /// </summary>
         internal IntPtr Handle { get; private set; }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the size of the contents of the memory object.
+        /// </summary>
+        public int Size { get; private set; }
 
         #endregion
         

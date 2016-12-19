@@ -453,6 +453,37 @@ namespace OpenCl.DotNetCore
         #endregion
 
         #region Enqueued Commands API Methods
+        
+        /// <summary>
+        /// Enqueue commands to read from a buffer object to host memory.
+        /// </summary>
+        /// <param name="command_queue">Is a valid host command-queue in which the read command will be queued. command_queue and buffer must be created with the same OpenCL context.</param>
+        /// <param name="buffer">Refers to a valid buffer object.</param>
+        /// <param name="blocking_read">Indicates if the read operations are blocking or non-blocking.</param>
+        /// <param name="offset">The offset in bytes in the buffer object to read from.</param>
+        /// <param name="size">The size in bytes of data being read.</param>
+        /// <param name="ptr">The pointer to buffer in host memory where data is to be read into.</param>
+        /// <param name="num_events_in_wait_list">The number of event in <see cref="event_wait_list"/>. If <see cref="event_wait_list"/> is <c>null</c>, then <see cref="num_events_in_wait_list"/ must be 0.</param>
+        /// <param name="event_wait_list">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="event_wait_list"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="event_wait">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [DllImport("OpenCL", EntryPoint = "clEnqueueReadBuffer")]
+        public static extern Result EnqueueReadBuffer(
+            [In] IntPtr command_queue,
+            [In] IntPtr buffer,
+            [In] [MarshalAs(UnmanagedType.U4)] bool blocking_read,
+            [In] IntPtr offset,
+            [In] IntPtr size,
+            [In] IntPtr ptr,
+            [In] [MarshalAs(UnmanagedType.U4)] uint num_events_in_wait_list,
+            [In] IntPtr[] event_wait_list,
+            [Out] out IntPtr event_wait
+        );
 
         /// <summary>
         /// Enqueues a command to execute a kernel on a device.

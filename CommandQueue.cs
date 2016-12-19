@@ -2,6 +2,7 @@
 #region Using Directives
 
 using System;
+using System.Runtime.InteropServices;
 
 #endregion
 
@@ -35,6 +36,47 @@ namespace OpenCl.DotNetCore
         #endregion
 
         #region Public Methods
+
+        /// <summary>
+        /// Reads the specified memory object associated with this command queue.
+        /// </summary>
+        /// <param name="memoryObject">The memory object that is to be read.</param>
+        /// <param name="outputSize">The number of array elements that are to be returned.</param>
+        /// <typeparam name="T">The type of the array that is to be returned.</typeparam>
+        /// <returns>Returns the value of the memory object.</param>
+        public T[] ReadMemoryObject<T>(MemoryObject memoryObject, int outputSize) where T : struct
+        {
+            // Tries to read the memory object
+            IntPtr resultValuePointer = IntPtr.Zero;
+            try
+            {
+                // Allocates enough memory for the result value
+                int size = Marshal.SizeOf<T>() * outputSize;
+                resultValuePointer = Marshal.AllocHGlobal(size);
+
+                // Reads the memory object, by enqueuing the read operation to the command queue
+                IntPtr waitEventPointer;
+                Result result = NativeMethods.EnqueueReadBuffer(this.Handle, memoryObject.Handle, true, IntPtr.Zero, new IntPtr(size), resultValuePointer, 0, null, out waitEventPointer);
+                
+                // Checks if the read operation was queued successfuly, if not, an exception is thrown
+                if (result != Result.Success)
+                    throw new OpenClException("The memory object could not be read.", result);
+
+                // Goes through the result and converts the content of the result to an array
+                T[] resultValue = new T[outputSize];
+                for (int i = 0; i < outputSize; i++)
+                    resultValue[i] = (T)Marshal.PtrToStructure(IntPtr.Add(resultValuePointer, i * Marshal.SizeOf<T>()), typeof(T));
+                
+                // Returns the content of the memory object
+                return resultValue;
+            }
+            finally
+            {
+                // Finally the allocated memory has to be freed
+                if (resultValuePointer != IntPtr.Zero)
+                    Marshal.FreeHGlobal(resultValuePointer);
+            }
+        }
 
         /// <summary>
         /// Enqueues a n-dimensional kernel to the command queue.
