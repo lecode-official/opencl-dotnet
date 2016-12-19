@@ -111,11 +111,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates the new command queue for the specified context and device
             Result result;
-            IntPtr commandQueuePointer = NativeMethods.CreateCommandQueue(
-                context.Handle,
-                device.Handle,
-                0,
-                out result);
+            IntPtr commandQueuePointer = NativeMethods.CreateCommandQueue(context.Handle, device.Handle, 0, out result);
 
             // Checks if the command queue creation was successful, if not, then an exception is thrown
             if (result != Result.Success)

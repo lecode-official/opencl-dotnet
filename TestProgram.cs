@@ -40,11 +40,12 @@ namespace OpenCl.DotNetCore
                         result[i] = dot(matrix[i], vector[0]);
                     }";
 
-                // Creates a program and then the kernel from it, which is then executed on a command queue
+                // Creates a program and then the kernel from it
                 using (Program program = context.CreateAndBuildProgramFromString(code))
                 {
                     using (Kernel kernel = program.CreateKernel("matvec_mult"))
                     {
+                        // Creates the memory objects for the input arguments of the kernel
                         MemoryObject matrix = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
                         {
                              0f,  2f,  4f,  6f,
@@ -55,12 +56,15 @@ namespace OpenCl.DotNetCore
                         MemoryObject vector = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
                         MemoryObject result = context.CreateMemoryObject<float>(MemoryFlag.WriteOnly, 4);
 
+                        // Tries to execute the kernel
                         try
                         {
+                            // Sets the arguments of the kernel
                             kernel.SetKernelArgument(0, matrix);
                             kernel.SetKernelArgument(1, vector);
                             kernel.SetKernelArgument(2, result);
                             
+                            // Creates a command queue, executes the kernel, and retrieves the result
                             using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, device))
                             {
                                 commandQueue.EnqueueNDRangeKernel(kernel, 1, 4);
@@ -70,6 +74,7 @@ namespace OpenCl.DotNetCore
                         }
                         finally
                         {
+                            // Even if something goes wrong, the kernel argument memory objects are disposed of
                             matrix.Dispose();
                             vector.Dispose();
                             result.Dispose();

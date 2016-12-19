@@ -51,27 +51,19 @@ namespace OpenCl.DotNetCore
             Result result;
             IntPtr[] sourceList = new IntPtr[] { Marshal.StringToHGlobalAnsi(source) };
             uint[] sourceLengths = new uint[] { (uint)source.Length };
-            IntPtr programPointer = NativeMethods.CreateProgramWithSource(
-                this.Handle,
-                1,
-                sourceList,
-                sourceLengths,
-                out result
-            );
+            IntPtr programPointer = NativeMethods.CreateProgramWithSource(this.Handle, 1, sourceList, sourceLengths, out result);
 
             // Checks if the program creation was successful, if not, then an exception is thrown
             if (result != Result.Success)
                 throw new OpenClException("The program could not be created.", result);
 
-            // Creates the new program
-            Program program = new Program(programPointer);
-
             // Builds (compiles and links) the program and checks if it was successful, if not, then an exception is thrown
-            result = NativeMethods.BuildProgram(program.Handle, 0, null, null, IntPtr.Zero, IntPtr.Zero);
+            result = NativeMethods.BuildProgram(programPointer, 0, null, null, IntPtr.Zero, IntPtr.Zero);
             if (result != Result.Success)
                 throw new OpenClException("The program could not be compiled and linked.", result);
 
-            // Returns the created program
+            // Creates the new program and returns it
+            Program program = new Program(programPointer);
             return program;
         }
 
@@ -168,13 +160,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates the new context for the specified devices
             Result result;
-            IntPtr contextPointer = NativeMethods.CreateContext(
-                null,
-                (uint)devices.Count(),
-                devices.Select(device => device.Handle).ToArray(),
-                IntPtr.Zero,
-                IntPtr.Zero,
-                out result);
+            IntPtr contextPointer = NativeMethods.CreateContext(null, (uint)devices.Count(), devices.Select(device => device.Handle).ToArray(), IntPtr.Zero, IntPtr.Zero, out result);
 
             // Checks if the device creation was successful, if not, then an exception is thrown
             if (result != Result.Success)

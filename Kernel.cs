@@ -56,8 +56,14 @@ namespace OpenCl.DotNetCore
             }
         }
 
+        /// <summary>
+        /// Contains the number of arguments, that the kernel function has.
+        /// </summary>
         private Nullable<int> numberOfArguments;
 
+        /// <summary>
+        /// Gets the number of arguments, that the kernel function has.
+        /// </summary>
         public int NumberOfArguments
         {
             get
