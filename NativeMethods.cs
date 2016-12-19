@@ -384,6 +384,37 @@ namespace OpenCl.DotNetCore
             [Out] out UIntPtr param_value_size_ret
         );
 
+        /// <summary>
+        /// Returns information about the arguments of a kernel.
+        /// </summary>
+        /// <param name="kernel">Specifies the kernel object being queried.</param>
+        /// <param name="arg_indx">The argument index. Arguments to the kernel are referred by indices that go from 0 for the leftmost argument to n - 1, where n is the total number of arguments declared by a kernel.</param>
+        /// <param name="param_name">Specifies the argument information to query.</param>
+        /// <param name="param_value_size">Used to specify the size in bytes of memory pointed to by <see cref="param_value"/>. This size must be greater or equal to the size of the return type.</param>
+        /// <param name="param_value">A pointer to memory where the appropriate result being queried is returned. If <see cref="param_value"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="param_value_size_ret">The actual size in bytes of data copied to <see cref="param_value"/>. If <see cref="param_value_size_ret"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidArgumentIndex</c> if <see cref="arg_indx"/> is not a valid argument index.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="param_name"/> is not one of the supported values or if size in bytes specified by <see cref="param_value_size"/> is less than size of return type and <see cref="param_value"/> is not a
+        /// <c>null</c> value or if <see cref="param_name"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
+        /// 
+        /// <c>Result.KernelArgumentInfoNotAvailable</c> if the argument information is not available for <see cref="kernel"/>.
+        /// 
+        /// <c>Result.InvalidKernel</c> if <see cref="kerlen"/> is not a valid kernel object.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetKernelArgInfo")]
+        public static extern Result GetKernelArgumentInfo(
+            [In] IntPtr kernel,
+            [In] [MarshalAs(UnmanagedType.U4)] uint arg_indx,
+            [In] [MarshalAs(UnmanagedType.U4)] KernelArgumentInfo param_name,
+            [In] UIntPtr param_value_size,
+            [Out] byte[] param_value,
+            [Out] out UIntPtr param_value_size_ret
+        );
+
         #endregion
 
         #region Command Queue API Methods
