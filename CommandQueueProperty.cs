@@ -11,7 +11,7 @@ namespace OpenCl.DotNetCore
     /// Represents an enumeration for the command queue properties.
     /// </summary>
     [Flags]
-    public enum CommandQueueProperty : uint
+    public enum CommandQueueProperty : ulong
     {
         /// <summary>
         /// Determines whether the commands queued in the command-queue are executed in-order or out-of-order. If set, the commands

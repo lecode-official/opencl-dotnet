@@ -77,6 +77,79 @@ namespace OpenCl.DotNetCore
             return program;
         }
 
+        /// <summary>
+        /// Creates a new memory object with the specified flags and of the specified size.
+        /// </summary>
+        /// <param name="memoryFlags">
+        /// The flags, that determines the how the memory object is created and how it can be accessed.
+        /// </param>
+        /// <param name="size">The size of memory that should be allocated for the memory object.</param>
+        /// <exception cref="OpenClException">
+        /// If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.
+        /// </exception>
+        /// <returns>Returns the created memory object.</returns>
+        public MemoryObject CreateMemoryObject(MemoryFlag memoryFlags, int size)
+        {
+            // Creates a new memory object of the specified size and with the specified memory flags
+            Result result;
+            IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, new IntPtr(size), IntPtr.Zero, out result);
+            
+            // Checks if the creation of the memory object was successful, if not, then an exception is thrown
+            if (result != Result.Success)
+                throw new OpenClException("The memory object could not be created.", result);
+
+            // Creates the memory object from the pointer to the memory object and returns it
+            MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
+            return memoryObject;
+        }
+
+        /// <summary>
+        /// Creates a new memory object with the specified flags. The size of memory allocated for the memory object is determined
+        /// by <see cref="T"/>.
+        /// </summary>
+        /// <typeparam name="T">
+        /// The size of the memory object will be determined by the structure specified in the type parameter.
+        /// </typeparam>
+        /// <param name="memoryFlags">
+        /// The flags, that determines the how the memory object is created and how it can be accessed.
+        /// </param>
+        /// <exception cref="OpenClException">
+        /// If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.
+        /// </exception>
+        /// <returns>Returns the created memory object.</returns>
+        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf(typeof(T)));
+
+        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T value) where T : struct
+        {
+            // Tries to create the memory object, if anything goes wrong, then it is crucial to free the allocated memory
+            IntPtr hostMemoryObjectPointer = IntPtr.Zero;
+            try
+            {
+                // Determines the size of the specified value and creates a pointer that points to the data inside the structure
+                IntPtr size = new IntPtr(Marshal.SizeOf(typeof(T)));
+                hostMemoryObjectPointer = Marshal.AllocHGlobal(size);
+                Marshal.StructureToPtr(value, hostMemoryObjectPointer, false);
+
+                // Creates a new memory object for the specified value
+                Result result;
+                IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, size, hostMemoryObjectPointer, out result);
+
+                // Checks if the creation of the memory object was successful, if not, then an exception is thrown
+                if (result != Result.Success)
+                    throw new OpenClException("The memory object could not be created.", result);
+
+                // Creates the memory object from the pointer to the memory object and returns it
+                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
+                return memoryObject;
+            }
+            finally
+            {
+                // Deallocates the host memory allocated for the value
+                if (hostMemoryObjectPointer != IntPtr.Zero)
+                    Marshal.FreeHGlobal(hostMemoryObjectPointer);
+            }
+        }
+
         #endregion
         
         #region Public Static Methods

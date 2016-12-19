@@ -474,7 +474,7 @@ namespace OpenCl.DotNetCore
         public static extern IntPtr CreateCommandQueue(
             [In] IntPtr context,
             [In] IntPtr device,
-            [In] [MarshalAs(UnmanagedType.U4)] CommandQueueProperty properties,
+            [In] [MarshalAs(UnmanagedType.U8)] CommandQueueProperty properties,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errcode_ret
         );
 
@@ -496,6 +496,59 @@ namespace OpenCl.DotNetCore
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseCommandQueue")]
         public static extern Result ReleaseCommandQueue([In] IntPtr commandQueue);
+
+        #endregion
+
+        #region Memory Object API Methods
+
+        /// <summary>
+        /// Creates a buffer object.
+        /// </summary>
+        /// <param name="context">A valid OpenCL context used to create the buffer object.</param>
+        /// <param name="flags">
+        /// A bit-field that is used to specify allocation and usage information such as the memory arena that should be used to
+        /// allocate the buffer object and how it will be used. If value specified for <see cref="flags"/> is 0, the default is
+        /// used which is <see cref="MemoryFlag.ReadWrite"/>.
+        /// </param>
+        /// <param name="size">The size in bytes of the buffer memory object to be allocated.</param>
+        /// <param name="host_ptr">
+        /// A pointer to the buffer data that may already be allocated by the application. The size of the buffer that
+        /// <see cref="host_ptr"/> points to must be greater or equal than size bytes.
+        /// </param>
+        /// <param name="errcode_ret">
+        /// Returns an appropriate error code. If <see cref="errcode_ret"/> is <c>null</c>, no error code is returned.
+        /// </param>
+        /// <returns>
+        /// Returns a valid non-zero buffer object and <see cref="errcode_ret"/> is set to <c>Result.Success</c> if the buffer
+        /// object is created successfully. Otherwise, it returns a <c>null</c> value and an error value in <see cref="errcode_ret"/>.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateBuffer")]
+        public static extern IntPtr CreateBuffer(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] IntPtr size,
+            [Out] IntPtr host_ptr,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errcode_ret
+        );
+
+        /// <summary>
+        /// Decrements the memory object reference count.
+        /// </summary>
+        /// <param name="memobj">Specifies the memory object to release.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following
+        /// errors:
+        /// 
+        /// <c>Result.InvalidContext</c> if <see cref="memobj"/> is not a valid memory object.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the
+        /// host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clReleaseMemObject")]
+        public static extern Result ReleaseMemoryObject([In] IntPtr memobj);
 
         #endregion
     }
