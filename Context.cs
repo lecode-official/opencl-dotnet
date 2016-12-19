@@ -107,7 +107,7 @@ namespace OpenCl.DotNetCore
         public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, int size) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>() * size);
 
         /// <summary>
-        /// Creates a new memory object with the specified flags for the specified array.  The size of memory 1allocated for the memory object is determined by <see cref="T"/> and the number of elements in the array.
+        /// Creates a new memory object with the specified flags for the specified array. The size of memory 1allocated for the memory object is determined by <see cref="T"/> and the number of elements in the array.
         /// </summary>
         /// <typeparam name="T">The size of the memory object will be determined by the structure specified in the type parameter.</typeparam>
         /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
