@@ -40,9 +40,7 @@ namespace OpenCl.DotNetCore
         /// Creates a kernel with the specified name from the program.
         /// </summary>
         /// <param name="kernelName">The name of the kernel that is defined in the program.</param>
-        /// <exception cref="OpenClException">
-        /// If the kernel could not be created, then an <see cref="OpenClException"/> is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the kernel could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created kernel.</returns>
         public Kernel CreateKernel(string kernelName)
         {
@@ -68,9 +66,7 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Disposes of the resources that have been acquired by the program.
         /// </summary>
-        /// <param name="disposing">
-        /// Determines whether managed object or managed and unmanaged resources should be disposed of.
-        /// </param>
+        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
         protected virtual void Dispose(bool disposing)
         {
             // Checks if the program has already been disposed of

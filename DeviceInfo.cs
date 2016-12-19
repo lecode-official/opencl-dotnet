@@ -78,8 +78,7 @@ namespace OpenCl.DotNetCore
         DeviceMaxClockFrequency = 0x100C,
 
         /// <summary>
-        /// The default compute device address space size of the global address space specified as an unsigned integer value in
-        /// bits. Currently supported values are 32 or 64 bits.
+        /// The default compute device address space size of the global address space specified as an unsigned integer value in bits. Currently supported values are 32 or 64 bits.
         /// </summary>
         DeviceAddressBits = 0x100D,
 
@@ -209,14 +208,12 @@ namespace OpenCl.DotNetCore
         DeviceEndianLittle = 0x1026,
 
         /// <summary>
-        /// Is <c>true</c> if the device is available and <c>false</c> otherwise. A device is considered to be available if the
-        /// device can be expected to successfully execute commands enqueued to the device.
+        /// Is <c>true</c> if the device is available and <c>false</c> otherwise. A device is considered to be available if the device can be expected to successfully execute commands enqueued to the device.
         /// </summary>
         DeviceAvailable = 0x1027,
 
         /// <summary>
-        /// Is <c>false</c> if the implementation does not have a compiler available to compile the program source. Is <c>true</c>
-        /// if the compiler is available. This can be <c>false</c> for the embedded platform profile only.
+        /// Is <c>false</c> if the implementation does not have a compiler available to compile the program source. Is <c>true</c> if the compiler is available. This can be <c>false</c> for the embedded platform profile only.
         /// </summary>
         DeviceCompilerAvailable = 0x1028,
 
@@ -338,8 +335,7 @@ namespace OpenCl.DotNetCore
         DeviceLinkerAvailable = 0x103E,
 
         /// <summary>
-        /// A semi-colon separated list of built-in kernels supported by the device. An empty string is returned if no built-in
-        /// kernels are supported by the device.
+        /// A semi-colon separated list of built-in kernels supported by the device. An empty string is returned if no built-in kernels are supported by the device.
         /// </summary>
         DeviceBuiltInKernels = 0x103F,
 

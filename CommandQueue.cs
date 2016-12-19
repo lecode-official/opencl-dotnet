@@ -41,9 +41,7 @@ namespace OpenCl.DotNetCore
         /// </summary>
         /// <param name="context">The context for which the command queue is to be created.</param>
         /// <param name="device">The devices for which the command queue is to be created.</param>
-        /// <exception cref="OpenClException">
-        /// If the command queue could not be created, then an <see cref="OpenClException"/> exception is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the command queue could not be created, then an <see cref="OpenClException"/> exception is thrown.</exception>
         /// <returns>Returns the created command queue.</returns>
         public static CommandQueue CreateCommandQueue(Context context, Device device)
         {
@@ -75,9 +73,7 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Disposes of the resources that have been acquired by the command queue.
         /// </summary>
-        /// <param name="disposing">
-        /// Determines whether managed object or managed and unmanaged resources should be disposed of.
-        /// </param>
+        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
         protected virtual void Dispose(bool disposing)
         {
             // Checks if the command queue has already been disposed of

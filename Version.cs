@@ -18,13 +18,8 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Initializes a new <see cref="Version"/> instance.
         /// </summary>
-        /// <param name="versionString">
-        /// Gets the original version string returned by the OpenCL platform, which is in the format
-        /// "OpenCL[space][major_version.minor_version][space][platform-specific information]".
-        /// </param>
-        /// <exception cref="ArgumentException">
-        /// If the version string could not be parsed, then an <see cref="ArgumentException"/> is thrown.
-        /// </exception>
+        /// <param name="versionString">Gets the original version string returned by the OpenCL platform, which is in the format"OpenCL[space][major_version.minor_version][space][platform-specific information]".</param>
+        /// <exception cref="ArgumentException">If the version string could not be parsed, then an <see cref="ArgumentException"/> is thrown.</exception>
         public Version(string versionString)
         {
             // Saves the version string for later reference
@@ -49,8 +44,7 @@ namespace OpenCl.DotNetCore
         #region Public Properties
         
         /// <summary>
-        /// Gets the original version string returned by the OpenCL platform, which is in the format
-        /// "OpenCL[space][major_version.minor_version][space][platform-specific information]".
+        /// Gets the original version string returned by the OpenCL platform, which is in the format "OpenCL[space][major_version.minor_version][space][platform-specific information]".
         /// </summary>
         public string VersionString { get; private set; }
 

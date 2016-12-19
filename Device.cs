@@ -81,9 +81,7 @@ namespace OpenCl.DotNetCore
         /// Retrieves the specified information about the device.
         /// </summary>
         /// <param name="deviceInfo">The kind of information that is to be retrieved.</param>
-        /// <exception cref="OpenClException">
-        /// If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
         private byte[] GetDeviceInformation(DeviceInfo deviceInfo)
         {

@@ -43,9 +43,7 @@ namespace OpenCl.DotNetCore
         /// Creates a program from the provided source code. The program is created, compiled, and linked.
         /// </summary>
         /// <param name="source">The source code from which the program is to be created.</param>
-        /// <exception cref="OpenClException">
-        /// If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created program.</returns>
         public Program CreateAndBuildProgramFromString(string source)
         {
@@ -80,13 +78,9 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Creates a new memory object with the specified flags and of the specified size.
         /// </summary>
-        /// <param name="memoryFlags">
-        /// The flags, that determines the how the memory object is created and how it can be accessed.
-        /// </param>
+        /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
         /// <param name="size">The size of memory that should be allocated for the memory object.</param>
-        /// <exception cref="OpenClException">
-        /// If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
         public MemoryObject CreateMemoryObject(MemoryFlag memoryFlags, int size)
         {
@@ -104,18 +98,11 @@ namespace OpenCl.DotNetCore
         }
 
         /// <summary>
-        /// Creates a new memory object with the specified flags. The size of memory allocated for the memory object is determined
-        /// by <see cref="T"/>.
+        /// Creates a new memory object with the specified flags. The size of memory allocated for the memory object is determined by <see cref="T"/>.
         /// </summary>
-        /// <typeparam name="T">
-        /// The size of the memory object will be determined by the structure specified in the type parameter.
-        /// </typeparam>
-        /// <param name="memoryFlags">
-        /// The flags, that determines the how the memory object is created and how it can be accessed.
-        /// </param>
-        /// <exception cref="OpenClException">
-        /// If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.
-        /// </exception>
+        /// <typeparam name="T">The size of the memory object will be determined by the structure specified in the type parameter.</typeparam>
+        /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
+        /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
         public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf(typeof(T)));
 
@@ -158,9 +145,7 @@ namespace OpenCl.DotNetCore
         /// Creates a new context for the specified device.
         /// </summary>
         /// <param name="device">The device for which the context is to be created.</param>
-        /// <exception cref="OpenClException">
-        /// If the context could not be created, then an <see cref="OpenClException"/> exception is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the context could not be created, then an <see cref="OpenClException"/> exception is thrown.</exception>
         /// <returns>Returns the created context.</returns>
         public static Context CreateContext(Device device) => Context.CreateContext(new List<Device> { device });
 
@@ -168,9 +153,7 @@ namespace OpenCl.DotNetCore
         /// Creates a new context for the specified device.
         /// </summary>
         /// <param name="devices">The devices for which the context is to be created.</param>
-        /// <exception cref="OpenClException">
-        /// If the context could not be created, then an <see cref="OpenClException"/> exception is thrown.
-        /// </exception>
+        /// <exception cref="OpenClException">If the context could not be created, then an <see cref="OpenClException"/> exception is thrown.</exception>
         /// <returns>Returns the created context.</returns>
         public static Context CreateContext(IEnumerable<Device> devices)
         {
@@ -204,9 +187,7 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Disposes of the resources that have been acquired by the context.
         /// </summary>
-        /// <param name="disposing">
-        /// Determines whether managed object or managed and unmanaged resources should be disposed of.
-        /// </param>
+        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
         protected virtual void Dispose(bool disposing)
         {
             // Checks if the context has already been disposed of

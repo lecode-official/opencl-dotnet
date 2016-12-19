@@ -159,8 +159,7 @@ namespace OpenCl.DotNetCore
         InvalidKernelName = -46,
 
         /// <summary>
-        /// The function definition for the __kernel function such as the number of arguments or the argument types are not the same
-        /// for all devices for which the program executable has been built.
+        /// The function definition for the __kernel function such as the number of arguments or the argument types are not the same for all devices for which the program executable has been built.
         /// </summary>
         InvalidKernelDefinition = -47,
 

@@ -65,9 +65,7 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Disposes of the resources that have been acquired by the kernel.
         /// </summary>
-        /// <param name="disposing">
-        /// Determines whether managed object or managed and unmanaged resources should be disposed of.
-        /// </param>
+        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
         protected virtual void Dispose(bool disposing)
         {
             // Checks if the kernel has already been disposed of

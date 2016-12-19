@@ -19,20 +19,17 @@ namespace OpenCl.DotNetCore
         Default = 1 << 0,
 
         /// <summary>
-        /// An OpenCL device that is the host processor. The host processor runs the OpenCL implementations and is a single or
-        /// multi-core CPU.
+        /// An OpenCL device that is the host processor. The host processor runs the OpenCL implementations and is a single or multi-core CPU.
         /// </summary>
         Cpu = 1 << 1,
 
         /// <summary>
-        /// An OpenCL device that is a GPU. By this we mean that the device can also be used to accelerate a 3D API such as OpenGL
-        /// or DirectX.
+        /// An OpenCL device that is a GPU. By this we mean that the device can also be used to accelerate a 3D API such as OpenGL or DirectX.
         /// </summary>
         Gpu = 1 << 2,
 
         /// <summary>
-        /// Dedicated OpenCL accelerators (for example the IBM CELL Blade). These devices communicate with the host processor using
-        /// a peripheral interconnect such as PCIe.
+        /// Dedicated OpenCL accelerators (for example the IBM CELL Blade). These devices communicate with the host processor using a peripheral interconnect such as PCIe.
         /// </summary>
         Accelerator = 1 << 3,
 
