@@ -114,7 +114,7 @@ namespace OpenCl.DotNetCore
         /// <param name="value">The value that is to be copied over to the device.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T[] value)
+        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T[] value) where T : struct
         {
             // Tries to create the memory object, if anything goes wrong, then it is crucial to free the allocated memory
             IntPtr hostMemoryObjectPointer = IntPtr.Zero;

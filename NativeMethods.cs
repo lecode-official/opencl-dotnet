@@ -490,7 +490,7 @@ namespace OpenCl.DotNetCore
             [In] IntPtr context,
             [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
             [In] UIntPtr size,
-            [Out] IntPtr host_ptr,
+            [In] IntPtr host_ptr,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errcode_ret
         );
         
