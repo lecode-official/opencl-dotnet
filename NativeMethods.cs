@@ -436,6 +436,39 @@ namespace OpenCl.DotNetCore
         [DllImport("OpenCL", EntryPoint = "clReleaseKernel")]
         public static extern Result ReleaseKernel([In] IntPtr kernel);
 
+        /// <summary>
+        /// Set the argument value for a specific argument of a kernel.
+        /// </summary>
+        /// <param name="kernel">A valid kernel object.</param>
+        /// <param name="arg_index">
+        /// The argument index. Arguments to the kernel are referred by indices that go from 0 for the leftmost argument to n - 1,
+        /// where n is the total number of arguments declared by a kernel.
+        /// </param>
+        /// <param name="arg_size">
+        /// Specifies the size of the argument value. If the argument is a memory object, the size is the size of the memory object.
+        /// For arguments declared with the local qualifier, the size specified will be the size in bytes of the buffer that must be
+        /// allocated for the local argument. If the argument is of type sampler_t, the <see cref="arg_size"/> value must be equal
+        /// to sizeof(cl_sampler). If the argument is of type queue_t, the <see cref="arg_size"/> value must be equal to
+        /// sizeof(cl_command_queue). For all other arguments, the size will be the size of argument type.
+        /// </param>
+        /// <param name="arg_value">
+        /// A pointer to data that should be used as the argument value for argument specified by <see cref="arg_index"/>. The
+        /// argument data pointed to by <see cref="arg_value"/> is copied and the <see cref="arg_value"/> pointer can therefore be
+        /// reused by the application after <see cref="SetKernelArgument"/> returns. The argument value specified is the value used
+        /// by all API calls that enqueue kernel (<see cref="EnqueueNDRangeKernel"/>) until the argument value is changed by a call
+        /// to <see cref="SetKernelArgument"/> for kernel.
+        /// </param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clSetKernelArg")]
+        public static extern Result SetKernelArgument(
+            [In] IntPtr kernel,
+            [In] [MarshalAsAttribute(UnmanagedType.U4)] uint arg_index,
+            [In] IntPtr arg_size,
+            [In] IntPtr arg_value
+        );
+
         #endregion
 
         #region Command Queue API Methods

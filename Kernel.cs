@@ -34,6 +34,27 @@ namespace OpenCl.DotNetCore
 
         #endregion
         
+        #region Public Methods
+
+        /// <summary>
+        /// Sets the specified argument to the specified value.
+        /// </summary>
+        /// <param name="index">The index of the parameter.</param>
+        /// <param name="memoryObject">The memory object that contains the value to which the kernel argument is to be set.</param>
+        public void SetKernelArgument(int index, MemoryObject memoryObject)
+        {
+            // Checks if the index is positive, if not, then an exception is thrown
+            if (index < 0)
+                throw new IndexOutOfRangeException($"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0.");
+
+            // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
+            Result result = NativeMethods.SetKernelArgument(this.Handle, (uint)index, new IntPtr(4), memoryObject.Handle);
+            if (result != Result.Success)
+                throw new OpenClException($"The kernel argument with the index {index} could not be set.", result);
+        }
+
+        #endregion
+
         #region IDisposable Implementation
 
         /// <summary>
