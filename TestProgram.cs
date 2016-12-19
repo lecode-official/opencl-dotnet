@@ -33,7 +33,9 @@ namespace OpenCl.DotNetCore
             {
                 // Creates the kernel code, which multiplies a matrix with a vector
                 string code = @"
-                    __kernel void matvec_mult(__global float4* matrix, __global float4* vector, __global float* result) {
+                    __kernel void matvec_mult(__global float4* matrix,
+                                              __global float4* vector,
+                                              __global float* result) {
                         int i = get_global_id(0);
                         result[i] = dot(matrix[i], vector[0]);
                     }";
@@ -43,35 +45,34 @@ namespace OpenCl.DotNetCore
                 {
                     using (Kernel kernel = program.CreateKernel("matvec_mult"))
                     {
-                        using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, device))
+                        MemoryObject matrix = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
                         {
-                            MemoryObject matrix = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
-                            {
-                                0f,   2f,  4f,  6f,
-                                8f,  10f, 12f, 14f,
-                                16f, 18f, 20f, 22f,
-                                24f, 26f, 28f, 30f
-                            });
-                            MemoryObject vector = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
-                            MemoryObject result = context.CreateMemoryObject<float>(MemoryFlag.WriteOnly, 4);
+                             0f,  2f,  4f,  6f,
+                             8f, 10f, 12f, 14f,
+                            16f, 18f, 20f, 22f,
+                            24f, 26f, 28f, 30f
+                        });
+                        MemoryObject vector = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
+                        MemoryObject result = context.CreateMemoryObject<float>(MemoryFlag.WriteOnly, 4);
+
+                        try
+                        {
+                            kernel.SetKernelArgument(0, matrix);
+                            kernel.SetKernelArgument(1, vector);
+                            kernel.SetKernelArgument(2, result);
                             
-                            try
+                            using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, device))
                             {
-                                kernel.SetKernelArgument(0, matrix);
-                                kernel.SetKernelArgument(1, vector);
-                                kernel.SetKernelArgument(2, result);
-
                                 commandQueue.EnqueueNDRangeKernel(kernel, 1, 4);
-
                                 float[] resultArray = commandQueue.ReadMemoryObject<float>(result, 4);
                                 Console.WriteLine(resultArray);
                             }
-                            finally
-                            {
-                                matrix.Dispose();
-                                vector.Dispose();
-                                result.Dispose();
-                            }
+                        }
+                        finally
+                        {
+                            matrix.Dispose();
+                            vector.Dispose();
+                            result.Dispose();
                         }
                     }
                 }
