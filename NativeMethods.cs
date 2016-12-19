@@ -281,6 +281,39 @@ namespace OpenCl.DotNetCore
         [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
         public static extern Result ReleaseContext([In] IntPtr context);
 
+        /// <summary>
+        /// Returns build information for each device in the program object.
+        /// </summary>
+        /// <param name="program">Specifies the program object being queried.</param>
+        /// <param name="device">Specifies the device for which build information is being queried. <see cref="device"/> must be a valid device associated with <see cref="program"/>.</param>
+        /// <param name="param_name">Specifies the information to query.</param>
+        /// <param name="param_value_size">Used to specify the size in bytes of memory pointed to by <see cref="param_value"/>. This size must be greater or equal to the size of the return type.</param>
+        /// <param name="param_value">A pointer to memory where the appropriate result being queried is returned. If <see cref="param_value"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="param_value_size_ret">The actual size in bytes of data copied to <see cref="param_value"/>. If <see cref="param_value_size_ret"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not a valid device object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="param_name"/> is not one of the supported values or if size in bytes specified by <see cref="param_value_size"/> is less than size of return type and <see cref="param_value"/> is not a
+        /// <c>null</c> value or if <see cref="param_name"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
+        /// 
+        /// <c>Result.InvalidProgram</c> if <see cref="program"/> is not a valid program object.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetProgramBuildInfo")]
+        public static extern Result GetProgramBuildInfo(
+            [In] IntPtr program,
+            [In] IntPtr device,
+            [In] [MarshalAs(UnmanagedType.U4)] ProgramBuildInfo param_name,
+            [In] UIntPtr param_value_size,
+            [Out] byte[] param_value,
+            [Out] out UIntPtr param_value_size_ret
+        );
+
         #endregion
 
         #region Kernel Object API Methods
@@ -366,7 +399,7 @@ namespace OpenCl.DotNetCore
         /// <returns>
         /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
         /// 
-        /// <c>Result.InvalidKernel</c> if <see cref="kerlen"/> is not a valid kernel object.
+        /// <c>Result.InvalidKernel</c> if <see cref="kernel"/> is not a valid kernel object.
         /// 
         /// <c>Result.InvalidValue</c> if <see cref="param_name"/> is not one of the supported values or if size in bytes specified by <see cref="param_value_size"/> is less than size of return type and <see cref="param_value"/> is not a
         /// <c>null</c> value or if <see cref="param_name"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
@@ -403,7 +436,7 @@ namespace OpenCl.DotNetCore
         /// 
         /// <c>Result.KernelArgumentInfoNotAvailable</c> if the argument information is not available for <see cref="kernel"/>.
         /// 
-        /// <c>Result.InvalidKernel</c> if <see cref="kerlen"/> is not a valid kernel object.
+        /// <c>Result.InvalidKernel</c> if <see cref="kernel"/> is not a valid kernel object.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetKernelArgInfo")]
         public static extern Result GetKernelArgumentInfo(
