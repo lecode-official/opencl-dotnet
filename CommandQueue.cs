@@ -34,6 +34,28 @@ namespace OpenCl.DotNetCore
 
         #endregion
 
+        #region Public Methods
+
+        /// <summary>
+        /// Enqueues a n-dimensional kernel to the command queue.
+        /// </summary>
+        /// <param name="kernel">The kernel that is to be enqueued.</param>
+        /// <param name="workDimension">The dimensionality of the work.</param>
+        /// <param name="workUnitsPerKernel">The number of work units per kernel.</param>
+        /// <exception cref="OpenClException">If the kernel could not be enqueued, then an <see cref="OpenClException"/> is thrown.</exception>
+        public void EnqueueNDRangeKernel(Kernel kernel, int workDimension, int workUnitsPerKernel)
+        {
+            // Enqueues the kernel
+            IntPtr waitEventPointer;
+            Result result = NativeMethods.EnqueueNDRangeKernel(this.Handle, kernel.Handle, (uint)workDimension, null, new IntPtr[] { new IntPtr(workUnitsPerKernel)}, null, 0, null, out waitEventPointer);
+
+            // Checks if the kernel was enqueued successfully, if not, then an exception is thrown
+            if (result != Result.Success)
+                throw new OpenClException("The kernel could not be enqueued.", result);
+        }
+
+        #endregion
+
         #region Public Static Methods
 
         /// <summary>

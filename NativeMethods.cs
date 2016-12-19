@@ -451,5 +451,49 @@ namespace OpenCl.DotNetCore
         public static extern Result ReleaseMemoryObject([In] IntPtr memobj);
 
         #endregion
+
+        #region Enqueued Commands API Methods
+
+        /// <summary>
+        /// Enqueues a command to execute a kernel on a device.
+        /// </summary>
+        /// <param name="command_queue">A valid host command-queue. The kernel will be queued for execution on the device associated with <see cref="command_queue"/>.</param>
+        /// <param name="kernel">A valid kernel object. The OpenCL context associated with <see cref="kernel"/> and <see cref="command_queue"/> must be the same.</param>
+        /// <param name="work_dim">The number of dimensions used to specify the global work-items and work-items in the work-group.</param>
+        /// <param name="global_work_offset">
+        /// Can be used to specify an array of <see cref="work_dim"/> unsigned values that describe the offset used to calculate the global ID of a work-item. If <see cref="global_work_offset"/> is <c>null</c>, the global IDs start at
+        /// offset (0, 0, ... 0).
+        /// </param>
+        /// <param name="global_work_size">
+        /// Points to an array of <see cref="work_dim"/> unsigned values that describe the number of global work-items in <see cref="work_dim"/> dimensions that will execute the kernel function. The total number of global work-items is
+        /// computed as global_work_size[0] *...* global_work_size[work_dim - 1].
+        /// </param>
+        /// <param name="local_work_size">
+        /// Points to an array of <see cref="work_dim"/> unsigned values that describe the number of work-items that make up a work-group (also referred to as the size of the work-group) that will execute the kernel specified by <see cref="kernel"/>.
+        /// The total number of work-items in a work-group is computed as local_work_size[0] *... * local_work_size[work_dim - 1].
+        /// </param>
+        /// <param name="num_events_in_wait_list">The number of event in <see cref="event_wait_list"/>. If <see cref="event_wait_list"/> is <c>null</c>, then <see cref="num_events_in_wait_list"/ must be 0.</param>
+        /// <param name="event_wait_list">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="event_wait_list"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="event_wait">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [DllImport("OpenCL", EntryPoint = "clEnqueueNDRangeKernel")]
+        public static extern Result EnqueueNDRangeKernel(
+            [In] IntPtr command_queue,
+            [In] IntPtr kernel,
+            [In] [MarshalAs(UnmanagedType.U4)] uint work_dim,
+            [In] IntPtr[] global_work_offset,
+            [In] IntPtr[] global_work_size,
+            [In] IntPtr[] local_work_size,
+            [In] [MarshalAs(UnmanagedType.U4)] uint num_events_in_wait_list,
+            [In] IntPtr[] event_wait_list,
+            [Out] out IntPtr event_wait
+        );
+
+        #endregion
     }
 }
