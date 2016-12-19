@@ -41,7 +41,7 @@ namespace OpenCl.DotNetCore
         /// <param name="message">An error message.</param>
         /// <param name="result">The error code that was returned by OpenCL.</param>
         public OpenClException(string message, Result result)
-            : base(message)
+            : base($"{message} Error code: {result}.")
         {
             this.Result = result;
         }
@@ -61,7 +61,7 @@ namespace OpenCl.DotNetCore
         /// <param name="inner">The inner exception, which is the root cause for this exception.</param>
         /// <param name="result">The error code that was returned by OpenCL.</param>
         public OpenClException(string message, Exception inner, Result result)
-            : base(message, inner)
+            : base($"{message} Error code: {result}.", inner)
         {
             this.Result = result;
         }

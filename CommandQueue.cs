@@ -56,7 +56,7 @@ namespace OpenCl.DotNetCore
 
                 // Reads the memory object, by enqueuing the read operation to the command queue
                 IntPtr waitEventPointer;
-                Result result = NativeMethods.EnqueueReadBuffer(this.Handle, memoryObject.Handle, true, IntPtr.Zero, new IntPtr(size), resultValuePointer, 0, null, out waitEventPointer);
+                Result result = NativeMethods.EnqueueReadBuffer(this.Handle, memoryObject.Handle, true, UIntPtr.Zero, new UIntPtr((uint)size), resultValuePointer, 0, null, out waitEventPointer);
                 
                 // Checks if the read operation was queued successfuly, if not, an exception is thrown
                 if (result != Result.Success)

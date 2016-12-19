@@ -63,9 +63,9 @@ namespace OpenCl.DotNetCore
         public static extern Result GetPlatformInfo(
             [In] IntPtr platform,
             [In] [MarshalAs(UnmanagedType.U4)] PlatformInfo param_name,
-            [In] IntPtr param_value_size,
+            [In] UIntPtr param_value_size,
             [Out] byte[] param_value,
-            [Out] out IntPtr param_value_size_ret
+            [Out] out UIntPtr param_value_size_ret
         );
 
         #endregion
@@ -134,9 +134,9 @@ namespace OpenCl.DotNetCore
         public static extern Result GetDeviceInfo(
             [In] IntPtr device,
             [In] [MarshalAs(UnmanagedType.U4)] DeviceInfo param_name,
-            [In] IntPtr param_value_size,
+            [In] UIntPtr param_value_size,
             [Out] byte[] param_value,
-            [Out] out IntPtr param_value_size_ret
+            [Out] out UIntPtr param_value_size_ret
         );
 
         #endregion
@@ -351,7 +351,7 @@ namespace OpenCl.DotNetCore
         public static extern Result SetKernelArgument(
             [In] IntPtr kernel,
             [In] [MarshalAsAttribute(UnmanagedType.U4)] uint arg_index,
-            [In] IntPtr arg_size,
+            [In] UIntPtr arg_size,
             [In] IntPtr arg_value
         );
 
@@ -429,11 +429,11 @@ namespace OpenCl.DotNetCore
         public static extern IntPtr CreateBuffer(
             [In] IntPtr context,
             [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
-            [In] IntPtr size,
+            [In] UIntPtr size,
             [Out] IntPtr host_ptr,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errcode_ret
         );
-
+        
         /// <summary>
         /// Decrements the memory object reference count.
         /// </summary>
@@ -477,8 +477,8 @@ namespace OpenCl.DotNetCore
             [In] IntPtr command_queue,
             [In] IntPtr buffer,
             [In] [MarshalAs(UnmanagedType.U4)] bool blocking_read,
-            [In] IntPtr offset,
-            [In] IntPtr size,
+            [In] UIntPtr offset,
+            [In] UIntPtr size,
             [In] IntPtr ptr,
             [In] [MarshalAs(UnmanagedType.U4)] uint num_events_in_wait_list,
             [In] IntPtr[] event_wait_list,

@@ -2,6 +2,7 @@
 #region Using Directives
 
 using System;
+using System.Runtime.InteropServices;
 
 #endregion
 
@@ -48,7 +49,7 @@ namespace OpenCl.DotNetCore
                 throw new IndexOutOfRangeException($"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0.");
 
             // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
-            Result result = NativeMethods.SetKernelArgument(this.Handle, (uint)index, new IntPtr(4), memoryObject.Handle);
+            Result result = NativeMethods.SetKernelArgument(this.Handle, (uint)index, new UIntPtr((uint)Marshal.SizeOf(memoryObject.Handle)), memoryObject.Handle);
             if (result != Result.Success)
                 throw new OpenClException($"The kernel argument with the index {index} could not be set.", result);
         }

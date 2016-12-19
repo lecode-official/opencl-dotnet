@@ -86,14 +86,14 @@ namespace OpenCl.DotNetCore
         private byte[] GetDeviceInformation(DeviceInfo deviceInfo)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
-            IntPtr returnValueSize;
-            Result result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, IntPtr.Zero, null, out returnValueSize);
+            UIntPtr returnValueSize;
+            Result result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
-            byte[] output = new byte[returnValueSize.ToInt32() + 1];
-            result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, new IntPtr(output.Length), output, out returnValueSize);
+            byte[] output = new byte[returnValueSize.ToUInt32() + 1];
+            result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
 

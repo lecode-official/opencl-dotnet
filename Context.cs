@@ -86,7 +86,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates a new memory object of the specified size and with the specified memory flags
             Result result;
-            IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, new IntPtr(size), IntPtr.Zero, out result);
+            IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
             
             // Checks if the creation of the memory object was successful, if not, then an exception is thrown
             if (result != Result.Success)
@@ -98,35 +98,44 @@ namespace OpenCl.DotNetCore
         }
 
         /// <summary>
-        /// Creates a new memory object with the specified flags. The size of memory allocated for the memory object is determined by <see cref="T"/>.
+        /// Creates a new memory object with the specified flags. The size of memory allocated for the memory object is determined by <see cref="T"/> and the number of elements.
         /// </summary>
         /// <typeparam name="T">The size of the memory object will be determined by the structure specified in the type parameter.</typeparam>
         /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>());
+        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, int size) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>() * size);
 
-        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T value) where T : struct
+        /// <summary>
+        /// Creates a new memory object with the specified flags for the specified array.  The size of memory 1allocated for the memory object is determined by <see cref="T"/> and the number of elements in the array.
+        /// </summary>
+        /// <typeparam name="T">The size of the memory object will be determined by the structure specified in the type parameter.</typeparam>
+        /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
+        /// <param name="value">The value that is to be copied over to the device.</param>
+        /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created memory object.</returns>
+        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T[] value)
         {
             // Tries to create the memory object, if anything goes wrong, then it is crucial to free the allocated memory
             IntPtr hostMemoryObjectPointer = IntPtr.Zero;
             try
             {
                 // Determines the size of the specified value and creates a pointer that points to the data inside the structure
-                IntPtr size = new IntPtr(Marshal.SizeOf<T>());
+                int size = Marshal.SizeOf<T>() * value.Length;
                 hostMemoryObjectPointer = Marshal.AllocHGlobal(size);
-                Marshal.StructureToPtr(value, hostMemoryObjectPointer, false);
+                for (int i = 0; i < value.Length; i++)
+                    Marshal.StructureToPtr(value[i], IntPtr.Add(hostMemoryObjectPointer, i * Marshal.SizeOf<T>()), false);
 
                 // Creates a new memory object for the specified value
                 Result result;
-                IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, size, hostMemoryObjectPointer, out result);
+                IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, new UIntPtr((uint)size), hostMemoryObjectPointer, out result);
 
                 // Checks if the creation of the memory object was successful, if not, then an exception is thrown
                 if (result != Result.Success)
                     throw new OpenClException("The memory object could not be created.", result);
 
                 // Creates the memory object from the pointer to the memory object and returns it
-                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer, size.ToInt32());
+                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer, size);
                 return memoryObject;
             }
             finally
