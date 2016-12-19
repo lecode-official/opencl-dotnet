@@ -194,7 +194,7 @@ namespace OpenCl.DotNetCore
                 throw new OpenClException("The platform information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
-            byte[] output = new byte[returnValueSize.ToUInt32() + 1];
+            byte[] output = new byte[returnValueSize.ToUInt32()];
             result = NativeMethods.GetPlatformInfo(this.Handle, platformInfo, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The platform information could not be retrieved.", result);
