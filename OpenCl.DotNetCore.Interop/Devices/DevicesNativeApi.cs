@@ -82,6 +82,16 @@ namespace OpenCl.DotNetCore.Interop.Devices
             [Out] out UIntPtr parameterValueSizeReturned
         );
 
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clCreateSubDevices(cl_device_id                         /* in_device */,
+        //                const cl_device_partition_property * /* properties */,
+        //                cl_uint                              /* num_devices */,
+        //                cl_device_id *                       /* out_devices */,
+        //                cl_uint *                            /* num_devices_ret */) CL_API_SUFFIX__VERSION_1_2;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clRetainDevice(cl_device_id /* device */) CL_API_SUFFIX__VERSION_1_2;
+
         /// <summary>
         /// Decrements the device reference count if device is a valid sub-device created by a call to <see cref="CreateSubDevices"/>. If device is a root level device i.e. a device returned by <see cref="GetDeviceIDs"/>, the device
         /// reference count remains unchanged.
@@ -99,6 +109,20 @@ namespace OpenCl.DotNetCore.Interop.Devices
 
         [DllImport("OpenCL", EntryPoint = "clReleaseDevice")]
         public static extern Result ReleaseDevice([In] IntPtr device);
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clSetDefaultDeviceCommandQueue(cl_context           /* context */,
+        //                            cl_device_id         /* device */,
+        //                            cl_command_queue     /* command_queue */) CL_API_SUFFIX__VERSION_2_1;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clGetDeviceAndHostTimer(cl_device_id    /* device */,
+        //                        cl_ulong*       /* device_timestamp */,
+        //                        cl_ulong*       /* host_timestamp */) CL_API_SUFFIX__VERSION_2_1;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clGetHostTimer(cl_device_id /* device */,
+        //            cl_ulong *   /* host_timestamp */)  CL_API_SUFFIX__VERSION_2_1;
 
         #endregion
     }

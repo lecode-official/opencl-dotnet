@@ -56,6 +56,16 @@ namespace OpenCl.DotNetCore.Interop.Contexts
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        //extern CL_API_ENTRY cl_context CL_API_CALL
+        //clCreateContextFromType(const cl_context_properties * /* properties */,
+        //                        cl_device_type          /* device_type */,
+        //                        void (CL_CALLBACK *     /* pfn_notify*/ )(const char *, const void *, size_t, void *),
+        //                        void *                  /* user_data */,
+        //                        cl_int *                /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clRetainContext(cl_context /* context */) CL_API_SUFFIX__VERSION_1_0;
+
         /// <summary>
         /// Decrement the context reference count.
         /// </summary>
@@ -71,6 +81,13 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
         public static extern Result ReleaseContext([In] IntPtr context);
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clGetContextInfo(cl_context         /* context */, 
+        //                cl_context_info    /* param_name */, 
+        //                size_t             /* param_value_size */, 
+        //                void *             /* param_value */, 
+        //                size_t *           /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
 
         #endregion
     }

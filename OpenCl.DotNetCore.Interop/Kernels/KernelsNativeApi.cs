@@ -45,6 +45,24 @@ namespace OpenCl.DotNetCore.Interop.Kernels
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        //extern CL_API_ENTRY cl_kernel CL_API_CALL
+        //clCreateKernel(cl_program      /* program */,
+        //            const char *    /* kernel_name */,
+        //            cl_int *        /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clCreateKernelsInProgram(cl_program     /* program */,
+        //                        cl_uint        /* num_kernels */,
+        //                        cl_kernel *    /* kernels */,
+        //                        cl_uint *      /* num_kernels_ret */) CL_API_SUFFIX__VERSION_1_0;
+
+        //extern CL_API_ENTRY cl_kernel CL_API_CALL
+        //clCloneKernel(cl_kernel     /* source_kernel */,
+        //            cl_int*       /* errcode_ret */) CL_API_SUFFIX__VERSION_2_1;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clRetainKernel(cl_kernel    /* kernel */) CL_API_SUFFIX__VERSION_1_0;
+
         /// <summary>
         /// Decrements the kernel reference count.
         /// </summary>
@@ -84,6 +102,17 @@ namespace OpenCl.DotNetCore.Interop.Kernels
             [In] UIntPtr argumentSize,
             [In] IntPtr argumentValue
         );
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clSetKernelArgSVMPointer(cl_kernel    /* kernel */,
+        //                        cl_uint      /* arg_index */,
+        //                        const void * /* arg_value */) CL_API_SUFFIX__VERSION_2_0;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clSetKernelExecInfo(cl_kernel            /* kernel */,
+        //                    cl_kernel_exec_info  /* param_name */,
+        //                    size_t               /* param_value_size */,
+        //                    const void *         /* param_value */) CL_API_SUFFIX__VERSION_2_0;
 
         /// <summary>
         /// Returns information about the kernel object.
@@ -144,6 +173,24 @@ namespace OpenCl.DotNetCore.Interop.Kernels
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned
         );
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clGetKernelWorkGroupInfo(cl_kernel                  /* kernel */,
+        //                        cl_device_id               /* device */,
+        //                        cl_kernel_work_group_info  /* param_name */,
+        //                        size_t                     /* param_value_size */,
+        //                        void *                     /* param_value */,
+        //                        size_t *                   /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
+
+        //extern CL_API_ENTRY cl_int CL_API_CALL
+        //clGetKernelSubGroupInfo(cl_kernel                   /* kernel */,
+        //                        cl_device_id                /* device */,
+        //                        cl_kernel_sub_group_info    /* param_name */,
+        //                        size_t                      /* input_value_size */,
+        //                        const void*                 /*input_value */,
+        //                        size_t                      /* param_value_size */,
+        //                        void*                       /* param_value */,
+        //                        size_t*                     /* param_value_size_ret */ ) CL_API_SUFFIX__VERSION_2_1;
 
         #endregion
     }
