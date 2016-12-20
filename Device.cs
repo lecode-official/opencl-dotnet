@@ -50,7 +50,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInfo.DeviceName));
+                    this.name = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInfo.DeviceName)).Replace("\0", string.Empty);
                 return this.name;
             }
         }
@@ -68,7 +68,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInfo.DeviceVendor));
+                    this.vendor = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInfo.DeviceVendor)).Replace("\0", string.Empty);
                 return this.vendor;
             }
         }

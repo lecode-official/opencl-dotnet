@@ -52,7 +52,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Name));
+                    this.name = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Name)).Replace("\0", string.Empty);
                 return this.name;
             }
         }
@@ -70,7 +70,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Vendor));
+                    this.vendor = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Vendor)).Replace("\0", string.Empty);
                 return this.vendor;
             }
         }
@@ -88,7 +88,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.version == null)
-                    this.version = new Version(Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Version)));
+                    this.version = new Version(Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Version)).Replace("\0", string.Empty));
                 return this.version;
             }
         }
@@ -107,7 +107,7 @@ namespace OpenCl.DotNetCore
             {
                 if (!this.profile.HasValue)
                 {
-                    string profileName = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Profile));
+                    string profileName = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Profile)).Replace("\0", string.Empty);
                     if (profileName == "FULL_PROFILE")
                         this.profile = Profile.Full;
                     else
@@ -130,7 +130,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.extensions == null)
-                    this.extensions = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Extensions)).Split(' ').ToList();
+                    this.extensions = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.Extensions)).Replace("\0", string.Empty).Split(' ').ToList();
                 return this.extensions;
             }
         }
@@ -170,7 +170,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.platformIcdSuffix == null)
-                    this.platformIcdSuffix = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.PlatformIcdSuffix));
+                    this.platformIcdSuffix = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInfo.PlatformIcdSuffix)).Replace("\0", string.Empty);
                 return this.platformIcdSuffix;
             }
         }

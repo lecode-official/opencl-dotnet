@@ -51,7 +51,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.functionName))
-                    this.functionName = Encoding.ASCII.GetString(this.GetKernelInformation(KernelInfo.FunctionName));
+                    this.functionName = Encoding.ASCII.GetString(this.GetKernelInformation(KernelInfo.FunctionName)).Replace("\0", string.Empty);
                 return this.functionName;
             }
         }
