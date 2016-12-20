@@ -3,7 +3,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using System.Text;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Kernels;
 

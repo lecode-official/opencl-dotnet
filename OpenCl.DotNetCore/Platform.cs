@@ -4,7 +4,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Devices;
 using OpenCl.DotNetCore.Interop.Platforms;

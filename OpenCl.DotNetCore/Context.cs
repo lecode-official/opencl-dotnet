@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using System.Text;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Contexts;
 using OpenCl.DotNetCore.Interop.Memory;
