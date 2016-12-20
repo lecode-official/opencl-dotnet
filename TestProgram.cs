@@ -71,19 +71,21 @@ namespace OpenCl.DotNetCore
                                 float[] resultArray = commandQueue.ReadMemoryObject<float>(result, 4);
                                 Console.WriteLine(resultArray);
                             }
+
+                            // Prints out a success message
+                            Console.WriteLine("Finished successfully");
                         }
-                        finally
+                        catch (OpenClException exception)
                         {
-                            // Even if something goes wrong, the kernel argument memory objects are disposed of
-                            matrix.Dispose();
-                            vector.Dispose();
-                            result.Dispose();
+                            Console.WriteLine(exception.Message);
                         }
+
+                        // Disposes of the memory objects
+                        matrix.Dispose();
+                        vector.Dispose();
+                        result.Dispose();
                     }
                 }
-
-                // Prints out a success message
-                Console.WriteLine("Finished successfully");
             }
         }
 
