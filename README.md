@@ -12,10 +12,6 @@
 - [x] Add method to compile from file
 - [x] Add method to compile from Stream/Streams
 - [x] Put the different APIs of the native wrapper into different classes
-- [ ] Create a class that converts byte arrays into CLR types
+- [x] Create a class that converts byte arrays into CLR types
 - [ ] Port the whole API surface area
 - [ ] Finish documentation
-
-074727099922
-Michael Becker
-Display Messtechnik und Systeme
