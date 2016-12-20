@@ -69,11 +69,8 @@ namespace OpenCl.DotNetCore
                             {
                                 commandQueue.EnqueueNDRangeKernel(kernel, 1, 4);
                                 float[] resultArray = commandQueue.ReadMemoryObject<float>(result, 4);
-                                Console.WriteLine(resultArray);
+                                Console.WriteLine($"Result: ({string.Join(", ", resultArray)})");
                             }
-
-                            // Prints out a success message
-                            Console.WriteLine("Finished successfully");
                         }
                         catch (OpenClException exception)
                         {
