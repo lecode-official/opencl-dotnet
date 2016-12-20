@@ -3,10 +3,10 @@
 
 ## Todo
 
+- [x] Separate into three projects: Native Core, CLR Wrapper, Test Program
 - [ ] HandleBase class, which is the base class for all OpenCL classes that need a handle
 - [ ] Rename the arguments of the native methods
 - [ ] Finish documentation
-- [ ] Separate into three projects: Native Core, CLR Wrapper, Test Program
 - [ ] Rename Info to Information
 - [ ] Add compiler log to exception, when program cannot be build
 - [ ] Add method to compile multiple sources at once
