@@ -25,7 +25,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// A list of OpenCL devices found. The device values returned in <see cref="devices"/> can be used to identify a specific OpenCL device. If <see cref="devices"/> argument is <c>null</c>, this argument is ignored. The number of
         /// OpenCL devices returned is the mininum of the value specified by <see cref="numberOfEntries"/> or the number of OpenCL devices whose type matches <see cref="deviceType"/>.
         /// </param>
-        /// <param name="numberOfDevices">The number of OpenCL devices available that match <see cref="deviceType". If <see cref="numberOfDevices"/> is <c>null</c>, this argument is ignored.</param>
+        /// <param name="numberOfDevicesReturned">The number of OpenCL devices available that match <see cref="deviceType". If <see cref="numberOfDevicesReturned"/> is <c>null</c>, this argument is ignored.</param>
         /// <returns>
         /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise it returns one of the following errors:
         /// 
@@ -33,7 +33,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.InvalidDeviceType</c> if <see cref="deviceType"/> is not a valid value.
         /// 
-        /// <c>Result.InvalidValue</c> if <see cref="numberOfEntries"/> is equal to zero and <see cref="devices"/> is not <c>null</c> or if both <see cref="numberOfDevices"/> and <see cref="devices"/> are <c>null</c>.
+        /// <c>Result.InvalidValue</c> if <see cref="numberOfEntries"/> is equal to zero and <see cref="devices"/> is not <c>null</c> or if both <see cref="numberOfDevicesReturned"/> and <see cref="devices"/> are <c>null</c>.
         /// 
         /// <c>Result.DeviceNotFound</c> if no OpenCL devices that matched <see cref="deviceType"/> were found.
         /// 
@@ -47,7 +47,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
             [In] [MarshalAs(UnmanagedType.U4)] DeviceType deviceType,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEntries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] devices,
-            [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfDevices
+            [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfDevicesReturned
         );
 
         /// <summary>
@@ -82,15 +82,44 @@ namespace OpenCl.DotNetCore.Interop.Devices
             [Out] out UIntPtr parameterValueSizeReturned
         );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clCreateSubDevices(cl_device_id                         /* in_device */,
-        //                const cl_device_partition_property * /* properties */,
-        //                cl_uint                              /* num_devices */,
-        //                cl_device_id *                       /* out_devices */,
-        //                cl_uint *                            /* num_devices_ret */) CL_API_SUFFIX__VERSION_1_2;
+        /// <summary>
+        /// Creates an array of sub-devices that each reference a non-intersecting set of compute units within <see cref="inDevice"/>.
+        /// </summary>
+        /// <param name="inDevice">The device to be partitioned.</param>
+        /// <param name="properties">
+        /// Specifies how <see cref="inDevice"/> is to be partitioned, described by a partition name and its corresponding value. Each partition name is immediately followed by the corresponding desired value. The list is terminated with 0.
+        /// </param>
+        /// <param name="numberOfDevices">Size of memory pointed to by <see cref="outDevices"/> specified as the number of device entries.</param>
+        /// <param name="outDevices"></param>
+        /// <param name="numberOfDevicesReturned">
+        /// The buffer where the OpenCL sub-devices will be returned. If <see cref="outDevices"/> is <c>null</c>, this argument is ignored. If <see cref="outDevices"/> is not <c>null</c>, <see cref="numberOfDevices"/> must be greater than
+        /// or equal to the number of sub-devices that device may be partitioned into according to the partitioning scheme specified in properties.
+        /// </param>
+        /// <returns></returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateSubDevices")]
+        public static extern Result CreateSubDevices(
+            [In] IntPtr inDevice,
+            [In] IntPtr properties,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
+            [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outDevices,
+            [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfDevicesReturned
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clRetainDevice(cl_device_id /* device */) CL_API_SUFFIX__VERSION_1_2;
+        /// <summary>
+        /// Increments the device reference count.
+        /// </summary>
+        /// <param name="device">Specifies the device to retain.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function executed successfully, or one of the errors below:
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not a valid command-queue.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clRetainDevice")]
+        public static extern Result RetainDevice([In] IntPtr device);
 
         /// <summary>
         /// Decrements the device reference count if device is a valid sub-device created by a call to <see cref="CreateSubDevices"/>. If device is a root level device i.e. a device returned by <see cref="GetDeviceIDs"/>, the device
@@ -106,23 +135,70 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-
         [DllImport("OpenCL", EntryPoint = "clReleaseDevice")]
         public static extern Result ReleaseDevice([In] IntPtr device);
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clSetDefaultDeviceCommandQueue(cl_context           /* context */,
-        //                            cl_device_id         /* device */,
-        //                            cl_command_queue     /* command_queue */) CL_API_SUFFIX__VERSION_2_1;
+        [DllImport("OpenCL", EntryPoint = "clSetDefaultDeviceCommandQueue")]
+        public static extern Result SetDefaultDeviceCommandQueue(
+            [In] IntPtr context,
+            [In] IntPtr device,
+            [In] IntPtr commandQueue
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetDeviceAndHostTimer(cl_device_id    /* device */,
-        //                        cl_ulong*       /* device_timestamp */,
-        //                        cl_ulong*       /* host_timestamp */) CL_API_SUFFIX__VERSION_2_1;
+        /// <summary>
+        /// Returns a reasonably synchronized pair of timestamps from the device timer and the host timer as seen by device.
+        /// </summary>
+        /// <param name="device">A device returned by <see cref="GetDeviceIds"/>.</param>
+        /// <param name="deviceTimestamp">
+        /// Will be updated with the value of the current timer in nanoseconds. The resolution of the timer is the same as the device profiling timer returned by <see cref="GetDeviceInformation"/> and the
+        /// <c>DeviceInformation.ProfilingTimerResolution</c> query.
+        /// </param>
+        /// <param name="hostTimestamp">
+        /// Will be updated with the value of the current timer in nanoseconds at the closest possible point in time to that at which device timer was returned. The resolution of the timer may be queried via <see cref="GetPlatformInfo"/>
+        /// and the flag <c>PlatformInformation.HostTimerResolution</c>.
+        /// </param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> with a time value in <see cref="hostTimestamp"/> if provided. Otherwise, it returns one of the following errors:
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not a valid OpenCL device.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="hostTimestamp"/> or <see cref="deviceTimestamp"/> is <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetDeviceAndHostTimer")]
+        public static extern Result GetDeviceAndHostTimer(
+            [In] IntPtr device,
+            [In] IntPtr deviceTimestamp,
+            [In] IntPtr hostTimestamp
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetHostTimer(cl_device_id /* device */,
-        //            cl_ulong *   /* host_timestamp */)  CL_API_SUFFIX__VERSION_2_1;
+        /// <summary>
+        /// Return the current value of the host clock as seen by device.
+        /// </summary>
+        /// <param name="device">A device returned by <see cref="GetDeviceIds"/>.</param>
+        /// <param name="hostTimestamp">
+        /// Will be updated with the value of the current timer in nanoseconds at the closest possible point in time to that at which device timer was returned. The resolution of the timer may be queried via <see cref="GetPlatformInfo"/>
+        /// and the flag <c>PlatformInformation.HostTimerResolution</c>.
+        /// </param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> with a time value in <see cref="hostTimestamp"/> if provided. Otherwise, it returns one of the following errors:
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not a valid OpenCL device.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="hostTimestamp"/> is <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetHostTimer")]
+        public static extern Result GetHostTimer(
+            [In] IntPtr device,
+            [In] IntPtr hostTimestamp
+        );
 
         #endregion
     }
