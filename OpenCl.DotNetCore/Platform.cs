@@ -14,7 +14,7 @@ namespace OpenCl.DotNetCore
     /// <summary>
     /// Represents an OpenCL platform.
     /// </summary>
-    public class Platform
+    public class Platform : HandleBase
     {
         #region Constructors
 
@@ -22,19 +22,10 @@ namespace OpenCl.DotNetCore
         /// Initializes a new <see cref="Platform"/> instance.
         /// </summary>
         /// <param name="handle">The handle to the OpenCL platform.</param>
-        private Platform(IntPtr handle)
+        internal Platform(IntPtr handle)
+            : base(handle)
         {
-            this.Handle = handle;
         }
-
-        #endregion
-
-        #region Internal Properties
-
-        /// <summary>
-        /// Gets the handle to the OpenCL platform.
-        /// </summary>
-        internal IntPtr Handle { get; private set; }
 
         #endregion
 

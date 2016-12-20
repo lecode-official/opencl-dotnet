@@ -12,7 +12,7 @@ namespace OpenCl.DotNetCore
     /// <summary>
     /// Represents an OpenCL device.
     /// </summary>
-    public class Device
+    public class Device : HandleBase
     {
         #region Constructors
 
@@ -21,18 +21,9 @@ namespace OpenCl.DotNetCore
         /// </summary>
         /// <param name="handle">The handle to the OpenCL device.</param>
         internal Device(IntPtr handle)
+            : base(handle)
         {
-            this.Handle = handle;
         }
-
-        #endregion
-
-        #region Internal Properties
-
-        /// <summary>
-        /// Gets the handle to the OpenCL device.
-        /// </summary>
-        internal IntPtr Handle { get; private set; }
 
         #endregion
 
@@ -100,6 +91,24 @@ namespace OpenCl.DotNetCore
 
             // Returns the output
             return output;
+        }
+
+        #endregion
+        
+        #region IDisposable Implementation
+
+        /// <summary>
+        /// Disposes of the resources that have been acquired by the command queue.
+        /// </summary>
+        /// <param name="disposing">Determines whether managed object or managed and unmanaged resources should be disposed of.</param>
+        protected override void Dispose(bool disposing)
+        {
+            // Checks if the device has already been disposed of, if not, then the device is disposed of
+            if (!this.IsDisposed)
+                NativeMethods.ReleaseDevice(this.Handle);
+
+            // Makes sure that the base class can execute its dispose logic
+            base.Dispose(disposing);
         }
 
         #endregion
