@@ -116,7 +116,7 @@ namespace OpenCl.DotNetCore
         {
             // Uses a stream reader to read the all streams
             List<string> sourceList = new List<string>();
-            foreach (Stream source in sources)
+            foreach (Stream source in streams)
             {
                 using (StreamReader stringReader = new StreamReader(source))
                     sourceList.Add(stringReader.ReadToEnd());
