@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -44,17 +45,17 @@ namespace OpenCl.DotNetCore
         #region Public Methods
 
         /// <summary>
-        /// Creates a program from the provided source code. The program is created, compiled, and linked.
+        /// Creates a program from the provided source codes. The program is created, compiled, and linked.
         /// </summary>
-        /// <param name="source">The source code from which the program is to be created.</param>
+        /// <param name="sources">The source codes from which the program is to be created.</param>
         /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created program.</returns>
-        public Program CreateAndBuildProgramFromString(string source)
+        public Program CreateAndBuildProgramFromString(IEnumerable<string> sources)
         {
             // Loads the program from the specified source string
             Result result;
-            IntPtr[] sourceList = new IntPtr[] { Marshal.StringToHGlobalAnsi(source) };
-            uint[] sourceLengths = new uint[] { (uint)source.Length };
+            IntPtr[] sourceList = sources.Select(source => Marshal.StringToHGlobalAnsi(source)).ToArray();
+            uint[] sourceLengths = sources.Select(source => (uint)source.Length).ToArray();
             IntPtr programPointer = NativeMethods.CreateProgramWithSource(this.Handle, 1, sourceList, sourceLengths, out result);
 
             // Checks if the program creation was successful, if not, then an exception is thrown
@@ -96,6 +97,65 @@ namespace OpenCl.DotNetCore
             Program program = new Program(programPointer);
             return program;
         }
+
+        /// <summary>
+        /// Creates a program from the provided source code. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="source">The source code from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Program CreateAndBuildProgramFromString(string source) => this.CreateAndBuildProgramFromString(new List<string> { source });
+
+        /// <summary>
+        /// Creates a program from the provided source streams. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="streams">The source streams from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Program CreateAndBuildProgramFromStream(IEnumerable<Stream> streams)
+        {
+            // Uses a stream reader to read the all streams
+            List<string> sourceList = new List<string>();
+            foreach (Stream source in sources)
+            {
+                using (StreamReader stringReader = new StreamReader(source))
+                    sourceList.Add(stringReader.ReadToEnd());
+            }
+
+            // Compiles the loaded strings
+            return this.CreateAndBuildProgramFromString(sourceList);
+        }
+
+        /// <summary>
+        /// Creates a program from the provided source stream. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="stream">The source stream from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Program CreateAndBuildProgramFromStream(Stream stream) => this.CreateAndBuildProgramFromStream(new List<Stream> { stream });
+
+        /// <summary>
+        /// Creates a program from the provided source files. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="fileNames">The source files from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Program CreateAndBuildProgramFromFile(IEnumerable<string> fileNames)
+        {
+            // Loads all the source code files and reads them in
+            List<string> sourceList = fileNames.Select(fileName => File.ReadAllText(fileName)).ToList();
+
+            // Compiles and returnes the program
+            return this.CreateAndBuildProgramFromString(sourceList);
+        }
+
+        /// <summary>
+        /// Creates a program from the provided source file. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="fileName">The source file from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Program CreateAndBuildProgramFromFile(string fileName) => this.CreateAndBuildProgramFromFile(new List<string> { fileName });
 
         /// <summary>
         /// Creates a new memory object with the specified flags and of the specified size.

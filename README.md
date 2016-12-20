@@ -8,9 +8,9 @@
 - [x] Rename the arguments of the native methods
 - [x] Rename Info to Information
 - [x] Add compiler log to exception, when program cannot be build
-- [ ] Add method to compile multiple sources at once
-- [ ] Add method to compile from file
-- [ ] Add method to compile from Stream/Streams
+- [x] Add method to compile multiple sources at once
+- [x] Add method to compile from file
+- [x] Add method to compile from Stream/Streams
 - [ ] Put the different APIs of the native wrapper into different classes
 - [ ] Create a class that converts byte arrays into CLR types
 - [ ] Port the whole API surface area
