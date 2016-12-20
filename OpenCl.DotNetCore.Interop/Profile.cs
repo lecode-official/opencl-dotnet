@@ -1,5 +1,5 @@
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Interop
 {
     /// <summary>
     /// Represents an enumeration for the different profiles that can be supported by OpenCL platforms.

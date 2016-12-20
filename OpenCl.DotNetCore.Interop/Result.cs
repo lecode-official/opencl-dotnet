@@ -1,5 +1,5 @@
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Interop
 {
     /// <summary>
     /// Represents an enumeration for the result codes that are returned by the native OpenCL functions.

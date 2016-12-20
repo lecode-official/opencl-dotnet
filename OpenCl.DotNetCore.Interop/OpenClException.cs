@@ -5,7 +5,7 @@ using System;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Interop
 {
     /// <summary>
     /// Represents an exception, which is thrown when there is an OpenCL error.

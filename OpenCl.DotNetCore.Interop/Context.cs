@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Interop
 {
     /// <summary>
     /// Represents an OpenCL context.

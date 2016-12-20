@@ -6,7 +6,7 @@ using System.Text;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Interop
 {
     /// <summary>
     /// Represents an OpenCL device.

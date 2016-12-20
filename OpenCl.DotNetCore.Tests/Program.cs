@@ -1,17 +1,18 @@
-
+﻿
 #region Using Directives
 
 using System;
 using System.Linq;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Tests
 {
     /// <summary>
     /// Represents a test program, that is used to test the OpenCL native interop wrapper.
     /// </summary>
-    public class TestProgram
+    public class Test
     {
         #region Public Static Methods
 
