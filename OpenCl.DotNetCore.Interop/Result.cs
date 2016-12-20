@@ -46,7 +46,7 @@ namespace OpenCl.DotNetCore.Interop
         /// <summary>
         /// 
         /// </summary>
-        ProfilingInfoNotAvailable = -7,
+        ProfilingInformationNotAvailable = -7,
 
         /// <summary>
         /// 

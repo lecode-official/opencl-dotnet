@@ -4,7 +4,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from a program build.
     /// </summary>
-    public enum ProgramBuildInfo
+    public enum ProgramBuildInformation
     {
         /// <summary>
         /// The build, compile, or link status.

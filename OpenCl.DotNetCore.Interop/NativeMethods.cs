@@ -60,9 +60,9 @@ namespace OpenCl.DotNetCore.Interop
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetPlatformInfo")]
-        public static extern Result GetPlatformInfo(
+        public static extern Result GetPlatformInformation(
             [In] IntPtr platform,
-            [In] [MarshalAs(UnmanagedType.U4)] PlatformInfo parameterName,
+            [In] [MarshalAs(UnmanagedType.U4)] PlatformInformation parameterName,
             [In] UIntPtr parameterValueSize,
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned
@@ -131,9 +131,9 @@ namespace OpenCl.DotNetCore.Interop
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetDeviceInfo")]
-        public static extern Result GetDeviceInfo(
+        public static extern Result GetDeviceInformation(
             [In] IntPtr device,
-            [In] [MarshalAs(UnmanagedType.U4)] DeviceInfo parameterName,
+            [In] [MarshalAs(UnmanagedType.U4)] DeviceInformation parameterName,
             [In] UIntPtr parameterValueSize,
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned
@@ -323,10 +323,10 @@ namespace OpenCl.DotNetCore.Interop
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetProgramBuildInfo")]
-        public static extern Result GetProgramBuildInfo(
+        public static extern Result GetProgramBuildInformation(
             [In] IntPtr program,
             [In] IntPtr device,
-            [In] [MarshalAs(UnmanagedType.U4)] ProgramBuildInfo parameterName,
+            [In] [MarshalAs(UnmanagedType.U4)] ProgramBuildInformation parameterName,
             [In] UIntPtr parameterValueSize,
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned
@@ -427,9 +427,9 @@ namespace OpenCl.DotNetCore.Interop
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetKernelInfo")]
-        public static extern Result GetKernelInfo(
+        public static extern Result GetKernelInformation(
             [In] IntPtr kernel,
-            [In] [MarshalAs(UnmanagedType.U4)] KernelInfo parameterName,
+            [In] [MarshalAs(UnmanagedType.U4)] KernelInformation parameterName,
             [In] UIntPtr parameterValueSize,
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned
@@ -457,10 +457,10 @@ namespace OpenCl.DotNetCore.Interop
         /// <c>Result.InvalidKernel</c> if <see cref="kernel"/> is not a valid kernel object.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetKernelArgInfo")]
-        public static extern Result GetKernelArgumentInfo(
+        public static extern Result GetKernelArgumentInformation(
             [In] IntPtr kernel,
             [In] [MarshalAs(UnmanagedType.U4)] uint argumentIndex,
-            [In] [MarshalAs(UnmanagedType.U4)] KernelArgumentInfo parameterName,
+            [In] [MarshalAs(UnmanagedType.U4)] KernelArgumentInformation parameterName,
             [In] UIntPtr parameterValueSize,
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned
@@ -582,9 +582,9 @@ namespace OpenCl.DotNetCore.Interop
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetMemObjectInfo")]
-        public static extern Result GetMemoryObjectInfo(
+        public static extern Result GetMemoryObjectInformation(
             [In] IntPtr memoryObject,
-            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectInfo parameterName,
+            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectInformation parameterName,
             [In] UIntPtr parameterValueSize,
             [Out] byte[] parameterValue,
             [Out] out UIntPtr parameterValueSizeReturned

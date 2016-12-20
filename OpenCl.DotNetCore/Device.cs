@@ -42,7 +42,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInfo.DeviceName)).Replace("\0", string.Empty);
+                    this.name = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInformation.DeviceName)).Replace("\0", string.Empty);
                 return this.name;
             }
         }
@@ -60,7 +60,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInfo.DeviceVendor)).Replace("\0", string.Empty);
+                    this.vendor = Encoding.ASCII.GetString(this.GetDeviceInformation(DeviceInformation.DeviceVendor)).Replace("\0", string.Empty);
                 return this.vendor;
             }
         }
@@ -72,20 +72,20 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Retrieves the specified information about the device.
         /// </summary>
-        /// <param name="deviceInfo">The kind of information that is to be retrieved.</param>
+        /// <param name="deviceInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetDeviceInformation(DeviceInfo deviceInfo)
+        private byte[] GetDeviceInformation(DeviceInformation deviceInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, UIntPtr.Zero, null, out returnValueSize);
+            Result result = NativeMethods.GetDeviceInformation(this.Handle, deviceInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetDeviceInfo(this.Handle, deviceInfo, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = NativeMethods.GetDeviceInformation(this.Handle, deviceInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
 

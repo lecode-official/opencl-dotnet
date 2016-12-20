@@ -4,7 +4,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from an memory object.
     /// </summary>
-    public enum MemoryObjectInfo
+    public enum MemoryObjectInformation
     {
         /// <summary>
         /// The type of the memory object.

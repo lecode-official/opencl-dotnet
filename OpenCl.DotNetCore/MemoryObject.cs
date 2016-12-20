@@ -44,9 +44,9 @@ namespace OpenCl.DotNetCore
                 if (!this.size.HasValue)
                 {
                     if (Marshal.SizeOf<IntPtr>() == sizeof(long))
-                        this.size = BitConverter.ToInt64(this.GetMemoryObjectInformation(MemoryObjectInfo.Size), 0);
+                        this.size = BitConverter.ToInt64(this.GetMemoryObjectInformation(MemoryObjectInformation.Size), 0);
                     else
-                        this.size = (long)BitConverter.ToInt32(this.GetMemoryObjectInformation(MemoryObjectInfo.Size), 0);
+                        this.size = (long)BitConverter.ToInt32(this.GetMemoryObjectInformation(MemoryObjectInformation.Size), 0);
                 }
                 return this.size.Value;
             }
@@ -65,7 +65,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (!this.flags.HasValue)
-                    this.flags = (MemoryFlag)BitConverter.ToUInt64(this.GetMemoryObjectInformation(MemoryObjectInfo.Flags), 0);
+                    this.flags = (MemoryFlag)BitConverter.ToUInt64(this.GetMemoryObjectInformation(MemoryObjectInformation.Flags), 0);
                 return this.flags.Value;
             }
         }
@@ -77,20 +77,20 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Retrieves the specified information about the OpenCL memory object.
         /// </summary>
-        /// <param name="memoryObjectInfo">The kind of information that is to be retrieved.</param>
+        /// <param name="memoryObjectInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetMemoryObjectInformation(MemoryObjectInfo memoryObjectInfo)
+        private byte[] GetMemoryObjectInformation(MemoryObjectInformation memoryObjectInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetMemoryObjectInfo(this.Handle, memoryObjectInfo, UIntPtr.Zero, null, out returnValueSize);
+            Result result = NativeMethods.GetMemoryObjectInformation(this.Handle, memoryObjectInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The memory object information could not be retrieved.", result);
 
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetMemoryObjectInfo(this.Handle, memoryObjectInfo, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = NativeMethods.GetMemoryObjectInformation(this.Handle, memoryObjectInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The memory object information could not be retrieved.", result);
 

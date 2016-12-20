@@ -4,7 +4,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from an OpenCL kernel parameter.
     /// </summary>
-    public enum KernelArgumentInfo : uint
+    public enum KernelArgumentInformation : uint
     {
         /// <summary>
         /// The address qualifier specified for the argument.

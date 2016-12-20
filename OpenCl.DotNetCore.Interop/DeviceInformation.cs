@@ -10,7 +10,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration that identifies the device information that can be queried from a device.
     /// </summary>
-    public enum DeviceInfo : uint
+    public enum DeviceInformation : uint
     {
         /// <summary>
         /// 

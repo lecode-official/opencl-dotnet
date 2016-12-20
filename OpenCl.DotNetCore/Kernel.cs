@@ -43,7 +43,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.functionName))
-                    this.functionName = Encoding.ASCII.GetString(this.GetKernelInformation(KernelInfo.FunctionName)).Replace("\0", string.Empty);
+                    this.functionName = Encoding.ASCII.GetString(this.GetKernelInformation(KernelInformation.FunctionName)).Replace("\0", string.Empty);
                 return this.functionName;
             }
         }
@@ -62,7 +62,7 @@ namespace OpenCl.DotNetCore
             {
                 if (!this.numberOfArguments.HasValue)
                 {
-                    byte[] rawNumberOfArguments = this.GetKernelInformation(KernelInfo.NumberOfArguments);
+                    byte[] rawNumberOfArguments = this.GetKernelInformation(KernelInformation.NumberOfArguments);
                     uint retrievedNumberOfArguments = BitConverter.ToUInt32(rawNumberOfArguments, 0);
                     this.numberOfArguments = (int)retrievedNumberOfArguments;
                 }
@@ -77,20 +77,20 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// Retrieves the specified information about the OpenCL kernel.
         /// </summary>
-        /// <param name="kernelInfo">The kind of information that is to be retrieved.</param>
+        /// <param name="kernelInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetKernelInformation(KernelInfo kernelInfo)
+        private byte[] GetKernelInformation(KernelInformation kernelInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetKernelInfo(this.Handle, kernelInfo, UIntPtr.Zero, null, out returnValueSize);
+            Result result = NativeMethods.GetKernelInformation(this.Handle, kernelInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The kernel information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetKernelInfo(this.Handle, kernelInfo, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = NativeMethods.GetKernelInformation(this.Handle, kernelInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The kernel information could not be retrieved.", result);
 

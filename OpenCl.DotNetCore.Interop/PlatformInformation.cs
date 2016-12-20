@@ -4,7 +4,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from an OpenCl platform.
     /// </summary>
-    public enum PlatformInfo : uint
+    public enum PlatformInformation : uint
     {
         /// <summary>
         /// OpenCL profile string. Returns the profile name supported by the implementation. The profile name returned can be one of the following strings: FULL_PROFILE - if the implementation supports the OpenCL specification (functionality
