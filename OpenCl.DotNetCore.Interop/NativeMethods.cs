@@ -139,6 +139,24 @@ namespace OpenCl.DotNetCore.Interop
             [Out] out UIntPtr param_value_size_ret
         );
 
+        /// <summary>
+        /// Decrements the device reference count if device is a valid sub-device created by a call to <see cref="CreateSubDevices"/>. If device is a root level device i.e. a device returned by <see cref="GetDeviceIDs"/>, the device
+        /// reference count remains unchanged.
+        /// </summary>
+        /// <param name="device">The device to release.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following errors:
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not a valid device object.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+
+        [DllImport("OpenCL", EntryPoint = "clReleaseDevice")]
+        public static extern Result ReleaseDevice([In] IntPtr device);
+
         #endregion
 
         #region Context API Methods
