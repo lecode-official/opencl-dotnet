@@ -121,10 +121,19 @@ namespace OpenCl.DotNetCore
             if (index < 0)
                 throw new IndexOutOfRangeException($"The specified index {index} is invalid. The index of the argument must always be greater or equal to 0.");
 
-            // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
-            Result result = NativeMethods.SetKernelArgument(this.Handle, (uint)index, new UIntPtr((uint)Marshal.SizeOf(memoryObject.Handle)), memoryObject.Handle);
-            if (result != Result.Success)
-                throw new OpenClException($"The kernel argument with the index {index} could not be set.", result);
+            // The set kernel argument method needs a pointer to the pointer, therefore the pointer is pinned, so that the garbage collector can not move it in memory
+            GCHandle garbageCollectorHandle = GCHandle.Alloc(memoryObject.Handle, GCHandleType.Pinned);
+            try
+            {
+                // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
+                Result result = NativeMethods.SetKernelArgument(this.Handle, (uint)index, new UIntPtr((uint)Marshal.SizeOf(memoryObject.Handle)), garbageCollectorHandle.AddrOfPinnedObject());
+                if (result != Result.Success)
+                    throw new OpenClException($"The kernel argument with the index {index} could not be set.", result);
+            }
+            finally
+            {
+                garbageCollectorHandle.Free();
+            }
         }
 
         #endregion
