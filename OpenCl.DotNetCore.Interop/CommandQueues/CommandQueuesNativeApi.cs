@@ -15,11 +15,27 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
     {
         #region Public Static methods
 
-        //extern CL_API_ENTRY cl_command_queue CL_API_CALL
-        //clCreateCommandQueueWithProperties(cl_context               /* context */,
-        //                                cl_device_id             /* device */,
-        //                                const cl_queue_properties *    /* properties */,
-        //                                cl_int *                 /* errcode_ret */) CL_API_SUFFIX__VERSION_2_0;
+        /// <summary>
+        /// Create a host or device command-queue on a specific device.
+        /// </summary>
+        /// <param name="context">Must be a valid OpenCL context.</param>
+        /// <param name="device">
+        /// Must be a device or sub-device associated with <see cref="context"/>. It can either be in the list of devices and sub-devices specified when <see cref="context"/> was created using <see cref="CreateContext"/> or be a root device
+        /// with the same device type as specified when the context is created using <see cref="CreateContextFromType"/>.
+        /// </param>
+        /// <param name="properties">
+        /// Specifies a list of properties for the command-queue and their corresponding values. Each property name is immediately followed by the corresponding desired value. The list is terminated with 0. If a supported property and its
+        /// value is not specified in properties, its default value will be used. <see cref="properties"/> can be <c>null</c> in which case the default values for supported command-queue properties will be used.
+        /// </param>
+        /// <param name="errorCode">Returns an appropriate error code. If errcode_ret is NULL, no error code is returned.</param>
+        /// <returns>Returns the created command queue.</returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateCommandQueueWithProperties")]
+        public static extern IntPtr CreateCommandQueueWithProperties(
+            [In] IntPtr context,
+            [In] IntPtr device,
+            [In] IntPtr properties,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
         //extern CL_API_ENTRY cl_int CL_API_CALL
         //clRetainCommandQueue(cl_command_queue /* command_queue */) CL_API_SUFFIX__VERSION_1_0;
