@@ -65,7 +65,7 @@ namespace OpenCl.DotNetCore.Interop
                 // Goes through the result and converts the content of the result to an array
                 T[] resultValue = new T[outputSize];
                 for (int i = 0; i < outputSize; i++)
-                    resultValue[i] = (T)Marshal.PtrToStructure(IntPtr.Add(resultValuePointer, i * Marshal.SizeOf<T>()), typeof(T));
+                    resultValue[i] = Marshal.PtrToStructure<T>(IntPtr.Add(resultValuePointer, i * Marshal.SizeOf<T>()));
                 
                 // Returns the content of the memory object
                 return resultValue;
