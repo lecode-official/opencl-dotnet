@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an OpenCL platform.
@@ -213,17 +214,17 @@ namespace OpenCl.DotNetCore.Interop
         /// <param name="deviceType">The type of devices that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the devices could not be retrieved, then a <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns a list of all devices that matched the specified device type.</returns>
-        public IEnumerable<Device> GetDevices(DeviceType deviceType)
+        public IEnumerable<Device> GetDevices(OpenCl.DotNetCore.DeviceType deviceType)
         {
             // Gets the number of available devices of the specified type
             uint numberOfAvailableDevices;
-            Result result = NativeMethods.GetDeviceIds(this.Handle, deviceType, 0, null, out numberOfAvailableDevices);
+            Result result = NativeMethods.GetDeviceIds(this.Handle, (OpenCl.DotNetCore.Interop.DeviceType)deviceType, 0, null, out numberOfAvailableDevices);
             if (result != Result.Success)
                 throw new OpenClException("The number of available devices could not be queried.", result);
 
             // Gets the pointers to the devices of the specified type
             IntPtr[] devicePointers = new IntPtr[numberOfAvailableDevices];
-            result = NativeMethods.GetDeviceIds(this.Handle, deviceType, numberOfAvailableDevices, devicePointers, out numberOfAvailableDevices);
+            result = NativeMethods.GetDeviceIds(this.Handle, (OpenCl.DotNetCore.Interop.DeviceType)deviceType, numberOfAvailableDevices, devicePointers, out numberOfAvailableDevices);
             if (result != Result.Success)
                 throw new OpenClException("The devices could not be retrieved.", result);
 

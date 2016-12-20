@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents the version of an OpenCL platform.

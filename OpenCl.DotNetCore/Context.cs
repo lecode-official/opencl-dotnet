@@ -5,10 +5,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an OpenCL context.
@@ -74,11 +75,11 @@ namespace OpenCl.DotNetCore.Interop
         /// <param name="size">The size of memory that should be allocated for the memory object.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject(MemoryFlag memoryFlags, int size)
+        public MemoryObject CreateMemoryObject(OpenCl.DotNetCore.MemoryFlag memoryFlags, int size)
         {
             // Creates a new memory object of the specified size and with the specified memory flags
             Result result;
-            IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
+            IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, (OpenCl.DotNetCore.Interop.MemoryFlag)memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
             
             // Checks if the creation of the memory object was successful, if not, then an exception is thrown
             if (result != Result.Success)
@@ -96,7 +97,7 @@ namespace OpenCl.DotNetCore.Interop
         /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, int size) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>() * size);
+        public MemoryObject CreateMemoryObject<T>(OpenCl.DotNetCore.MemoryFlag memoryFlags, int size) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>() * size);
 
         /// <summary>
         /// Creates a new memory object with the specified flags for the specified array. The size of memory 1allocated for the memory object is determined by <see cref="T"/> and the number of elements in the array.
@@ -106,7 +107,7 @@ namespace OpenCl.DotNetCore.Interop
         /// <param name="value">The value that is to be copied over to the device.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(MemoryFlag memoryFlags, T[] value) where T : struct
+        public MemoryObject CreateMemoryObject<T>(OpenCl.DotNetCore.MemoryFlag memoryFlags, T[] value) where T : struct
         {
             // Tries to create the memory object, if anything goes wrong, then it is crucial to free the allocated memory
             IntPtr hostMemoryObjectPointer = IntPtr.Zero;
@@ -120,7 +121,7 @@ namespace OpenCl.DotNetCore.Interop
 
                 // Creates a new memory object for the specified value
                 Result result;
-                IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, memoryFlags, new UIntPtr((uint)size), hostMemoryObjectPointer, out result);
+                IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, (OpenCl.DotNetCore.Interop.MemoryFlag)memoryFlags, new UIntPtr((uint)size), hostMemoryObjectPointer, out result);
 
                 // Checks if the creation of the memory object was successful, if not, then an exception is thrown
                 if (result != Result.Success)

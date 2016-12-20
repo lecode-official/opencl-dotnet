@@ -4,10 +4,11 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an OpenCL kernel.

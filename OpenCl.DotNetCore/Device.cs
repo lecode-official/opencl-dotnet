@@ -3,10 +3,11 @@
 
 using System;
 using System.Text;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an OpenCL device.

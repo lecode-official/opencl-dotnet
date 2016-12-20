@@ -3,10 +3,11 @@
 
 using System;
 using System.Runtime.InteropServices;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an OpenCL command queue.

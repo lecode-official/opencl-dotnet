@@ -11,7 +11,7 @@
     "emitEntryPoint": true
   },
   "dependencies": {
-    "OpenCl.DotNetCore.Interop": "0.1.0-alpha1"
+    "OpenCl.DotNetCore": "0.1.0-alpha1"
   },
   "frameworks": {
     "netcoreapp1.1": {

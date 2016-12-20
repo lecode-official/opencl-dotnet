@@ -2,10 +2,11 @@
 #region Using Directives
 
 using System;
+using OpenCl.DotNetCore.Interop;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an exception, which is thrown when there is an OpenCL error.

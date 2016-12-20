@@ -3,7 +3,7 @@
 
 using System;
 using System.Linq;
-using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore;
 
 #endregion
 
