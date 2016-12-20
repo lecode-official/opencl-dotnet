@@ -543,6 +543,35 @@ namespace OpenCl.DotNetCore
         [DllImport("OpenCL", EntryPoint = "clReleaseMemObject")]
         public static extern Result ReleaseMemoryObject([In] IntPtr memobj);
 
+        /// <summary>
+        /// Get information that is common to all memory objects (buffer and image objects).
+        /// </summary>
+        /// <param name="memobj">Specifies the memory object being queried.</param>
+        /// <param name="param_name">Specifies the information to query.</param>
+        /// <param name="param_value_size">Used to specify the size in bytes of memory pointed to by <see cref="param_value"/>. This size must be greater or equal to the size of the return type.</param>
+        /// <param name="param_value">A pointer to memory where the appropriate result being queried is returned. If <see cref="param_value"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="param_value_size_ret">The actual size in bytes of data copied to <see cref="param_value"/>. If <see cref="param_value_size_ret"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidMemoryObject</c> if <see cref="memobj"/> is not a valid memory object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="param_name"/> is not one of the supported values or if size in bytes specified by <see cref="param_value_size"/> is less than size of return type and <see cref="param_value"/> is not a
+        /// <c>null</c> value or if <see cref="param_name"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clGetMemObjectInfo")]
+        public static extern Result GetMemoryObjectInfo(
+            [In] IntPtr memobj,
+            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectInfo param_name,
+            [In] UIntPtr param_value_size,
+            [Out] byte[] param_value,
+            [Out] out UIntPtr param_value_size_ret
+        );
+
         #endregion
 
         #region Enqueued Commands API Methods

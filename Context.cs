@@ -85,7 +85,7 @@ namespace OpenCl.DotNetCore
                 throw new OpenClException("The memory object could not be created.", result);
 
             // Creates the memory object from the pointer to the memory object and returns it
-            MemoryObject memoryObject = new MemoryObject(memoryObjectPointer, size);
+            MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
             return memoryObject;
         }
 
@@ -127,7 +127,7 @@ namespace OpenCl.DotNetCore
                     throw new OpenClException("The memory object could not be created.", result);
 
                 // Creates the memory object from the pointer to the memory object and returns it
-                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer, size);
+                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
                 return memoryObject;
             }
             finally
