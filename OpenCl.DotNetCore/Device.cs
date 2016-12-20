@@ -4,6 +4,7 @@
 using System;
 using System.Text;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.Devices;
 
 #endregion
 
@@ -79,13 +80,13 @@ namespace OpenCl.DotNetCore
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetDeviceInformation(this.Handle, deviceInformation, UIntPtr.Zero, null, out returnValueSize);
+            Result result = DevicesNativeApi.GetDeviceInformation(this.Handle, deviceInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetDeviceInformation(this.Handle, deviceInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = DevicesNativeApi.GetDeviceInformation(this.Handle, deviceInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The device information could not be retrieved.", result);
 
@@ -105,7 +106,7 @@ namespace OpenCl.DotNetCore
         {
             // Checks if the device has already been disposed of, if not, then the device is disposed of
             if (!this.IsDisposed)
-                NativeMethods.ReleaseDevice(this.Handle);
+                DevicesNativeApi.ReleaseDevice(this.Handle);
 
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);

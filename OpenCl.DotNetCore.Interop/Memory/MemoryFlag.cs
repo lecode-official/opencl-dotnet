@@ -5,7 +5,7 @@ using System;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore.Interop.Memory
 {
     /// <summary>
     /// Represents the memory flags, that are used to create memory buffers.

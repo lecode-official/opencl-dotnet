@@ -5,7 +5,7 @@ using System;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore.Interop.CommandQueues
 {
     /// <summary>
     /// Represents an enumeration for the command queue properties.

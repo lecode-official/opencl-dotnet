@@ -4,6 +4,7 @@
 using System;
 using System.Runtime.InteropServices;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.Memory;
 
 #endregion
 
@@ -84,13 +85,13 @@ namespace OpenCl.DotNetCore
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetMemoryObjectInformation(this.Handle, memoryObjectInformation, UIntPtr.Zero, null, out returnValueSize);
+            Result result = MemoryNativeApi.GetMemoryObjectInformation(this.Handle, memoryObjectInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The memory object information could not be retrieved.", result);
 
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetMemoryObjectInformation(this.Handle, memoryObjectInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = MemoryNativeApi.GetMemoryObjectInformation(this.Handle, memoryObjectInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The memory object information could not be retrieved.", result);
 
@@ -110,7 +111,7 @@ namespace OpenCl.DotNetCore
         {
             // Checks if the memory object has already been disposed of, if not, then the memory object is disposed of
             if (!this.IsDisposed)
-                NativeMethods.ReleaseMemoryObject(this.Handle);
+                MemoryNativeApi.ReleaseMemoryObject(this.Handle);
 
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);

@@ -5,6 +5,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Text;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.Kernels;
 
 #endregion
 
@@ -84,13 +85,13 @@ namespace OpenCl.DotNetCore
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetKernelInformation(this.Handle, kernelInformation, UIntPtr.Zero, null, out returnValueSize);
+            Result result = KernelsNativeApi.GetKernelInformation(this.Handle, kernelInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The kernel information could not be retrieved.", result);
             
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetKernelInformation(this.Handle, kernelInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = KernelsNativeApi.GetKernelInformation(this.Handle, kernelInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The kernel information could not be retrieved.", result);
 
@@ -118,7 +119,7 @@ namespace OpenCl.DotNetCore
             try
             {
                 // Sets the kernel argument and checks if it was successful, if not, then an exception is thrown
-                Result result = NativeMethods.SetKernelArgument(this.Handle, (uint)index, new UIntPtr((uint)Marshal.SizeOf(memoryObject.Handle)), garbageCollectorHandle.AddrOfPinnedObject());
+                Result result = KernelsNativeApi.SetKernelArgument(this.Handle, (uint)index, new UIntPtr((uint)Marshal.SizeOf(memoryObject.Handle)), garbageCollectorHandle.AddrOfPinnedObject());
                 if (result != Result.Success)
                     throw new OpenClException($"The kernel argument with the index {index} could not be set.", result);
             }
@@ -140,7 +141,7 @@ namespace OpenCl.DotNetCore
         {
             // Checks if the kernel has already been disposed of, if not, then it is disposed of
             if (!this.IsDisposed)
-                NativeMethods.ReleaseKernel(this.Handle);
+                KernelsNativeApi.ReleaseKernel(this.Handle);
 
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);

@@ -1,5 +1,5 @@
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore.Interop.Kernels
 {
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from an OpenCL kernel.

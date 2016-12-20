@@ -3,6 +3,8 @@
 
 using System;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.Kernels;
+using OpenCl.DotNetCore.Interop.Programs;
 
 #endregion
 
@@ -38,7 +40,7 @@ namespace OpenCl.DotNetCore
         {
             // Allocates enough memory for the return value and retrieves it
             Result result;
-            IntPtr kernelPointer = NativeMethods.CreateKernel(this.Handle, kernelName, out result);
+            IntPtr kernelPointer = KernelsNativeApi.CreateKernel(this.Handle, kernelName, out result);
             if (result != Result.Success)
                 throw new OpenClException("The kernel could not be created.", result);
 
@@ -58,7 +60,7 @@ namespace OpenCl.DotNetCore
         {
             // Checks if the program has already been disposed of, if not, then the program is disposed of
             if (!this.IsDisposed)
-                NativeMethods.ReleaseProgram(this.Handle);
+                ProgramsNativeApi.ReleaseProgram(this.Handle);
 
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);

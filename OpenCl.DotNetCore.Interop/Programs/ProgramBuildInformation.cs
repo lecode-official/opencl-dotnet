@@ -1,5 +1,5 @@
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore.Interop.Programs
 {
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from a program build.

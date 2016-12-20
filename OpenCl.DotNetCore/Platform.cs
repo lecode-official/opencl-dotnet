@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.Devices;
+using OpenCl.DotNetCore.Interop.Platforms;
 
 #endregion
 
@@ -181,13 +183,13 @@ namespace OpenCl.DotNetCore
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
-            Result result = NativeMethods.GetPlatformInformation(this.Handle, platformInformation, UIntPtr.Zero, null, out returnValueSize);
+            Result result = PlatformsNativeApi.GetPlatformInformation(this.Handle, platformInformation, UIntPtr.Zero, null, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The platform information could not be retrieved.", result);
 
             // Allocates enough memory for the return value and retrieves it
             byte[] output = new byte[returnValueSize.ToUInt32()];
-            result = NativeMethods.GetPlatformInformation(this.Handle, platformInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            result = PlatformsNativeApi.GetPlatformInformation(this.Handle, platformInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
             if (result != Result.Success)
                 throw new OpenClException("The platform information could not be retrieved.", result);
 
@@ -209,13 +211,13 @@ namespace OpenCl.DotNetCore
         {
             // Gets the number of available devices of the specified type
             uint numberOfAvailableDevices;
-            Result result = NativeMethods.GetDeviceIds(this.Handle, (OpenCl.DotNetCore.Interop.DeviceType)deviceType, 0, null, out numberOfAvailableDevices);
+            Result result = DevicesNativeApi.GetDeviceIds(this.Handle, (Interop.Devices.DeviceType)deviceType, 0, null, out numberOfAvailableDevices);
             if (result != Result.Success)
                 throw new OpenClException("The number of available devices could not be queried.", result);
 
             // Gets the pointers to the devices of the specified type
             IntPtr[] devicePointers = new IntPtr[numberOfAvailableDevices];
-            result = NativeMethods.GetDeviceIds(this.Handle, (OpenCl.DotNetCore.Interop.DeviceType)deviceType, numberOfAvailableDevices, devicePointers, out numberOfAvailableDevices);
+            result = DevicesNativeApi.GetDeviceIds(this.Handle, (Interop.Devices.DeviceType)deviceType, numberOfAvailableDevices, devicePointers, out numberOfAvailableDevices);
             if (result != Result.Success)
                 throw new OpenClException("The devices could not be retrieved.", result);
 
@@ -237,13 +239,13 @@ namespace OpenCl.DotNetCore
         {
             // Gets the number of available platforms
             uint numberOfAvailablePlatforms;
-            Result result = NativeMethods.GetPlatformIds(0, null, out numberOfAvailablePlatforms);
+            Result result = PlatformsNativeApi.GetPlatformIds(0, null, out numberOfAvailablePlatforms);
             if (result != Result.Success)
                 throw new OpenClException("The number of platforms could not be queried.", result);
             
             // Gets pointers to all the platforms
             IntPtr[] platformPointers = new IntPtr[numberOfAvailablePlatforms];
-            result = NativeMethods.GetPlatformIds(numberOfAvailablePlatforms, platformPointers, out numberOfAvailablePlatforms);
+            result = PlatformsNativeApi.GetPlatformIds(numberOfAvailablePlatforms, platformPointers, out numberOfAvailablePlatforms);
             if (result != Result.Success)
                 throw new OpenClException("The platforms could not be retrieved.", result);
 

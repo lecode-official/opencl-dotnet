@@ -4,6 +4,8 @@
 using System;
 using System.Runtime.InteropServices;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.CommandQueues;
+using OpenCl.DotNetCore.Interop.EnqueuedCommands;
 
 #endregion
 
@@ -48,7 +50,7 @@ namespace OpenCl.DotNetCore
 
                 // Reads the memory object, by enqueuing the read operation to the command queue
                 IntPtr waitEventPointer;
-                Result result = NativeMethods.EnqueueReadBuffer(this.Handle, memoryObject.Handle, 1, UIntPtr.Zero, new UIntPtr((uint)size), resultValuePointer, 0, null, out waitEventPointer);
+                Result result = EnqueuedCommandsNativeApi.EnqueueReadBuffer(this.Handle, memoryObject.Handle, 1, UIntPtr.Zero, new UIntPtr((uint)size), resultValuePointer, 0, null, out waitEventPointer);
                 
                 // Checks if the read operation was queued successfuly, if not, an exception is thrown
                 if (result != Result.Success)
@@ -81,7 +83,7 @@ namespace OpenCl.DotNetCore
         {
             // Enqueues the kernel
             IntPtr waitEventPointer;
-            Result result = NativeMethods.EnqueueNDRangeKernel(this.Handle, kernel.Handle, (uint)workDimension, null, new IntPtr[] { new IntPtr(workUnitsPerKernel)}, null, 0, null, out waitEventPointer);
+            Result result = EnqueuedCommandsNativeApi.EnqueueNDRangeKernel(this.Handle, kernel.Handle, (uint)workDimension, null, new IntPtr[] { new IntPtr(workUnitsPerKernel)}, null, 0, null, out waitEventPointer);
 
             // Checks if the kernel was enqueued successfully, if not, then an exception is thrown
             if (result != Result.Success)
@@ -103,7 +105,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates the new command queue for the specified context and device
             Result result;
-            IntPtr commandQueuePointer = NativeMethods.CreateCommandQueue(context.Handle, device.Handle, 0, out result);
+            IntPtr commandQueuePointer = CommandQueuesNativeApi.CreateCommandQueue(context.Handle, device.Handle, 0, out result);
 
             // Checks if the command queue creation was successful, if not, then an exception is thrown
             if (result != Result.Success)
@@ -125,7 +127,7 @@ namespace OpenCl.DotNetCore
         {
             // Checks if the command queue has already been disposed of, if not, then the command queue is disposed of
             if (!this.IsDisposed)
-                NativeMethods.ReleaseCommandQueue(this.Handle);
+                CommandQueuesNativeApi.ReleaseCommandQueue(this.Handle);
 
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);

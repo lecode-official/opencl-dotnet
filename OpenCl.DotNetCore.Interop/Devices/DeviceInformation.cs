@@ -5,7 +5,7 @@ using System;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore.Interop.Devices
 {
     /// <summary>
     /// Represents an enumeration that identifies the device information that can be queried from a device.

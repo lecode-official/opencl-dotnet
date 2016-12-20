@@ -8,6 +8,9 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using OpenCl.DotNetCore.Interop;
+using OpenCl.DotNetCore.Interop.Contexts;
+using OpenCl.DotNetCore.Interop.Memory;
+using OpenCl.DotNetCore.Interop.Programs;
 
 #endregion
 
@@ -56,14 +59,14 @@ namespace OpenCl.DotNetCore
             Result result;
             IntPtr[] sourceList = sources.Select(source => Marshal.StringToHGlobalAnsi(source)).ToArray();
             uint[] sourceLengths = sources.Select(source => (uint)source.Length).ToArray();
-            IntPtr programPointer = NativeMethods.CreateProgramWithSource(this.Handle, 1, sourceList, sourceLengths, out result);
+            IntPtr programPointer = ProgramsNativeApi.CreateProgramWithSource(this.Handle, 1, sourceList, sourceLengths, out result);
 
             // Checks if the program creation was successful, if not, then an exception is thrown
             if (result != Result.Success)
                 throw new OpenClException("The program could not be created.", result);
 
             // Builds (compiles and links) the program and checks if it was successful, if not, then an exception is thrown
-            result = NativeMethods.BuildProgram(programPointer, 0, null, null, IntPtr.Zero, IntPtr.Zero);
+            result = ProgramsNativeApi.BuildProgram(programPointer, 0, null, null, IntPtr.Zero, IntPtr.Zero);
             if (result != Result.Success)
             {
                 // Cycles over all devices and retrieves the build log for each one, so that the errors that occurred can be added to the exception message (if any error occur during the retrieval, the exception is thrown without the log)
@@ -72,13 +75,13 @@ namespace OpenCl.DotNetCore
                 {
                     // Retrieves the size of the return value in bytes, this is used to later get the full information
                     UIntPtr returnValueSize;
-                    result = NativeMethods.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, UIntPtr.Zero, null, out returnValueSize);
+                    result = ProgramsNativeApi.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, UIntPtr.Zero, null, out returnValueSize);
                     if (result != Result.Success)
                         throw new OpenClException("The program could not be compiled and linked.", result);
                     
                     // Allocates enough memory for the return value and retrieves it
                     byte[] output = new byte[returnValueSize.ToUInt32()];
-                    result = NativeMethods.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, new UIntPtr((uint)output.Length), output, out returnValueSize);
+                    result = ProgramsNativeApi.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, new UIntPtr((uint)output.Length), output, out returnValueSize);
                     if (result != Result.Success)
                         throw new OpenClException("The program could not be compiled and linked.", result);
 
@@ -168,7 +171,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates a new memory object of the specified size and with the specified memory flags
             Result result;
-            IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, (OpenCl.DotNetCore.Interop.MemoryFlag)memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
+            IntPtr memoryObjectPointer = MemoryNativeApi.CreateBuffer(this.Handle, (Interop.Memory.MemoryFlag)memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
             
             // Checks if the creation of the memory object was successful, if not, then an exception is thrown
             if (result != Result.Success)
@@ -210,7 +213,7 @@ namespace OpenCl.DotNetCore
 
                 // Creates a new memory object for the specified value
                 Result result;
-                IntPtr memoryObjectPointer = NativeMethods.CreateBuffer(this.Handle, (OpenCl.DotNetCore.Interop.MemoryFlag)memoryFlags, new UIntPtr((uint)size), hostMemoryObjectPointer, out result);
+                IntPtr memoryObjectPointer = MemoryNativeApi.CreateBuffer(this.Handle, (Interop.Memory.MemoryFlag)memoryFlags, new UIntPtr((uint)size), hostMemoryObjectPointer, out result);
 
                 // Checks if the creation of the memory object was successful, if not, then an exception is thrown
                 if (result != Result.Success)
@@ -250,7 +253,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates the new context for the specified devices
             Result result;
-            IntPtr contextPointer = NativeMethods.CreateContext(null, (uint)devices.Count(), devices.Select(device => device.Handle).ToArray(), IntPtr.Zero, IntPtr.Zero, out result);
+            IntPtr contextPointer = ContextsNativeApi.CreateContext(null, (uint)devices.Count(), devices.Select(device => device.Handle).ToArray(), IntPtr.Zero, IntPtr.Zero, out result);
 
             // Checks if the device creation was successful, if not, then an exception is thrown
             if (result != Result.Success)
@@ -272,7 +275,7 @@ namespace OpenCl.DotNetCore
         {
             // Checks if the context has already been disposed of, if not, then the context is disposed of
             if (!this.IsDisposed)
-                NativeMethods.ReleaseContext(this.Handle);
+                ContextsNativeApi.ReleaseContext(this.Handle);
 
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);

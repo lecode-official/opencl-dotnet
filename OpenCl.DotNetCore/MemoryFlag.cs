@@ -33,8 +33,8 @@ namespace OpenCl.DotNetCore
         /// <summary>
         /// This flag is valid only if a host pointer was specified. If specified, it indicates that the application wants the OpenCL implementation to use memory referenced by the specified host pointer as the storage bits for the memory
         /// object. OpenCL implementations are allowed to cache the buffer contents pointed to by the specified host pointer in device memory. This cached copy can be used when kernels are executed on a device. The result of OpenCL commands
-        /// that operate on multiple buffer objects created with the same host pointer or overlapping host regions is considered to be undefined. Refer to the description of the alignment rules for the specified host pointer for memory objects
-        /// (buffer and images) created using <see cref="UseHostPointer"/>.
+        /// that operate on multiple buffer objects created with the same host pointer or overlapping host regions is considered to be undefined. Refer to the description of the alignment rules for the specified host pointer for memory
+        /// objects (buffer and images) created using <see cref="UseHostPointer"/>.
         /// </summary>
         UseHostPointer = 1 << 3,
 
@@ -51,8 +51,8 @@ namespace OpenCl.DotNetCore
         CopyHostPointer = 1 << 5,
 
         /// <summary>
-        /// This flag specifies that the host will only write to the memory object (using OpenCL APIs that enqueue a write or a map for write). This can be used to optimize write access from the host (e.g. enable write combined allocations for
-        /// memory objects for devices that communicate with the host over a system bus such as PCIe).
+        /// This flag specifies that the host will only write to the memory object (using OpenCL APIs that enqueue a write or a map for write). This can be used to optimize write access from the host (e.g. enable write combined allocations
+        /// for memory objects for devices that communicate with the host over a system bus such as PCIe).
         /// </summary>
         HostWriteOnly = 1 << 7,
 

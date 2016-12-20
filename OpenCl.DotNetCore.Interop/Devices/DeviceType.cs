@@ -5,7 +5,7 @@ using System;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore.Interop.Devices
 {
     /// <summary>
     /// Represents the different device types that can be supported by an OpenCL platform.
