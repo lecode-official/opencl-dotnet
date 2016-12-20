@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Text;
 using OpenCl.DotNetCore.Interop;
 
 #endregion
@@ -22,10 +23,21 @@ namespace OpenCl.DotNetCore
         /// Initializes a new <see cref="Context"/> instance.
         /// </summary>
         /// <param name="handle">The handle to the OpenCL context.</param>
-        internal Context(IntPtr handle)
+        /// <param name="devices">The devices for which the context was created.</param>
+        internal Context(IntPtr handle, IEnumerable<Device> devices)
             : base(handle)
         {
+            this.Devices = devices;
         }
+
+        #endregion
+
+        #region Public Properties
+
+        /// <summary>
+        /// Gets the devices for which the context was created.
+        /// </summary>
+        public IEnumerable<Device> Devices { get; private set; }
 
         #endregion
 
@@ -52,7 +64,33 @@ namespace OpenCl.DotNetCore
             // Builds (compiles and links) the program and checks if it was successful, if not, then an exception is thrown
             result = NativeMethods.BuildProgram(programPointer, 0, null, null, IntPtr.Zero, IntPtr.Zero);
             if (result != Result.Success)
-                throw new OpenClException("The program could not be compiled and linked.", result);
+            {
+                // Cycles over all devices and retrieves the build log for each one, so that the errors that occurred can be added to the exception message (if any error occur during the retrieval, the exception is thrown without the log)
+                Dictionary<string, string> buildLogs = new Dictionary<string, string>();
+                foreach (Device device in this.Devices)
+                {
+                    // Retrieves the size of the return value in bytes, this is used to later get the full information
+                    UIntPtr returnValueSize;
+                    result = NativeMethods.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, UIntPtr.Zero, null, out returnValueSize);
+                    if (result != Result.Success)
+                        throw new OpenClException("The program could not be compiled and linked.", result);
+                    
+                    // Allocates enough memory for the return value and retrieves it
+                    byte[] output = new byte[returnValueSize.ToUInt32()];
+                    result = NativeMethods.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, new UIntPtr((uint)output.Length), output, out returnValueSize);
+                    if (result != Result.Success)
+                        throw new OpenClException("The program could not be compiled and linked.", result);
+
+                    // Converts the output to a string, checks if the log is not empty, and adds it to the build logs
+                    string buildLog = Encoding.ASCII.GetString(output).Replace("\0", string.Empty).Trim();
+                    if (!string.IsNullOrWhiteSpace(buildLog))
+                        buildLogs.Add(device.Name, buildLog);
+                }
+
+                // Compiles the build logs into a formatted string and integrates it into the exception message
+                string buildLogString = string.Join($"{Environment.NewLine}{Environment.NewLine}", buildLogs.Select(keyValuePair => $" Build log for device \"{keyValuePair.Key}\":{Environment.NewLine}{keyValuePair.Value}"));
+                throw new OpenClException($"The program could not be compiled and linked.{Environment.NewLine}{Environment.NewLine}{buildLogString}", result);
+            }
 
             // Creates the new program and returns it
             Program program = new Program(programPointer);
@@ -159,7 +197,7 @@ namespace OpenCl.DotNetCore
                 throw new OpenClException("The context could not be created.", result);
 
             // Creates the new context object from the pointer and returns it
-            return new Context(contextPointer);
+            return new Context(contextPointer, devices);
         }
 
         #endregion

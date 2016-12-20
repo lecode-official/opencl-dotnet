@@ -7,7 +7,7 @@
 - [x] HandleBase class, which is the base class for all OpenCL classes that need a handle
 - [x] Rename the arguments of the native methods
 - [x] Rename Info to Information
-- [ ] Add compiler log to exception, when program cannot be build
+- [x] Add compiler log to exception, when program cannot be build
 - [ ] Add method to compile multiple sources at once
 - [ ] Add method to compile from file
 - [ ] Add method to compile from Stream/Streams
