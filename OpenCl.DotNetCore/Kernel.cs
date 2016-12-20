@@ -44,7 +44,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.functionName))
-                    this.functionName = Encoding.ASCII.GetString(this.GetKernelInformation(KernelInformation.FunctionName)).Replace("\0", string.Empty);
+                    this.functionName = InteropConverter.To<string>(this.GetKernelInformation(KernelInformation.FunctionName));
                 return this.functionName;
             }
         }
@@ -64,7 +64,7 @@ namespace OpenCl.DotNetCore
                 if (!this.numberOfArguments.HasValue)
                 {
                     byte[] rawNumberOfArguments = this.GetKernelInformation(KernelInformation.NumberOfArguments);
-                    uint retrievedNumberOfArguments = BitConverter.ToUInt32(rawNumberOfArguments, 0);
+                    uint retrievedNumberOfArguments = InteropConverter.To<uint>(rawNumberOfArguments);
                     this.numberOfArguments = (int)retrievedNumberOfArguments;
                 }
                 return this.numberOfArguments.Value;

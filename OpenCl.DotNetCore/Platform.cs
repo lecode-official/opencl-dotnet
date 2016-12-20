@@ -46,7 +46,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInformation.Name)).Replace("\0", string.Empty);
+                    this.name = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Name));
                 return this.name;
             }
         }
@@ -64,7 +64,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInformation.Vendor)).Replace("\0", string.Empty);
+                    this.vendor = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Vendor));
                 return this.vendor;
             }
         }
@@ -82,7 +82,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.version == null)
-                    this.version = new Version(Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInformation.Version)).Replace("\0", string.Empty));
+                    this.version = new Version(InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Version)));
                 return this.version;
             }
         }
@@ -101,7 +101,7 @@ namespace OpenCl.DotNetCore
             {
                 if (!this.profile.HasValue)
                 {
-                    string profileName = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInformation.Profile)).Replace("\0", string.Empty);
+                    string profileName = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Profile));
                     if (profileName == "FULL_PROFILE")
                         this.profile = Profile.Full;
                     else
@@ -124,7 +124,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.extensions == null)
-                    this.extensions = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInformation.Extensions)).Replace("\0", string.Empty).Split(' ').ToList();
+                    this.extensions = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Extensions)).Split(' ').ToList();
                 return this.extensions;
             }
         }
@@ -144,7 +144,7 @@ namespace OpenCl.DotNetCore
                 if (!this.platformHostTimerResolution.HasValue)
                 {
                     byte[] rawPlatformInformation = this.GetPlatformInformation(PlatformInformation.PlatformHostTimerResolution);
-                    ulong retrievedPlatformHostTimerResolution = BitConverter.ToUInt64(rawPlatformInformation, 0);
+                    ulong retrievedPlatformHostTimerResolution = InteropConverter.To<ulong>(rawPlatformInformation);
                     this.platformHostTimerResolution = (long)retrievedPlatformHostTimerResolution;
                 }
                 return this.platformHostTimerResolution.Value;
@@ -164,7 +164,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (this.platformIcdSuffix == null)
-                    this.platformIcdSuffix = Encoding.ASCII.GetString(this.GetPlatformInformation(PlatformInformation.PlatformIcdSuffix)).Replace("\0", string.Empty);
+                    this.platformIcdSuffix = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.PlatformIcdSuffix));
                 return this.platformIcdSuffix;
             }
         }

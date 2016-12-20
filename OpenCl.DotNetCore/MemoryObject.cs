@@ -45,9 +45,9 @@ namespace OpenCl.DotNetCore
                 if (!this.size.HasValue)
                 {
                     if (Marshal.SizeOf<IntPtr>() == sizeof(long))
-                        this.size = BitConverter.ToInt64(this.GetMemoryObjectInformation(MemoryObjectInformation.Size), 0);
+                        this.size = InteropConverter.To<long>(this.GetMemoryObjectInformation(MemoryObjectInformation.Size));
                     else
-                        this.size = (long)BitConverter.ToInt32(this.GetMemoryObjectInformation(MemoryObjectInformation.Size), 0);
+                        this.size = (long)InteropConverter.To<int>(this.GetMemoryObjectInformation(MemoryObjectInformation.Size));
                 }
                 return this.size.Value;
             }
@@ -66,7 +66,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (!this.flags.HasValue)
-                    this.flags = (MemoryFlag)BitConverter.ToUInt64(this.GetMemoryObjectInformation(MemoryObjectInformation.Flags), 0);
+                    this.flags = (MemoryFlag)InteropConverter.To<ulong>(this.GetMemoryObjectInformation(MemoryObjectInformation.Flags));
                 return this.flags.Value;
             }
         }

@@ -86,7 +86,7 @@ namespace OpenCl.DotNetCore
                         throw new OpenClException("The program could not be compiled and linked.", result);
 
                     // Converts the output to a string, checks if the log is not empty, and adds it to the build logs
-                    string buildLog = Encoding.ASCII.GetString(output).Replace("\0", string.Empty).Trim();
+                    string buildLog = InteropConverter.To<string>(output).Trim();
                     if (!string.IsNullOrWhiteSpace(buildLog))
                         buildLogs.Add(device.Name, buildLog);
                 }
