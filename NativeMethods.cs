@@ -598,7 +598,7 @@ namespace OpenCl.DotNetCore
         public static extern Result EnqueueReadBuffer(
             [In] IntPtr command_queue,
             [In] IntPtr buffer,
-            [In] [MarshalAs(UnmanagedType.U4)] bool blocking_read,
+            [In] [MarshalAs(UnmanagedType.U4)] uint blocking_read,
             [In] UIntPtr offset,
             [In] UIntPtr size,
             [In] IntPtr ptr,
