@@ -166,7 +166,7 @@ namespace OpenCl.DotNetCore
         /// <param name="size">The size of memory that should be allocated for the memory object.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject(OpenCl.DotNetCore.MemoryFlag memoryFlags, int size)
+        public MemoryObject CreateBuffer(OpenCl.DotNetCore.MemoryFlag memoryFlags, int size)
         {
             // Creates a new memory object of the specified size and with the specified memory flags
             Result result;
@@ -188,7 +188,7 @@ namespace OpenCl.DotNetCore
         /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(OpenCl.DotNetCore.MemoryFlag memoryFlags, int size) where T : struct => this.CreateMemoryObject(memoryFlags, Marshal.SizeOf<T>() * size);
+        public MemoryObject CreateBuffer<T>(OpenCl.DotNetCore.MemoryFlag memoryFlags, int size) where T : struct => this.CreateBuffer(memoryFlags, Marshal.SizeOf<T>() * size);
 
         /// <summary>
         /// Creates a new memory object with the specified flags for the specified array. The size of memory 1allocated for the memory object is determined by <see cref="T"/> and the number of elements in the array.
@@ -198,7 +198,7 @@ namespace OpenCl.DotNetCore
         /// <param name="value">The value that is to be copied over to the device.</param>
         /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateMemoryObject<T>(OpenCl.DotNetCore.MemoryFlag memoryFlags, T[] value) where T : struct
+        public MemoryObject CreateBuffer<T>(OpenCl.DotNetCore.MemoryFlag memoryFlags, T[] value) where T : struct
         {
             // Tries to create the memory object, if anything goes wrong, then it is crucial to free the allocated memory
             IntPtr hostMemoryObjectPointer = IntPtr.Zero;

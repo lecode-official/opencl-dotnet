@@ -9,6 +9,7 @@ namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents the abstract base class for all OpenCL objects, that are represented by a handle.
+    /// TODO: Implement the equals and the == operator, which compares the handle.
     /// </summary>
     public abstract class HandleBase : IDisposable
     {

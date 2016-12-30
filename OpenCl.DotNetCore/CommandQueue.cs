@@ -38,7 +38,7 @@ namespace OpenCl.DotNetCore
         /// <param name="outputSize">The number of array elements that are to be returned.</param>
         /// <typeparam name="T">The type of the array that is to be returned.</typeparam>
         /// <returns>Returns the value of the memory object.</param>
-        public T[] ReadMemoryObject<T>(MemoryObject memoryObject, int outputSize) where T : struct
+        public T[] EnqueueReadBuffer<T>(MemoryObject memoryObject, int outputSize) where T : struct
         {
             // Tries to read the memory object
             IntPtr resultValuePointer = IntPtr.Zero;
