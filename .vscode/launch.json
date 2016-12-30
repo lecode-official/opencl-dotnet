@@ -2,11 +2,11 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch OpenCL.Net",
+            "name": "Launch OpenCL.NET Tests",
             "type": "coreclr",
             "request": "launch",
             "preLaunchTask": "build",
-            "program": "${workspaceRoot}/bin/Debug/netcoreapp1.1/opencl-dotnet.dll",
+            "program": "${workspaceRoot}/OpenCl.DotNetCore.Tests/bin/Debug/netcoreapp1.1/OpenCl.DotNetCore.Tests.dll",
             "args": [],
             "cwd": "${workspaceRoot}",
             "externalConsole": false,
