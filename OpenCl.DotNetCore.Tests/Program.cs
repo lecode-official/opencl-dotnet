@@ -26,7 +26,7 @@ namespace OpenCl.DotNetCore.Tests
             Device device = platform.GetDevices(DeviceType.All).FirstOrDefault();
 
             // Prints out information about the selected device
-            Console.WriteLine($"Using {device.Name} ({device.Vendor})");
+            Console.WriteLine($"Using {device.Name} ({device.Vendor}, {device.AddressBits} Bit, {device.GlobalMemorySize / 1024.0f / 1024.0f / 1024.0f} GiB Global Memory)");
 
             // Creats a new context for the selected device
             using (Context context = Context.CreateContext(device))
