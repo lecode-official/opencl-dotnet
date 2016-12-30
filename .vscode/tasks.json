@@ -7,7 +7,7 @@
         {
             "taskName": "build",
             "args": [
-                "${workspaceRoot}/project.json"
+                "${workspaceRoot}/OpenCl.DotNetCore.Tests/project.json"
             ],
             "isBuildCommand": true,
             "problemMatcher": "$msCompile"
