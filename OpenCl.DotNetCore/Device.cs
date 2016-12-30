@@ -42,7 +42,7 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.DeviceName));
+                    this.name = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.Name));
                 return this.name;
             }
         }
@@ -60,8 +60,44 @@ namespace OpenCl.DotNetCore
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.DeviceVendor));
+                    this.vendor = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.Vendor));
                 return this.vendor;
+            }
+        }
+
+        /// <summary>
+        /// Contains the global memory size of the device.
+        /// </summary>
+        private Nullable<long> globalMemorySize;
+
+        /// <summary>
+        /// Gets the global memory size of the device.
+        /// </summary>
+        public long GlobalMemorySize
+        {
+            get
+            {
+                if (!this.globalMemorySize.HasValue)
+                    this.globalMemorySize = (long)InteropConverter.To<ulong>(this.GetDeviceInformation(DeviceInformation.GlobalMemorySize));
+                return this.globalMemorySize.Value;
+            }
+        }
+
+        /// <summary>
+        /// Contains the number of bits, that the device can use to address its memory.
+        /// </summary>
+        private Nullable<int> addressBits;
+
+        /// <summary>
+        /// Gets the number of bits, that the device can use to address its memory.
+        /// </summary>
+        public int AddressBits
+        {
+            get
+            {
+                if (!this.addressBits.HasValue)
+                    this.addressBits = (int)InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.AddressBits));
+                return this.addressBits.Value;
             }
         }
 
