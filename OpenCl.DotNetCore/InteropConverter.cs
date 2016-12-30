@@ -9,7 +9,7 @@ using System.Text;
 
 #endregion
 
-namespace OpenCl.DotNetCore.Interop
+namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents a converter, which is used to convert byte arrays into several different CLR data types.
