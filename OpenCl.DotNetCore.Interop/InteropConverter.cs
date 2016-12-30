@@ -97,7 +97,7 @@ namespace OpenCl.DotNetCore.Interop
             string result = Encoding.ASCII.GetString(data);
 
             // All OpenCL strings are null-terminated, therefore the null-terminator must be removed
-            result.Replace("\0", string.Empty);
+            result = result.Replace("\0", string.Empty);
 
             // Returns the converted string
             return result;

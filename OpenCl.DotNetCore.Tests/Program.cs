@@ -68,7 +68,7 @@ namespace OpenCl.DotNetCore.Tests
                             using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, device))
                             {
                                 commandQueue.EnqueueNDRangeKernel(kernel, 1, 4);
-                                float[] resultArray = commandQueue.ReadMemoryObject<float>(result, 4);
+                                float[] resultArray = commandQueue.EnqueueReadBuffer<float>(result, 4);
                                 Console.WriteLine($"Result: ({string.Join(", ", resultArray)})");
                             }
                         }
