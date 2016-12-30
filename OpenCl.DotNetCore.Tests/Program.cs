@@ -46,15 +46,15 @@ namespace OpenCl.DotNetCore.Tests
                     using (Kernel kernel = program.CreateKernel("matvec_mult"))
                     {
                         // Creates the memory objects for the input arguments of the kernel
-                        MemoryObject matrix = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
+                        MemoryObject matrix = context.CreateBuffer(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
                         {
                              0f,  2f,  4f,  6f,
                              8f, 10f, 12f, 14f,
                             16f, 18f, 20f, 22f,
                             24f, 26f, 28f, 30f
                         });
-                        MemoryObject vector = context.CreateMemoryObject(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
-                        MemoryObject result = context.CreateMemoryObject<float>(MemoryFlag.WriteOnly, 4);
+                        MemoryObject vector = context.CreateBuffer(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
+                        MemoryObject result = context.CreateBuffer<float>(MemoryFlag.WriteOnly, 4);
 
                         // Tries to execute the kernel
                         try
