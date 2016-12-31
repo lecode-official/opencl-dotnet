@@ -12,7 +12,6 @@ namespace OpenCl.DotNetCore
 {
     /// <summary>
     /// Represents an OpenCL memory object.
-    /// TODO: Make MemoryObject abstract and derive Image and Buffer from it.
     /// </summary>
     public class MemoryObject : HandleBase
     {
