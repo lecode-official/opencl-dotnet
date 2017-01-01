@@ -20,10 +20,10 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// </summary>
         /// <param name="commandQueue">Is a valid host command-queue in which the read command will be queued. commandQueue and buffer must be created with the same OpenCL context.</param>
         /// <param name="buffer">Refers to a valid buffer object.</param>
-        /// <param name="blocking_read">Indicates if the read operations are blocking or non-blocking.</param>
+        /// <param name="blockingRead">Indicates if the read operations are blocking or non-blocking.</param>
         /// <param name="offset">The offset in bytes in the buffer object to read from.</param>
         /// <param name="size">The size in bytes of data being read.</param>
-        /// <param name="ptr">The pointer to buffer in host memory where data is to be read into.</param>
+        /// <param name="pointer">The pointer to buffer in host memory where data is to be read into.</param>
         /// <param name="numberOfEventsinWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsinWaitList"/ must be 0.</param>
         /// <param name="eventWaitList">
         /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
@@ -37,108 +37,122 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         public static extern Result EnqueueReadBuffer(
             [In] IntPtr commandQueue,
             [In] IntPtr buffer,
-            [In] [MarshalAs(UnmanagedType.U4)] uint blocking_read,
+            [In] [MarshalAs(UnmanagedType.U4)] uint blockingRead,
             [In] UIntPtr offset,
             [In] UIntPtr size,
-            [In] IntPtr ptr,
+            [In] IntPtr pointer,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
             [In] IntPtr[] eventWaitList,
             [Out] out IntPtr waitEvent
         );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueReadBufferRect(cl_command_queue    /* command_queue */,
-        //                        cl_mem              /* buffer */,
-        //                        cl_bool             /* blocking_read */,
-        //                        const size_t *      /* buffer_offset */,
-        //                        const size_t *      /* host_offset */, 
-        //                        const size_t *      /* region */,
-        //                        size_t              /* buffer_row_pitch */,
-        //                        size_t              /* buffer_slice_pitch */,
-        //                        size_t              /* host_row_pitch */,
-        //                        size_t              /* host_slice_pitch */,                        
-        //                        void *              /* ptr */,
-        //                        cl_uint             /* num_events_in_wait_list */,
-        //                        const cl_event *    /* event_wait_list */,
-        //                        cl_event *          /* event */) CL_API_SUFFIX__VERSION_1_1;
+        [DllImport("OpenCL", EntryPoint = "clEnqueueReadBufferRect")]
+        public static extern Result EnqueueREadBufferRectangle(
+            [In] IntPtr commandQueue,
+            [In] IntPtr buffer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint blockingRead,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] bufferOffset,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] hostOffset,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] region,
+            [In] UIntPtr bufferRowPitch,
+            [In] UIntPtr bufferSlicePitch,
+            [In] UIntPtr hostRowPitch,
+            [In] UIntPtr hostSlicePitch,
+            [In] IntPtr pointer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueWriteBuffer(cl_command_queue   /* command_queue */, 
-        //                    cl_mem             /* buffer */, 
-        //                    cl_bool            /* blocking_write */, 
-        //                    size_t             /* offset */, 
-        //                    size_t             /* size */, 
-        //                    const void *       /* ptr */, 
-        //                    cl_uint            /* num_events_in_wait_list */, 
-        //                    const cl_event *   /* event_wait_list */, 
-        //                    cl_event *         /* event */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clEnqueueWriteBuffer")]
+        public static extern Result EnqueueWriteBuffer(
+            [In] IntPtr commandQueue,
+            [In] IntPtr buffer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint blockingWrite,
+            [In] UIntPtr offset,
+            [In] UIntPtr size,
+            [In] IntPtr pointer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
+        
+        [DllImport("OpenCL", EntryPoint = "clEnqueueWriteBufferRect")]
+        public static extern Result EnqueueWriteBufferRectangle(
+            [In] IntPtr commandQueue,
+            [In] IntPtr buffer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint blockingWrite,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] bufferOffset,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] hostOffset,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] region,
+            [In] UIntPtr bufferRowPitch,
+            [In] UIntPtr bufferSlicePitch,
+            [In] UIntPtr hostRowPitch,
+            [In] UIntPtr hostSlicePitch,
+            [In] IntPtr pointer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueWriteBufferRect(cl_command_queue    /* command_queue */,
-        //                        cl_mem              /* buffer */,
-        //                        cl_bool             /* blocking_write */,
-        //                        const size_t *      /* buffer_offset */,
-        //                        const size_t *      /* host_offset */, 
-        //                        const size_t *      /* region */,
-        //                        size_t              /* buffer_row_pitch */,
-        //                        size_t              /* buffer_slice_pitch */,
-        //                        size_t              /* host_row_pitch */,
-        //                        size_t              /* host_slice_pitch */,                        
-        //                        const void *        /* ptr */,
-        //                        cl_uint             /* num_events_in_wait_list */,
-        //                        const cl_event *    /* event_wait_list */,
-        //                        cl_event *          /* event */) CL_API_SUFFIX__VERSION_1_1;
+        [DllImport("OpenCL", EntryPoint = "clEnqueueFillBuffer")]
+        public static extern Result EnqueueFillBuffer(
+            [In] IntPtr commandQueue,
+            [In] IntPtr buffer,
+            [In] IntPtr pattern,
+            [In] UIntPtr patternSize,
+            [In] UIntPtr offset,
+            [In] UIntPtr size,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueFillBuffer(cl_command_queue   /* command_queue */,
-        //                    cl_mem             /* buffer */, 
-        //                    const void *       /* pattern */, 
-        //                    size_t             /* pattern_size */, 
-        //                    size_t             /* offset */, 
-        //                    size_t             /* size */, 
-        //                    cl_uint            /* num_events_in_wait_list */, 
-        //                    const cl_event *   /* event_wait_list */, 
-        //                    cl_event *         /* event */) CL_API_SUFFIX__VERSION_1_2;
+        [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBuffer")]
+        public static extern Result EnqueueCopyBuffer(
+            [In] IntPtr commandQueue,
+            [In] IntPtr sourceBuffer,
+            [In] IntPtr destinationBuffer,
+            [In] UIntPtr sourceOffset,
+            [In] UIntPtr destinationOffset,
+            [In] UIntPtr size,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueCopyBuffer(cl_command_queue    /* command_queue */, 
-        //                    cl_mem              /* src_buffer */,
-        //                    cl_mem              /* dst_buffer */, 
-        //                    size_t              /* src_offset */,
-        //                    size_t              /* dst_offset */,
-        //                    size_t              /* size */, 
-        //                    cl_uint             /* num_events_in_wait_list */,
-        //                    const cl_event *    /* event_wait_list */,
-        //                    cl_event *          /* event */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBufferRect")]
+        public static extern Result EnqueueCopyBufferRectangle(
+            [In] IntPtr commandQueue,
+            [In] IntPtr sourceBuffer,
+            [In] IntPtr destinationBuffer,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] sourceOrigin,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] destinationOrigin,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] region,
+            [In] UIntPtr sourceRowPitch,
+            [In] UIntPtr sourceSlicePitch,
+            [In] UIntPtr destinationRowPitch,
+            [In] UIntPtr destinationSlicePitch,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueCopyBufferRect(cl_command_queue    /* command_queue */, 
-        //                        cl_mem              /* src_buffer */,
-        //                        cl_mem              /* dst_buffer */, 
-        //                        const size_t *      /* src_origin */,
-        //                        const size_t *      /* dst_origin */,
-        //                        const size_t *      /* region */, 
-        //                        size_t              /* src_row_pitch */,
-        //                        size_t              /* src_slice_pitch */,
-        //                        size_t              /* dst_row_pitch */,
-        //                        size_t              /* dst_slice_pitch */,
-        //                        cl_uint             /* num_events_in_wait_list */,
-        //                        const cl_event *    /* event_wait_list */,
-        //                        cl_event *          /* event */) CL_API_SUFFIX__VERSION_1_1;
-
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clEnqueueReadImage(cl_command_queue     /* command_queue */,
-        //                cl_mem               /* image */,
-        //                cl_bool              /* blocking_read */, 
-        //                const size_t *       /* origin[3] */,
-        //                const size_t *       /* region[3] */,
-        //                size_t               /* row_pitch */,
-        //                size_t               /* slice_pitch */, 
-        //                void *               /* ptr */,
-        //                cl_uint              /* num_events_in_wait_list */,
-        //                const cl_event *     /* event_wait_list */,
-        //                cl_event *           /* event */) CL_API_SUFFIX__VERSION_1_0;
-
+        [DllImport("OpenCL", EntryPoint = "clEnqueueReadImage")]
+        public static extern Result EnqueueReadImage(
+            [In] IntPtr commandQueue,
+            [In] IntPtr image,
+            [In] [MarshalAs(UnmanagedType.U4)] uint blockingRead,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] origin,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] region,
+            [In] UIntPtr rowPitch,
+            [In] UIntPtr slicePitch,
+            [In] IntPtr pointer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsinWaitList,
+            [In] IntPtr[] eventWaitList,
+            [Out] out IntPtr waitEvent
+        );
+        
         //extern CL_API_ENTRY cl_int CL_API_CALL
         //clEnqueueWriteImage(cl_command_queue    /* command_queue */,
         //                    cl_mem              /* image */,
