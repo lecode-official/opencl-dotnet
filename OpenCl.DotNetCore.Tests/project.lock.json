@@ -3,6 +3,19 @@
   "version": 2,
   "targets": {
     ".NETCoreApp,Version=v1.1": {
+      "ConsoleTables/2.1.0": {
+        "type": "package",
+        "dependencies": {
+          "NETStandard.Library": "1.6.1",
+          "System.Reflection.TypeExtensions": "4.3.0"
+        },
+        "compile": {
+          "lib/netstandard1.3/ConsoleTables.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard1.3/ConsoleTables.dll": {}
+        }
+      },
       "Libuv/1.9.1": {
         "type": "package",
         "dependencies": {
@@ -2181,6 +2194,17 @@
     }
   },
   "libraries": {
+    "ConsoleTables/2.1.0": {
+      "sha512": "0Y95Fr9tNzxxJmZejpYNTZ/9xAvdeYE5px8MAzfTylaPbIsEPBaQIq5mAPbJJAPAcB2nlc6paENbGfwMtrUdPg==",
+      "type": "package",
+      "path": "ConsoleTables/2.1.0",
+      "files": [
+        "ConsoleTables.2.1.0.nupkg.sha512",
+        "ConsoleTables.nuspec",
+        "lib/net40/ConsoleTables.dll",
+        "lib/netstandard1.3/ConsoleTables.dll"
+      ]
+    },
     "Libuv/1.9.1": {
       "sha512": "uqX2Frwf9PW8MaY7PRNY6HM5BpW1D8oj1EdqzrmbEFD5nH63Yat3aEjN/tws6Tw6Fk7LwmLBvtUh32tTeTaHiA==",
       "type": "package",
@@ -6992,6 +7016,7 @@
   },
   "projectFileDependencyGroups": {
     "": [
+      "ConsoleTables >= 2.1.0",
       "OpenCl.DotNetCore >= 0.1.0-alpha1"
     ],
     ".NETCoreApp,Version=v1.1": [
