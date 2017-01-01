@@ -30,7 +30,7 @@ namespace OpenCl.DotNetCore.Tests
             {
                 foreach (Device device in platform.GetDevices(DeviceType.All))
                     consoleTable.AddRow(
-                        platform.Name,
+                        $"{platform.Name} {platform.Version.MajorVersion}.{platform.Version.MinorVersion}",
                         platform.Vendor,
                         device.Name,
                         $"{device.AddressBits} Bit",
