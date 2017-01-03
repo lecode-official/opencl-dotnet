@@ -119,7 +119,9 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clRetainDevice")]
-        public static extern Result RetainDevice([In] IntPtr device);
+        public static extern Result RetainDevice(
+            [In] IntPtr device
+        );
 
         /// <summary>
         /// Decrements the device reference count if device is a valid sub-device created by a call to <see cref="CreateSubDevices"/>. If device is a root level device i.e. a device returned by <see cref="GetDeviceIDs"/>, the device
@@ -136,7 +138,9 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseDevice")]
-        public static extern Result ReleaseDevice([In] IntPtr device);
+        public static extern Result ReleaseDevice(
+            [In] IntPtr device
+        );
 
         /// <summary>
         /// Replaces the default command queue on the device. <see cref="SetDefaultDeviceCommandQueue"/> may be used to replace a default device command queue created with <see cref="CreateCommandQueueWithProperties"/> and the

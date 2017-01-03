@@ -19,3 +19,4 @@
 - [ ] Make `MemoryObject` abstract and derive `Image` and `Buffer` from it
 - [ ] Add `async` methods for all native methods that have an `event`
 - [ ] Mark everything in the Interop project with an attribute that contains the minimum version of OpenCL required
+- [ ] Mark everything in the Interop project with the Obsolete attribute that have been deprecated in OpenCL
