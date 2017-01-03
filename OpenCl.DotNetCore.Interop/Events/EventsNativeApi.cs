@@ -1,6 +1,9 @@
 
 #region Using Directives
 
+using System;
+using System.Runtime.InteropServices;
+
 #endregion
 
 namespace OpenCl.DotNetCore.Interop.Events
@@ -12,37 +15,51 @@ namespace OpenCl.DotNetCore.Interop.Events
     {
         #region Public Static Methods
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clWaitForEvents(cl_uint             /* num_events */,
-        //                const cl_event *    /* event_list */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clWaitForEvents")]
+        public static extern Result WaitForEvents(
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEvents,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] eventList
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetEventInfo(cl_event         /* event */,
-        //            cl_event_info    /* param_name */,
-        //            size_t           /* param_value_size */,
-        //            void *           /* param_value */,
-        //            size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clGetEventInfo")]
+        public static extern Result GetEventInformation(
+            [In] IntPtr eventPointer,
+            [In] [MarshalAs(UnmanagedType.U4)] EventInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned
+        );
 
-        //extern CL_API_ENTRY cl_event CL_API_CALL
-        //clCreateUserEvent(cl_context    /* context */,
-        //                cl_int *      /* errcode_ret */) CL_API_SUFFIX__VERSION_1_1;               
+        [DllImport("OpenCL", EntryPoint = "clCreateUserEvent")]
+        public static extern IntPtr CreateUserEvent(
+            [In] IntPtr context,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clRetainEvent(cl_event /* event */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clRetainEvent")]
+        public static extern Result RetainEvent(
+            [In] IntPtr eventPointer
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clReleaseEvent(cl_event /* event */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clReleaseEvent")]
+        public static extern Result ReleaseEvent(
+            [In] IntPtr eventPointer
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clSetUserEventStatus(cl_event   /* event */,
-        //                    cl_int     /* execution_status */) CL_API_SUFFIX__VERSION_1_1;
+        [DllImport("OpenCL", EntryPoint = "clSetUserEventStatus")]
+        public static extern Result SetUserEventStatus(
+            [In] IntPtr eventPointer,
+            [In] [MarshalAs(UnmanagedType.I4)] int executionStatus
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clSetEventCallback( cl_event    /* event */,
-        //                    cl_int      /* command_exec_callback_type */,
-        //                    void (CL_CALLBACK * /* pfn_notify */)(cl_event, cl_int, void *),
-        //                    void *      /* user_data */) CL_API_SUFFIX__VERSION_1_1;
-
+        [DllImport("OpenCL", EntryPoint = "clSetEventCallback")]
+        public static extern Result SetEventCallback(
+            [In] IntPtr eventPointer,
+            [In] [MarshalAs(UnmanagedType.I4)] int commandExecutionCallbackType,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData
+        );
+        
         #endregion
     }
 }
