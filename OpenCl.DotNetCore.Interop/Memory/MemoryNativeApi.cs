@@ -39,21 +39,34 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
         
-        //extern CL_API_ENTRY cl_mem CL_API_CALL
-        //clCreateSubBuffer(cl_mem                   /* buffer */,
-        //                cl_mem_flags             /* flags */,
-        //                cl_buffer_create_type    /* buffer_create_type */,
-        //                const void *             /* buffer_create_info */,
-        //                cl_int *                 /* errcode_ret */) CL_API_SUFFIX__VERSION_1_1;
+        [DllImport("OpenCL", EntryPoint = "clCreateSubBuffer")]
+        public static extern IntPtr CreateSubBuffer(
+            [In] IntPtr memoryObject,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] [MarshalAs(UnmanagedType.U4)] BufferCreateType bufferCreateType,
+            [In] IntPtr bufferCreateInfo,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
-        //extern CL_API_ENTRY cl_mem CL_API_CALL
-        //clCreateImage(cl_context              /* context */,
-        //            cl_mem_flags            /* flags */,
-        //            const cl_image_format * /* image_format */,
-        //            const cl_image_desc *   /* image_desc */, 
-        //            void *                  /* host_ptr */,
-        //            cl_int *                /* errcode_ret */) CL_API_SUFFIX__VERSION_1_2;
+        [DllImport("OpenCL", EntryPoint = "clCreateImage")]
+        public static extern IntPtr CreateImage(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] IntPtr imageFormat,
+            [In] IntPtr imageDescription,
+            [In] IntPtr hostPointer,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
+        [DllImport("OpenCL", EntryPoint = "clCreatePipe")]
+        public static extern IntPtr CreatePipe(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] IntPtr imageFormat,
+            [In] IntPtr imageDescription,
+            [In] IntPtr hostPointer,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
         //extern CL_API_ENTRY cl_mem CL_API_CALL
         //clCreatePipe(cl_context                 /* context */,
         //            cl_mem_flags               /* flags */,
