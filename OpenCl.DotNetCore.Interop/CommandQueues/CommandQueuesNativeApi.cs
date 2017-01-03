@@ -27,7 +27,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// Specifies a list of properties for the command-queue and their corresponding values. Each property name is immediately followed by the corresponding desired value. The list is terminated with 0. If a supported property and its
         /// value is not specified in properties, its default value will be used. <see cref="properties"/> can be <c>null</c> in which case the default values for supported command-queue properties will be used.
         /// </param>
-        /// <param name="errorCode">Returns an appropriate error code. If errcode_ret is NULL, no error code is returned.</param>
+        /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
         /// <returns>Returns the created command queue.</returns>
         [DllImport("OpenCL", EntryPoint = "clCreateCommandQueueWithProperties")]
         public static extern IntPtr CreateCommandQueueWithProperties(
