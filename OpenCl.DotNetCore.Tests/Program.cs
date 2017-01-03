@@ -36,12 +36,12 @@ namespace OpenCl.DotNetCore.Tests
                         $"{device.AddressBits} Bit",
                         $"{Math.Round(device.GlobalMemorySize / 1024.0f / 1024.0f / 1024.0f, 2)} GiB");
             }
+            Console.WriteLine("Supported Platforms & Devices:");
             consoleTable.Write(Format.Alternative);
-            Console.WriteLine();
 
             // Gets the first available platform and selects the first device offered by the platform and prints out the chosen device
             Device chosenDevice = platforms.FirstOrDefault().GetDevices(DeviceType.All).FirstOrDefault();
-            Console.WriteLine($"Using {chosenDevice.Name} ({chosenDevice.Vendor})");
+            Console.WriteLine($"Using: {chosenDevice.Name} ({chosenDevice.Vendor})");
             Console.WriteLine();
 
             // Creats a new context for the selected device
