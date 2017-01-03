@@ -4,7 +4,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried for profiling purposes.
     /// </summary>
-    public enum ProfilingInformation
+    public enum ProfilingInformation : uint
     {
         /// <summary>
         /// A 64-bit value that describes the current device time counter in nanoseconds when the command identified by the event is enqueued in a command-queue by the host.
