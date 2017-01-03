@@ -67,17 +67,17 @@ namespace OpenCl.DotNetCore
         HostNoAccess = 1 << 9,
 
         /// <summary>
-        /// 
+        /// This specifies that the application wants the OpenCL implementation to do a fine-grained allocation.
         /// </summary>
         SvmFineGrainBuffer = 1 << 10,
 
         /// <summary>
-        /// 
+        /// This flag is valid only if <c>MemoryFlag.SvmFineGrainBuffer</c> is specified in flags. It is used to indicate that SVM atomic operations can control visibility of memory accesses in this SVM buffer.
         /// </summary>
         SvmAtomics = 1 << 11,
 
         /// <summary>
-        /// 
+        /// Can be used to get a list of supported image formats that can be both read from and written to by a kernel.
         /// </summary>
         KernelReadAndWrite = 1 << 12
     }

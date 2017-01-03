@@ -82,7 +82,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         [DllImport("OpenCL", EntryPoint = "clCreateContextFromType")]
         public static extern IntPtr CreateContextFromType(
             [In] IntPtr properties,
-            [In] [MarshalAs(UnmanagedType.U4)] DeviceType deviceType,
+            [In] [MarshalAs(UnmanagedType.U8)] DeviceType deviceType,
             [In] IntPtr notificationCallback,
             [In] IntPtr userData,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode

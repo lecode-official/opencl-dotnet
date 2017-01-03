@@ -4,7 +4,7 @@ namespace OpenCl.DotNetCore.Interop
     /// <summary>
     /// Represents an enumeration for the different types of information that can be queried from a command queue.
     /// </summary>
-    public enum CommandQueueInformation
+    public enum CommandQueueInformation : uint
     {
         /// <summary>
         /// The context specified when the command-queue is created.

@@ -44,7 +44,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         [DllImport("OpenCL", EntryPoint = "clGetDeviceIDs")]
         public static extern Result GetDeviceIds(
             [In] IntPtr platform,
-            [In] [MarshalAs(UnmanagedType.U4)] DeviceType deviceType,
+            [In] [MarshalAs(UnmanagedType.U8)] DeviceType deviceType,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEntries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] devices,
             [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfDevicesReturned

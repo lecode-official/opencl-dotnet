@@ -11,7 +11,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
     /// Represents the different device types that can be supported by an OpenCL platform.
     /// </summary>
     [Flags]
-    public enum DeviceType : uint
+    public enum DeviceType : ulong
     {
         /// <summary>
         /// The default OpenCL device in the system. The default device cannot be a <c>DeviceType.Custom</c> device.
