@@ -21,7 +21,7 @@
     - [x] Events API
     - [x] Extensions API
     - [x] Kernels API
-    - [ ] Memory API
+    - [x] Memory API
     - [x] Platforms API
     - [x] Profiling API
     - [ ] Programs API
@@ -42,7 +42,7 @@
     - [ ] Samplers API
     - [ ] SVM Allocations API
 - [ ] Implement the `equals` and the `==` operator, which compares the `Handle`
-- [ ] Make `MemoryObject` abstract and derive `Image` and `Buffer` from it
+- [ ] Make `MemoryObject` abstract and derive `Image`, `Pipe`, and `Buffer` from it
 - [ ] Add `async` methods for all native methods that have an `event`
 - [ ] Mark everything in the Interop project with an attribute that contains the minimum version of OpenCL required
 - [ ] Mark everything in the Interop project with the Obsolete attribute that have been deprecated in OpenCL

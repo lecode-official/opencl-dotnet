@@ -62,21 +62,16 @@ namespace OpenCl.DotNetCore.Interop.Memory
         public static extern IntPtr CreatePipe(
             [In] IntPtr context,
             [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
-            [In] IntPtr imageFormat,
-            [In] IntPtr imageDescription,
-            [In] IntPtr hostPointer,
+            [In] [MarshalAs(UnmanagedType.U4)] uint pipePacketSize,
+            [In] [MarshalAs(UnmanagedType.U4)] uint pipeMaximumNumberOfPackets,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] properties,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
-        //extern CL_API_ENTRY cl_mem CL_API_CALL
-        //clCreatePipe(cl_context                 /* context */,
-        //            cl_mem_flags               /* flags */,
-        //            cl_uint                    /* pipe_packet_size */,
-        //            cl_uint                    /* pipe_max_packets */,
-        //            const cl_pipe_properties * /* properties */,
-        //            cl_int *                   /* errcode_ret */) CL_API_SUFFIX__VERSION_2_0;
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clRetainMemObject(cl_mem /* memobj */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clRetainMemObject")]
+        public static extern Result RetainMemoryObject(
+            [In] IntPtr memoryObject
+        );
 
         /// <summary>
         /// Decrements the memory object reference count.
@@ -123,65 +118,71 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] out UIntPtr parameterValueSizeReturned
         );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetSupportedImageFormats(cl_context           /* context */,
-        //                        cl_mem_flags         /* flags */,
-        //                        cl_mem_object_type   /* image_type */,
-        //                        cl_uint              /* num_entries */,
-        //                        cl_image_format *    /* image_formats */,
-        //                        cl_uint *            /* num_image_formats */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clGetSupportedImageFormats")]
+        public static extern Result GetSupportedImageFormats(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectType memoryObjectType,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEntries,
+            [Out] [MarshalAs(UnmanagedType.LPArray)] ImageFormat[] imageFormats,
+            [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfImageFormats
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetMemObjectInfo(cl_mem           /* memobj */,
-        //                cl_mem_info      /* param_name */, 
-        //                size_t           /* param_value_size */,
-        //                void *           /* param_value */,
-        //                size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clGetImageInfo")]
+        public static extern Result GetImageInformation(
+            [In] IntPtr image,
+            [In] [MarshalAs(UnmanagedType.U4)] ImageInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetImageInfo(cl_mem           /* image */,
-        //            cl_image_info    /* param_name */, 
-        //            size_t           /* param_value_size */,
-        //            void *           /* param_value */,
-        //            size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clGetPipeInfo")]
+        public static extern Result GetPipeInformation(
+            [In] IntPtr pipe,
+            [In] [MarshalAs(UnmanagedType.U4)] PipeInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetPipeInfo(cl_mem           /* pipe */,
-        //            cl_pipe_info     /* param_name */,
-        //            size_t           /* param_value_size */,
-        //            void *           /* param_value */,
-        //            size_t *         /* param_value_size_ret */) CL_API_SUFFIX__VERSION_2_0;
-
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clSetMemObjectDestructorCallback(cl_mem /* memobj */,
-        //                                void (CL_CALLBACK * /*pfn_notify*/)( cl_mem /* memobj */, void* /*user_data*/),
-        //                                void * /*user_data */ )             CL_API_SUFFIX__VERSION_1_1;
+        [DllImport("OpenCL", EntryPoint = "clSetMemObjectDestructorCallback")]
+        public static extern Result SetMemoryObjectDestructorCallback(
+            [In] IntPtr memoryObject,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData
+        );
 
         #endregion
 
         #region Deprecated Public Methods
 
-        //extern CL_API_ENTRY CL_EXT_PREFIX__VERSION_1_1_DEPRECATED cl_mem CL_API_CALL
-        //clCreateImage2D(cl_context              /* context */,
-        //                cl_mem_flags            /* flags */,
-        //                const cl_image_format * /* image_format */,
-        //                size_t                  /* image_width */,
-        //                size_t                  /* image_height */,
-        //                size_t                  /* image_row_pitch */, 
-        //                void *                  /* host_ptr */,
-        //                cl_int *                /* errcode_ret */) CL_EXT_SUFFIX__VERSION_1_1_DEPRECATED;
+        [DllImport("OpenCL", EntryPoint = "clCreateImage2D")]
+        [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateImage instead.")]
+        public static extern IntPtr CreateImage2D(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] IntPtr imageFormat,
+            [In] UIntPtr imageWidth,
+            [In] UIntPtr imageHeight,
+            [In] UIntPtr imageRowPitch,
+            [In] IntPtr hostPointer,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
-        //extern CL_API_ENTRY CL_EXT_PREFIX__VERSION_1_1_DEPRECATED cl_mem CL_API_CALL
-        //clCreateImage3D(cl_context              /* context */,
-        //                cl_mem_flags            /* flags */,
-        //                const cl_image_format * /* image_format */,
-        //                size_t                  /* image_width */, 
-        //                size_t                  /* image_height */,
-        //                size_t                  /* image_depth */, 
-        //                size_t                  /* image_row_pitch */, 
-        //                size_t                  /* image_slice_pitch */, 
-        //                void *                  /* host_ptr */,
-        //                cl_int *                /* errcode_ret */) CL_EXT_SUFFIX__VERSION_1_1_DEPRECATED;
+        [DllImport("OpenCL", EntryPoint = "clCreateImage2D")]
+        [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateImage instead.")]
+        public static extern IntPtr CreateImage3D(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
+            [In] IntPtr imageFormat,
+            [In] UIntPtr imageWidth,
+            [In] UIntPtr imageHeight,
+            [In] UIntPtr imageDepth,
+            [In] UIntPtr imageRowPitch,
+            [In] IntPtr hostPointer,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
         #endregion
     }
