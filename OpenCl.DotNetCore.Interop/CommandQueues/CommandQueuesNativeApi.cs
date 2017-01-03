@@ -157,8 +157,8 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// Returns a valid non-zero command-queue and <see cref="errorCode"/> is set to <c>Result.Success</c> if the command-queue is created successfully. Otherwise, it returns a <c>null</c> value with an error values returned in
         /// <see cref="errorCode"/>.
         /// </returns>
-        [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateCommandQueueWithProperties instead.")]
         [DllImport("OpenCL", EntryPoint = "clCreateCommandQueue")]
+        [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateCommandQueueWithProperties instead.")]
         public static extern IntPtr CreateCommandQueue(
             [In] IntPtr context,
             [In] IntPtr device,
