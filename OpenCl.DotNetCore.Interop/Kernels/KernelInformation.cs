@@ -39,12 +39,13 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         Attributes = 0x1195,
 
         /// <summary>
-        /// 
+        /// This provides a mechanism for the application to query the maximum number of sub-groups that may make up each work-group to execute a kernel on a specific device. The OpenCL implementation uses the resource requirements of the
+        /// kernel (register usage etc.) to determine what this work-group size should be. The returned value may be used to compute a work-group size to enqueue the kernel with to give a round number of sub-groups for an enqueue.
         /// </summary>
         MaxNumberOfSubGroups = 0x11B9,
 
         /// <summary>
-        /// 
+        /// Returns the number of sub-groups specified in the kernel source or IL. If the sub-group count is not specified then 0 is returned.
         /// </summary>
         CompileNumberOfSubGroups = 0x11BA
     }

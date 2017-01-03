@@ -14,7 +14,33 @@
 - [x] Put the different APIs of the native wrapper into different classes
 - [x] Create a class that converts `byte` arrays into CLR types
 - [ ] Port the whole API surface area
-- [ ] Finish documentation
+    - [x] Command Queues API
+    - [x] Contexts API
+    - [x] Devices API
+    - [ ] Enqueued Commands API
+    - [x] Events API
+    - [x] Extensions API
+    - [x] Kernels API
+    - [ ] Memory API
+    - [x] Platforms API
+    - [x] Profiling API
+    - [ ] Programs API
+    - [ ] Samplers API
+    - [ ] SVM Allocations API
+- [ ] Finish API documentation
+    - [ ] Command Queues API
+    - [x] Contexts API
+    - [ ] Devices API
+    - [ ] Enqueued Commands API
+    - [x] Events API
+    - [x] Extensions API
+    - [x] Kernels API
+    - [ ] Memory API
+    - [x] Platforms API
+    - [x] Profiling API
+    - [ ] Programs API
+    - [ ] Samplers API
+    - [ ] SVM Allocations API
 - [ ] Implement the `equals` and the `==` operator, which compares the `Handle`
 - [ ] Make `MemoryObject` abstract and derive `Image` and `Buffer` from it
 - [ ] Add `async` methods for all native methods that have an `event`

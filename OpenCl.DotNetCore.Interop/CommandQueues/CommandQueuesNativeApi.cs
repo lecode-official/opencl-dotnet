@@ -38,7 +38,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         );
 
         /// <summary>
-        /// Increments the command_queue reference count.
+        /// Increments the command queue reference count.
         /// </summary>
         /// <param name="commandQueue">Specifies the command-queue to retain.</param>
         /// <returns>
