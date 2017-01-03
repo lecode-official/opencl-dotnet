@@ -138,6 +138,26 @@ namespace OpenCl.DotNetCore.Interop.Devices
         [DllImport("OpenCL", EntryPoint = "clReleaseDevice")]
         public static extern Result ReleaseDevice([In] IntPtr device);
 
+        /// <summary>
+        /// Replaces the default command queue on the device. <see cref="SetDefaultDeviceCommandQueue"/> may be used to replace a default device command queue created with <see cref="CreateCommandQueueWithProperties"/> and the
+        /// <c>CommandQueueProperty.OnDeviceDefault</c> flag.
+        /// </summary>
+        /// <param name="context">The contact to which the device belongs.</param>
+        /// <param name="device">The device whose default device command queue is to be replaced.</param>
+        /// <param name="commandQueue">The command queue that is to be replace the current default command queue as default command queue for the device.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following errors:
+        /// 
+        /// <c>Result.InvalidContext</c> if <see cref="context"/> is not a valid context.
+        /// 
+        /// <c>Result.InvalidDevice</c> if <see cref="device"/> is not a valid device object.
+        /// 
+        /// <c>Result.InvalidCommandQueue</c> if <see cref="commandQueue"/> is not a valid command queue for <see cref="device"/>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clSetDefaultDeviceCommandQueue")]
         public static extern Result SetDefaultDeviceCommandQueue(
             [In] IntPtr context,
