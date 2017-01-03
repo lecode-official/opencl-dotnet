@@ -1,6 +1,9 @@
 
 #region Using Directives
 
+using System;
+using System.Runtime.InteropServices;
+
 #endregion
 
 namespace OpenCl.DotNetCore.Interop.SvmAllocations
@@ -12,15 +15,19 @@ namespace OpenCl.DotNetCore.Interop.SvmAllocations
     {
         #region Public Static Methods
 
-        //extern CL_API_ENTRY void * CL_API_CALL
-        //clSVMAlloc(cl_context       /* context */,
-        //        cl_svm_mem_flags /* flags */,
-        //        size_t           /* size */,
-        //        cl_uint          /* alignment */) CL_API_SUFFIX__VERSION_2_0;
+        [DllImport("OpenCL", EntryPoint = "clSVMAlloc")]
+        public static extern IntPtr SvmAllocate(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U8)] SvmMemoryFlag flags,
+            [In] UIntPtr size,
+            [In] [MarshalAs(UnmanagedType.U4)] uint alignment
+        );
 
-        //extern CL_API_ENTRY void CL_API_CALL
-        //clSVMFree(cl_context        /* context */,
-        //        void *            /* svm_pointer */) CL_API_SUFFIX__VERSION_2_0;
+        [DllImport("OpenCL", EntryPoint = "clSVMFree")]
+        public static extern void SvmFree(
+            [In] IntPtr context,
+            [In] IntPtr svmPointer
+        );
 
         #endregion
     }
