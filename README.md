@@ -25,7 +25,7 @@
     - [x] Platforms API
     - [x] Profiling API
     - [ ] Programs API
-    - [ ] Samplers API
+    - [x] Samplers API
     - [ ] SVM Allocations API
 - [ ] Finish API documentation
     - [ ] Command Queues API
