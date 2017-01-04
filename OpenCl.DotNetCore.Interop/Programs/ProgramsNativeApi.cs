@@ -47,31 +47,38 @@ namespace OpenCl.DotNetCore.Interop.Programs
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
-        //extern CL_API_ENTRY cl_program CL_API_CALL
-        //clCreateProgramWithBinary(cl_context                     /* context */,
-        //                        cl_uint                        /* num_devices */,
-        //                        const cl_device_id *           /* device_list */,
-        //                        const size_t *                 /* lengths */,
-        //                        const unsigned char **         /* binaries */,
-        //                        cl_int *                       /* binary_status */,
-        //                        cl_int *                       /* errcode_ret */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clCreateProgramWithBinary")]
+        public static extern IntPtr CreateProgramWithBinary(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] deviceList,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] lengths,
+            [In] IntPtr binaries,
+            [In] IntPtr binaryStatus,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
-        //extern CL_API_ENTRY cl_program CL_API_CALL
-        //clCreateProgramWithBuiltInKernels(cl_context            /* context */,
-        //                                cl_uint               /* num_devices */,
-        //                                const cl_device_id *  /* device_list */,
-        //                                const char *          /* kernel_names */,
-        //                                cl_int *              /* errcode_ret */) CL_API_SUFFIX__VERSION_1_2;
+        [DllImport("OpenCL", EntryPoint = "clCreateProgramWithBuiltInKernels")]
+        public static extern IntPtr CreateProgramWithBuiltInKernels(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] deviceList,
+            [In] [MarshalAs(UnmanagedType.LPStr)] string kernelNames,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
-        //extern CL_API_ENTRY cl_program CL_API_CALL
-        //clCreateProgramWithIL(cl_context    /* context */,
-        //                    const void*    /* il */,
-        //                    size_t         /* length */,
-        //                    cl_int*        /* errcode_ret */) CL_API_SUFFIX__VERSION_2_1;
+        [DllImport("OpenCL", EntryPoint = "clCreateProgramWithIL")]
+        public static extern IntPtr CreateProgramWithIl(
+            [In] IntPtr context,
+            [In] IntPtr il,
+            [In] UIntPtr length,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
-
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clRetainProgram(cl_program /* program */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clRetainProgram")]
+        public static extern Result RetainProgram(
+            [In] IntPtr program
+        );
 
         /// <summary>
         /// Decrements the program reference count.
@@ -118,38 +125,45 @@ namespace OpenCl.DotNetCore.Interop.Programs
             [In] IntPtr userData
         );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clCompileProgram(cl_program           /* program */,
-        //                cl_uint              /* num_devices */,
-        //                const cl_device_id * /* device_list */,
-        //                const char *         /* options */, 
-        //                cl_uint              /* num_input_headers */,
-        //                const cl_program *   /* input_headers */,
-        //                const char **        /* header_include_names */,
-        //                void (CL_CALLBACK *  /* pfn_notify */)(cl_program /* program */, void * /* user_data */),
-        //                void *               /* user_data */) CL_API_SUFFIX__VERSION_1_2;
+        [DllImport("OpenCL", EntryPoint = "clCompileProgram")]
+        public static extern Result CompileProgram(
+            [In] IntPtr program,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] deviceList,
+            [In] [MarshalAs(UnmanagedType.LPStr)] string options,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfInputHeaders,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] inputHeaders,
+            [Out] out IntPtr headerIncludeNames,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData
+        );
 
-        //extern CL_API_ENTRY cl_program CL_API_CALL
-        //clLinkProgram(cl_context           /* context */,
-        //            cl_uint              /* num_devices */,
-        //            const cl_device_id * /* device_list */,
-        //            const char *         /* options */, 
-        //            cl_uint              /* num_input_programs */,
-        //            const cl_program *   /* input_programs */,
-        //            void (CL_CALLBACK *  /* pfn_notify */)(cl_program /* program */, void * /* user_data */),
-        //            void *               /* user_data */,
-        //            cl_int *             /* errcode_ret */ ) CL_API_SUFFIX__VERSION_1_2;
+        [DllImport("OpenCL", EntryPoint = "clLinkProgram")]
+        public static extern IntPtr LinkProgram(
+            [In] IntPtr context,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] deviceList,
+            [In] [MarshalAs(UnmanagedType.LPStr)] string options,
+            [In] [MarshalAs(UnmanagedType.U4)] uint numberOfInputPrograms,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] inputPrograms,
+            [In] IntPtr notificationCallback,
+            [In] IntPtr userData,
+            [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
+        );
 
+        [DllImport("OpenCL", EntryPoint = "clUnloadPlatformCompiler")]
+        public static extern Result UnloadPlatformCompiler(
+            [In] IntPtr platform
+        );
 
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clUnloadPlatformCompiler(cl_platform_id /* platform */) CL_API_SUFFIX__VERSION_1_2;
-
-        //extern CL_API_ENTRY cl_int CL_API_CALL
-        //clGetProgramInfo(cl_program         /* program */,
-        //                cl_program_info    /* param_name */,
-        //                size_t             /* param_value_size */,
-        //                void *             /* param_value */,
-        //                size_t *           /* param_value_size_ret */) CL_API_SUFFIX__VERSION_1_0;
+        [DllImport("OpenCL", EntryPoint = "clGetProgramInfo")]
+        public static extern Result GetProgramInformation(
+            [In] IntPtr program,
+            [In] [MarshalAs(UnmanagedType.U4)] ProgramInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned
+        );
 
         /// <summary>
         /// Returns build information for each device in the program object.
@@ -188,8 +202,9 @@ namespace OpenCl.DotNetCore.Interop.Programs
 
         #region Deprecated Public Methods
 
-        //extern CL_API_ENTRY CL_EXT_PREFIX__VERSION_1_1_DEPRECATED cl_int CL_API_CALL
-        //clUnloadCompiler(void) CL_EXT_SUFFIX__VERSION_1_1_DEPRECATED;
+        [DllImport("OpenCL", EntryPoint = "clUnloadCompiler")]
+        [Obsolete("This is a deprecated OpenCL 1.1 method, please use UnloadPlatformCompiler instead.")]
+        public static extern Result UnloadCompiler();
 
         #endregion
     }

@@ -29,7 +29,7 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] Memory API
     - [x] Platforms API
     - [x] Profiling API
-    - [ ] Programs API
+    - [x] Programs API
     - [x] Samplers API
     - [x] SVM Allocations API
 - [ ] Finish API documentation
