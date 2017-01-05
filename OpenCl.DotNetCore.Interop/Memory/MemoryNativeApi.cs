@@ -87,7 +87,9 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseMemObject")]
-        public static extern Result ReleaseMemoryObject([In] IntPtr memoryObject);
+        public static extern Result ReleaseMemoryObject(
+            [In] IntPtr memoryObject
+        );
 
         /// <summary>
         /// Get information that is common to all memory objects (buffer and image objects).

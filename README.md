@@ -43,7 +43,7 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [ ] Memory API
     - [x] Platforms API
     - [x] Profiling API
-    - [ ] Programs API
+    - [x] Programs API
     - [x] Samplers API
     - [x] SVM Allocations API
 - [x] Mark everything with the Obsolete attribute that have been deprecated in OpenCL

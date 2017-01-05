@@ -102,7 +102,9 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clRetainContext")]
-        public static extern Result CreateContextFromType([In] IntPtr context);
+        public static extern Result CreateContextFromType(
+            [In] IntPtr context
+        );
 
         /// <summary>
         /// Decrement the context reference count.
@@ -118,7 +120,9 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
-        public static extern Result ReleaseContext([In] IntPtr context);
+        public static extern Result ReleaseContext(
+            [In] IntPtr context
+        );
 
         /// <summary>
         /// Query information about a context.
