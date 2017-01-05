@@ -18,11 +18,11 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
 - [x] Rename the arguments of the native methods
 - [x] Rename Info to Information
 - [x] Put the different APIs of the native wrapper into different classes
-- [ ] Port the whole API surface area
+- [x] Port the whole API surface area
     - [x] Command Queues API
     - [x] Contexts API
     - [x] Devices API
-    - [ ] Enqueued Commands API
+    - [x] Enqueued Commands API
     - [x] Events API
     - [x] Extensions API
     - [x] Kernels API
@@ -46,8 +46,8 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [ ] Programs API
     - [ ] Samplers API
     - [ ] SVM Allocations API
+- [x] Mark everything with the Obsolete attribute that have been deprecated in OpenCL
 - [ ] Mark everything with an attribute that contains the minimum version of OpenCL required
-- [ ] Mark everything with the Obsolete attribute that have been deprecated in OpenCL
 
 ### *__OpenCl.DotNetCore__* Project Todos
 
