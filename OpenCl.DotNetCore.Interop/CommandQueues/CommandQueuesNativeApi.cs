@@ -51,7 +51,9 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clRetainCommandQueue")]
-        public static extern Result RetainCommandQueue([In] IntPtr commandQueue);
+        public static extern Result RetainCommandQueue(
+            [In] IntPtr commandQueue
+        );
 
         /// <summary>
         /// Decrements the commandQueue reference count.
@@ -67,7 +69,9 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseCommandQueue")]
-        public static extern Result ReleaseCommandQueue([In] IntPtr commandQueue);
+        public static extern Result ReleaseCommandQueue(
+            [In] IntPtr commandQueue
+        );
 
         /// <summary>
         /// Query information about a command-queue.
@@ -112,7 +116,9 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clFlush")]
-        public static extern Result Flush([In] IntPtr commandQueue);
+        public static extern Result Flush(
+            [In] IntPtr commandQueue
+        );
 
         /// <summary>
         /// Blocks until all previously queued OpenCL commands in a command-queue are issued to the associated device and have completed.
@@ -128,7 +134,9 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clFinish")]
-        public static extern Result Finish([In] IntPtr commandQueue);
+        public static extern Result Finish(
+            [In] IntPtr commandQueue
+        );
 
         #endregion
 

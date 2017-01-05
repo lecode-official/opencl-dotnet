@@ -129,7 +129,9 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clReleaseKernel")]
-        public static extern Result ReleaseKernel([In] IntPtr kernel);
+        public static extern Result ReleaseKernel(
+            [In] IntPtr kernel
+        );
 
         /// <summary>
         /// Set the argument value for a specific argument of a kernel.
