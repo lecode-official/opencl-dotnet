@@ -33,7 +33,7 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] Samplers API
     - [x] SVM Allocations API
 - [ ] Finish API documentation
-    - [ ] Command Queues API
+    - [x] Command Queues API
     - [x] Contexts API
     - [ ] Devices API
     - [ ] Enqueued Commands API
