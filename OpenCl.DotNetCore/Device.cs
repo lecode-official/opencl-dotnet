@@ -2,6 +2,8 @@
 #region Using Directives
 
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Devices;
 
@@ -66,6 +68,24 @@ namespace OpenCl.DotNetCore
         }
 
         /// <summary>
+        /// Contains the version of the device driver.
+        /// </summary>
+        private string driverVersion;
+
+        /// <summary>
+        /// Gets the version of the device driver
+        /// </summary>
+        public string DriverVersion
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(this.driverVersion))
+                    this.driverVersion = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.DriverVersion));
+                return this.driverVersion;
+            }
+        }
+
+        /// <summary>
         /// Contains the global memory size of the device.
         /// </summary>
         private Nullable<long> globalMemorySize;
@@ -98,6 +118,60 @@ namespace OpenCl.DotNetCore
                 if (!this.addressBits.HasValue)
                     this.addressBits = (int)InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.AddressBits));
                 return this.addressBits.Value;
+            }
+        }
+
+        /// <summary>
+        /// Contains the maximum clock frequency of the device in MHz.
+        /// </summary>
+        private Nullable<int> maximumClockFrequency;
+
+        /// <summary>
+        /// Gets the maximum clock frequency of the device in MHz.
+        /// </summary>
+        public int MaximumClockFrequency
+        {
+            get
+            {
+                if (!this.maximumClockFrequency.HasValue)
+                    this.maximumClockFrequency = (int)InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.MaximumClockFrequency));
+                return this.maximumClockFrequency.Value;
+            }
+        }
+
+        /// <summary>
+        /// Contains a value that determines whether the device is currently available.
+        /// </summary>
+        private Nullable<bool> isAvailable;
+
+        /// <summary>
+        /// Gets a value that determines whether the device is currently available.
+        /// </summary>
+        public bool IsAvailable
+        {
+            get
+            {
+                if (!this.isAvailable.HasValue)
+                    this.isAvailable = InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.Available)) == 1;
+                return this.isAvailable.Value;
+            }
+        }
+
+        /// <summary>
+        /// Contains a list of all the built-in kernels.
+        /// </summary>
+        private IEnumerable<string> builtInKernels;
+
+        /// <summary>
+        /// Gets a list of all the built-in kernels.
+        /// </summary>
+        public IEnumerable<string> BuiltInKernels
+        {
+            get
+            {
+                if (this.builtInKernels == null)
+                    this.builtInKernels = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.BuiltInKernels)).Split(';').ToList();
+                return this.builtInKernels;
             }
         }
 
