@@ -25,16 +25,20 @@ namespace OpenCl.DotNetCore.Tests
         {
             // Gets all available platforms and their corresponding devices, and prints them out in a table
             IEnumerable<Platform> platforms = Platform.GetPlatforms();
-            ConsoleTable consoleTable = new ConsoleTable("Platform", "Vendor", "Device", "Bits", "Memory");
+            ConsoleTable consoleTable = new ConsoleTable("Platform", "OpenCL Version", "Vendor", "Device", "Driver Version", "Bits", "Memory", "Clock Speed", "Available");
             foreach (Platform platform in platforms)
             {
                 foreach (Device device in platform.GetDevices(DeviceType.All))
                     consoleTable.AddRow(
-                        $"{platform.Name} {platform.Version.MajorVersion}.{platform.Version.MinorVersion}",
+                        platform.Name,
+                        $"{platform.Version.MajorVersion}.{platform.Version.MinorVersion}",
                         platform.Vendor,
                         device.Name,
+                        device.DriverVersion,
                         $"{device.AddressBits} Bit",
-                        $"{Math.Round(device.GlobalMemorySize / 1024.0f / 1024.0f / 1024.0f, 2)} GiB");
+                        $"{Math.Round(device.GlobalMemorySize / 1024.0f / 1024.0f / 1024.0f, 2)} GiB",
+                        $"{device.MaximumClockFrequency} MHz",
+                        device.IsAvailable ? "✔" : "✖");
             }
             Console.WriteLine("Supported Platforms & Devices:");
             consoleTable.Write(Format.Alternative);

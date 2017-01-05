@@ -13,7 +13,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
     public enum DeviceInformation : uint
     {
         /// <summary>
-        /// The OpenCL device type. Currently supported values are.
+        /// The OpenCL device type.
         /// </summary>
         Type = 0x1000,
 
