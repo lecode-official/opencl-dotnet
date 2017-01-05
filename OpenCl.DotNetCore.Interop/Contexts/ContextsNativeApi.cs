@@ -49,7 +49,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// </returns>
         [DllImport("OpenCL", EntryPoint = "clCreateContext")]
         public static extern IntPtr CreateContext(
-            [In] IntPtr[] properties,
+            [In] IntPtr properties,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
             [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] devices,
             [In] IntPtr notificationCallback,
