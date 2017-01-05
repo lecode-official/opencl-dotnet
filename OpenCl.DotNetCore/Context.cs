@@ -252,7 +252,7 @@ namespace OpenCl.DotNetCore
         {
             // Creates the new context for the specified devices
             Result result;
-            IntPtr contextPointer = ContextsNativeApi.CreateContext(null, (uint)devices.Count(), devices.Select(device => device.Handle).ToArray(), IntPtr.Zero, IntPtr.Zero, out result);
+            IntPtr contextPointer = ContextsNativeApi.CreateContext(IntPtr.Zero, (uint)devices.Count(), devices.Select(device => device.Handle).ToArray(), IntPtr.Zero, IntPtr.Zero, out result);
 
             // Checks if the device creation was successful, if not, then an exception is thrown
             if (result != Result.Success)
