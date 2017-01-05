@@ -20,7 +20,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// </summary>
         /// <param name="context">A valid OpenCL context used to create the buffer object.</param>
         /// <param name="flags">
-        /// A bit-field that is used to specify allocation and usage information such as the memory arena that should be used to allocate the buffer object and how it will be used. If value specified for <see cref="flags"/> is 0, the
+        /// An enumeration that is used to specify allocation and usage information such as the memory arena that should be used to allocate the buffer object and how it will be used. If value specified for <see cref="flags"/> is 0, the
         /// default is used which is <see cref="MemoryFlag.ReadWrite"/>.
         /// </param>
         /// <param name="size">The size in bytes of the buffer memory object to be allocated.</param>
@@ -38,16 +38,48 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [In] IntPtr hostPointer,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
-        
+
+        /// <summary>
+        /// Creates a new buffer object (referred to as a sub-buffer object) from an existing buffer object.
+        /// </summary>
+        /// <param name="memoryObject">A valid buffer object and cannot be a sub-buffer object.</param>
+        /// <param name="flags">
+        /// An enumeration that is used to specify allocation and usage information about the sub-buffer memory object being created and is described in the table below. If the <c>MemoryFlag.ReadWrite</c>, <c>MemoryFlag.ReadOnly</c> or
+        /// <c>MemoryFlag.WriteOnly</c> values are not specified in <see cref="flags"/>, they are inherited from the corresponding memory access qualifers associated with <see cref="buffer"/>. The <c>MemoryFlag.UseHostPointer</c>,
+        /// <c>MemoryFlag.AllocateHostPointer</c> and <c>MemoryFlag.CopyHostPointer</c> values cannot be specified in <see cref="flags"/> but are inherited from the corresponding memory access qualifiers associated with <see cref="buffer"/>.
+        /// If <c>MemoryFlag.CopyHostPointer</c> is specified in the memory access qualifier values associated with <see cref="buffer"/> it does not imply any additional copies when the sub-buffer is created from <see cref="buffer"/>. If
+        /// the <c>MemoryFlag.HostWriteOnly</c>, <c>MemoryFlag.HostReadOnly</c> or <c>MemoryFlag.HostNoAccess</c> values are not specified in <see cref="flags"/>, they are inherited from the corresponding memory access qualifiers associated
+        /// with <see cref="buffer"/>.
+        /// </param>
+        /// <param name="bufferCreateType">Describes the type of buffer object to be created.</param>
+        /// <param name="bufferCreateInformation">Describes the type of buffer object to be created. </param>
+        /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
+        /// <returns>
+        /// Returns a valid non-zero buffer object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the buffer object is created successfully. Otherwise, it returns a <c>null</c> value and an error value in
+        /// <see cref="errorCode"/>.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clCreateSubBuffer")]
         public static extern IntPtr CreateSubBuffer(
             [In] IntPtr memoryObject,
             [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
             [In] [MarshalAs(UnmanagedType.U4)] BufferCreateType bufferCreateType,
-            [In] IntPtr bufferCreateInfo,
+            [In] IntPtr bufferCreateInformation,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        /// <summary>
+        /// Creates a 1D image, 1D image buffer, 1D image array, 2D image, 2D image array or 3D image object.
+        /// </summary>
+        /// <param name="context">A valid OpenCL context on which the image object is to be created.</param>
+        /// <param name="flags">An enumeration that is used to specify allocation and usage information about the image memory object being created.</param>
+        /// <param name="imageFormat">A pointer to a structure that describes format properties of the image to be allocated.</param>
+        /// <param name="imageDescription">A pointer to a structure that describes type and dimensions of the image to be allocated.</param>
+        /// <param name="hostPointer">A pointer to the image data that may already be allocated by the application.</param>
+        /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
+        /// <returns>
+        /// Returns a valid non-zero image object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the image object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
+        /// <see cref="errorCode"/>.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clCreateImage")]
         public static extern IntPtr CreateImage(
             [In] IntPtr context,
@@ -58,6 +90,25 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        /// <summary>
+        /// Creates a pipe object.
+        /// </summary>
+        /// <param name="context">A valid OpenCL context used to create the pipe object.</param>
+        /// <param name="flags">
+        /// An enumeration that is used to specify allocation and usage information such as the memory arena that should be used to allocate the pipe object and how it will be used. Only <c>MemoryFlag.ReadOnly</c>, <c>MemoryFlag.WriteOnly</c>,
+        /// <c>MemoryFlag.ReadWrite</c>, and <c>MemoryFlag.HostNoAccess</c> can be specified when creating a pipe object. If value specified for <see cref="flags"/> is 0, the default is used which is
+        /// <c>MemoryFlag.ReadWrite | MemoryFlag.HostNoAccess</c>.
+        /// </param>
+        /// <param name="pipePacketSize">Size in bytes of a pipe packet.</param>
+        /// <param name="pipeMaximumNumberOfPackets">Specifies the pipe capacity by specifying the maximum number of packets the pipe can hold.</param>
+        /// <param name="properties">
+        /// A list of properties for the pipe and their corresponding values. Each property name is immediately followed by the corresponding desired value. The list is terminated with 0. In OpenCL 2.0, properties must be <c>null</c>.
+        /// </param>
+        /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
+        /// <returns>
+        /// Returns a valid non-zero pipe object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the pipe object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
+        /// <see cref="errorCode"/>.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clCreatePipe")]
         public static extern IntPtr CreatePipe(
             [In] IntPtr context,
@@ -68,6 +119,19 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        /// <summary>
+        /// Increments the memory object reference count.
+        /// </summary>
+        /// <param name="memoryObject">A valid memory object.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns one of the following errors:
+        /// 
+        /// <c>Result.InvalidMemoryObject</c> if <see cref="memoryObject"/> is not a valid memory object.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clRetainMemObject")]
         public static extern Result RetainMemoryObject(
             [In] IntPtr memoryObject
