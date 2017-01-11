@@ -81,7 +81,7 @@ namespace OpenCl.DotNetCore.Tests
                     }";
 
                 // Creates a program and then the kernel from it
-                using (Program program = await context.CreateAndBuildProgramFromStringAsync(new List<string> { code }))
+                using (Program program = await context.CreateAndBuildProgramFromStringAsync(code))
                 {
                     using (Kernel kernel = program.CreateKernel("matvec_mult"))
                     {
