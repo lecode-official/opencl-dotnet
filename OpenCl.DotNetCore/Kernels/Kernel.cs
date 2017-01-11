@@ -5,10 +5,11 @@ using System;
 using System.Runtime.InteropServices;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Kernels;
+using OpenCl.DotNetCore.Memory;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Kernels
 {
     /// <summary>
     /// Represents an OpenCL kernel.

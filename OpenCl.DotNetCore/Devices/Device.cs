@@ -9,7 +9,7 @@ using OpenCl.DotNetCore.Interop.Devices;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Devices
 {
     /// <summary>
     /// Represents an OpenCL device.

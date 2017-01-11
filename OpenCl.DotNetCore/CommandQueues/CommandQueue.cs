@@ -3,13 +3,17 @@
 
 using System;
 using System.Runtime.InteropServices;
+using OpenCl.DotNetCore.Contexts;
+using OpenCl.DotNetCore.Devices;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.CommandQueues;
 using OpenCl.DotNetCore.Interop.EnqueuedCommands;
+using OpenCl.DotNetCore.Kernels;
+using OpenCl.DotNetCore.Memory;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.CommandQueues
 {
     /// <summary>
     /// Represents an OpenCL command queue.

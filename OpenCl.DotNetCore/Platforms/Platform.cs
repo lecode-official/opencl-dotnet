@@ -4,13 +4,14 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using OpenCl.DotNetCore.Devices;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Devices;
 using OpenCl.DotNetCore.Interop.Platforms;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Platforms
 {
     /// <summary>
     /// Represents an OpenCL platform.
@@ -206,7 +207,7 @@ namespace OpenCl.DotNetCore
         /// <param name="deviceType">The type of devices that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the devices could not be retrieved, then a <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns a list of all devices that matched the specified device type.</returns>
-        public IEnumerable<Device> GetDevices(OpenCl.DotNetCore.DeviceType deviceType)
+        public IEnumerable<Device> GetDevices(OpenCl.DotNetCore.Devices.DeviceType deviceType)
         {
             // Gets the number of available devices of the specified type
             uint numberOfAvailableDevices;

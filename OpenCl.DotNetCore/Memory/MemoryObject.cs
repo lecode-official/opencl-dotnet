@@ -8,7 +8,7 @@ using OpenCl.DotNetCore.Interop.Memory;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Memory
 {
     /// <summary>
     /// Represents an OpenCL memory object.
