@@ -5,10 +5,11 @@ using System;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Kernels;
 using OpenCl.DotNetCore.Interop.Programs;
+using OpenCl.DotNetCore.Kernels;
 
 #endregion
 
-namespace OpenCl.DotNetCore
+namespace OpenCl.DotNetCore.Programs
 {
     /// <summary>
     /// Represents an OpenCL program.

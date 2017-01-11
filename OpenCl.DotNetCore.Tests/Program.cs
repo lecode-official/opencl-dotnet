@@ -5,6 +5,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using ConsoleTables;
+using OpenCl.DotNetCore.CommandQueues;
+using OpenCl.DotNetCore.Contexts;
+using OpenCl.DotNetCore.Devices;
+using OpenCl.DotNetCore.Kernels;
+using OpenCl.DotNetCore.Memory;
+using OpenCl.DotNetCore.Platforms;
+using OpenCl.DotNetCore.Programs;
 
 #endregion
 
@@ -29,6 +36,7 @@ namespace OpenCl.DotNetCore.Tests
             foreach (Platform platform in platforms)
             {
                 foreach (Device device in platform.GetDevices(DeviceType.All))
+                {
                     consoleTable.AddRow(
                         platform.Name,
                         $"{platform.Version.MajorVersion}.{platform.Version.MinorVersion}",
@@ -39,6 +47,7 @@ namespace OpenCl.DotNetCore.Tests
                         $"{Math.Round(device.GlobalMemorySize / 1024.0f / 1024.0f / 1024.0f, 2)} GiB",
                         $"{device.MaximumClockFrequency} MHz",
                         device.IsAvailable ? "✔" : "✖");
+                }
             }
             Console.WriteLine("Supported Platforms & Devices:");
             consoleTable.Write(Format.Alternative);
