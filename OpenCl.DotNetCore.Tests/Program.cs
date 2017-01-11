@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using ConsoleTables;
 using OpenCl.DotNetCore.CommandQueues;
 using OpenCl.DotNetCore.Contexts;
@@ -28,7 +29,17 @@ namespace OpenCl.DotNetCore.Tests
         /// This is the entrypoint to the application.
         /// </summary>
         /// <param name="args">The command line arguments that have been passed to the program.</param>
-        public static void Main(string[] args)
+        public static void Main(string[] args) => Test.MainAsync(args).Wait();
+
+        #endregion
+
+        #region Private Static Methods
+
+        /// <summary>
+        /// This is the asynchronous entrypoint to the application.
+        /// </summary>
+        /// <param name="args">The command line arguments that have been passed to the program.</param>
+        private static async Task MainAsync(string[] args)
         {
             // Gets all available platforms and their corresponding devices, and prints them out in a table
             IEnumerable<Platform> platforms = Platform.GetPlatforms();
@@ -96,7 +107,7 @@ namespace OpenCl.DotNetCore.Tests
                             // Creates a command queue, executes the kernel, and retrieves the result
                             using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, chosenDevice))
                             {
-                                commandQueue.EnqueueNDRangeKernel(kernel, 1, 4);
+                                await commandQueue.EnqueueNDRangeKernelAsync(kernel, 1, 4);
                                 float[] resultArray = commandQueue.EnqueueReadBuffer<float>(resultBuffer, 4);
                                 Console.WriteLine($"Result: ({string.Join(", ", resultArray)})");
                             }
