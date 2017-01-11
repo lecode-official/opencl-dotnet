@@ -29,6 +29,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// </param>
         /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
         /// <returns>Returns the created command queue.</returns>
+        [IntroducedIn(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateCommandQueueWithProperties")]
         public static extern IntPtr CreateCommandQueueWithProperties(
             [In] IntPtr context,
@@ -50,6 +51,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainCommandQueue")]
         public static extern Result RetainCommandQueue(
             [In] IntPtr commandQueue
@@ -68,6 +70,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseCommandQueue")]
         public static extern Result ReleaseCommandQueue(
             [In] IntPtr commandQueue
@@ -93,6 +96,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetCommandQueueInfo")]
         public static extern Result GetCommandQueueInfo(
             [In] IntPtr commandQueue,
@@ -115,6 +119,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clFlush")]
         public static extern Result Flush(
             [In] IntPtr commandQueue
@@ -133,6 +138,7 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clFinish")]
         public static extern Result Finish(
             [In] IntPtr commandQueue
@@ -165,8 +171,9 @@ namespace OpenCl.DotNetCore.Interop.CommandQueues
         /// Returns a valid non-zero command-queue and <see cref="errorCode"/> is set to <c>Result.Success</c> if the command-queue is created successfully. Otherwise, it returns a <c>null</c> value with an error values returned in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateCommandQueue")]
-        [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateCommandQueueWithProperties instead.")]
+        [Obsolete("This is a deprecated OpenCL 1.2 method, please use CreateCommandQueueWithProperties instead.")]
         public static extern IntPtr CreateCommandQueue(
             [In] IntPtr context,
             [In] IntPtr device,
