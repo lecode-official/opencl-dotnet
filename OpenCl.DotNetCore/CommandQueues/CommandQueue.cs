@@ -97,7 +97,7 @@ namespace OpenCl.DotNetCore.CommandQueues
         }
 
         /// <summary>
-        /// Enqueues a n-dimensional kernel to the command queue.
+        /// Enqueues a n-dimensional kernel to the command queue, which is executed asynchronously.
         /// </summary>
         /// <param name="kernel">The kernel that is to be enqueued.</param>
         /// <param name="workDimension">The dimensionality of the work.</param>
