@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using OpenCl.DotNetCore.Devices;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Contexts;
@@ -47,7 +48,108 @@ namespace OpenCl.DotNetCore.Contexts
 
         #endregion
 
+        #region Private Methods
+
+        /// <summary>
+        /// Retrieves the specified information about the program build.
+        /// </summary>
+        /// <param name="program">The handle to the program for which the build information is to be retrieved.</param>
+        /// <param name="device">The device for which the build information is to be retrieved.</param>
+        /// <param name="programBuildInformation">The kind of information that is to be retrieved.</param>
+        /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the specified information.</returns>
+        private byte[] GetProgramBuildInformation(IntPtr program, Device device, ProgramBuildInformation programBuildInformation)
+        {
+            // Retrieves the size of the return value in bytes, this is used to later get the full information
+            UIntPtr returnValueSize;
+            Result result = ProgramsNativeApi.GetProgramBuildInformation(program, device.Handle, programBuildInformation, UIntPtr.Zero, null, out returnValueSize);
+            if (result != Result.Success)
+                throw new OpenClException("The program build information could not be retrieved.", result);
+            
+            // Allocates enough memory for the return value and retrieves it
+            byte[] output = new byte[returnValueSize.ToUInt32()];
+            result = ProgramsNativeApi.GetProgramBuildInformation(program, device.Handle, programBuildInformation, new UIntPtr((uint)output.Length), output, out returnValueSize);
+            if (result != Result.Success)
+                throw new OpenClException("The program build information could not be retrieved.", result);
+
+            // Returns the output
+            return output;
+        }
+
+        #endregion
+        
         #region Public Methods
+
+        /// <summary>
+        /// Creates a program from the provided source codes asynchronously. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="sources">The source codes from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Task<Program> CreateAndBuildProgramFromStringAsync(IEnumerable<string> sources)
+        {
+            // Creates a new task completion source, which is used to signal when the build has completed
+            TaskCompletionSource<Program> taskCompletionSource = new TaskCompletionSource<Program>();
+
+            // Loads the program from the specified source string
+            Result result;
+            IntPtr[] sourceList = sources.Select(source => Marshal.StringToHGlobalAnsi(source)).ToArray();
+            uint[] sourceLengths = sources.Select(source => (uint)source.Length).ToArray();
+            IntPtr programPointer = ProgramsNativeApi.CreateProgramWithSource(this.Handle, 1, sourceList, sourceLengths, out result);
+
+            // Checks if the program creation was successful, if not, then an exception is thrown
+            if (result != Result.Success)
+                throw new OpenClException("The program could not be created.", result);
+
+            // Builds (compiles and links) the program and checks if it was successful, if not, then an exception is thrown
+            result = ProgramsNativeApi.BuildProgram(programPointer, 0, null, null, Marshal.GetFunctionPointerForDelegate(new BuildProgramCallback((builtProgramPointer, userData) =>
+            {
+                // Tries to validate the build, if not successful, then an exception is thrown
+                try
+                {
+                    // Cycles over all devices and retrieves the build log for each one, so that the errors that occurred can be added to the exception message (if any error occur during the retrieval, the exception is thrown without the log)
+                    Dictionary<string, string> buildLogs = new Dictionary<string, string>();
+                    foreach (Device device in this.Devices)
+                    {
+                        try
+                        {
+                            byte[] programBuildLog = this.GetProgramBuildInformation(builtProgramPointer, device, ProgramBuildInformation.Log);
+                            string buildLog = InteropConverter.To<string>(programBuildLog).Trim();
+                            if (!string.IsNullOrWhiteSpace(buildLog))
+                                buildLogs.Add(device.Name, buildLog);
+                        }
+                        catch (OpenClException)
+                        {
+                            continue;
+                        }
+                    }
+
+                    // Checks if there were any errors, if so then the build logs are compiled into a formatted string and integrates it into the exception message
+                    if (buildLogs.Any())
+                    {
+                        string buildLogString = string.Join($"{Environment.NewLine}{Environment.NewLine}", buildLogs.Select(keyValuePair => $" Build log for device \"{keyValuePair.Key}\":{Environment.NewLine}{keyValuePair.Value}"));
+                        taskCompletionSource.TrySetException(new OpenClException($"The program could not be compiled and linked.{Environment.NewLine}{Environment.NewLine}{buildLogString}", result));
+                    }
+
+                    // Since the build was successful, the program is created and the task completion source is resolved with it Creates the new program and returns it
+                    taskCompletionSource.TrySetResult(new Program(builtProgramPointer));
+                }
+                catch (Exception exception)
+                {
+                    taskCompletionSource.TrySetException(exception);
+                }
+            })), IntPtr.Zero);
+
+            // Checks if the build could be started successfully, if not, then an exception is thrown
+            if (result != Result.Success)
+            {
+                if (result != Result.Success)
+                    taskCompletionSource.TrySetException(new OpenClException("The program could not be compiled and linked.", result));
+            }
+
+            // Returns the task which is resolved when the program was build successful or not
+            return taskCompletionSource.Task;
+        }
 
         /// <summary>
         /// Creates a program from the provided source codes. The program is created, compiled, and linked.
@@ -75,22 +177,17 @@ namespace OpenCl.DotNetCore.Contexts
                 Dictionary<string, string> buildLogs = new Dictionary<string, string>();
                 foreach (Device device in this.Devices)
                 {
-                    // Retrieves the size of the return value in bytes, this is used to later get the full information
-                    UIntPtr returnValueSize;
-                    result = ProgramsNativeApi.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, UIntPtr.Zero, null, out returnValueSize);
-                    if (result != Result.Success)
-                        throw new OpenClException("The program could not be compiled and linked.", result);
-                    
-                    // Allocates enough memory for the return value and retrieves it
-                    byte[] output = new byte[returnValueSize.ToUInt32()];
-                    result = ProgramsNativeApi.GetProgramBuildInformation(programPointer, device.Handle, ProgramBuildInformation.Log, new UIntPtr((uint)output.Length), output, out returnValueSize);
-                    if (result != Result.Success)
-                        throw new OpenClException("The program could not be compiled and linked.", result);
-
-                    // Converts the output to a string, checks if the log is not empty, and adds it to the build logs
-                    string buildLog = InteropConverter.To<string>(output).Trim();
-                    if (!string.IsNullOrWhiteSpace(buildLog))
-                        buildLogs.Add(device.Name, buildLog);
+                    try
+                    {
+                        byte[] programBuildLog = this.GetProgramBuildInformation(programPointer, device, ProgramBuildInformation.Log);
+                        string buildLog = InteropConverter.To<string>(programBuildLog).Trim();
+                        if (!string.IsNullOrWhiteSpace(buildLog))
+                            buildLogs.Add(device.Name, buildLog);
+                    }
+                    catch (OpenClException)
+                    {
+                        continue;
+                    }
                 }
 
                 // Compiles the build logs into a formatted string and integrates it into the exception message
@@ -99,8 +196,7 @@ namespace OpenCl.DotNetCore.Contexts
             }
 
             // Creates the new program and returns it
-            Program program = new Program(programPointer);
-            return program;
+            return new Program(programPointer);
         }
 
         /// <summary>
@@ -280,6 +376,17 @@ namespace OpenCl.DotNetCore.Contexts
             // Makes sure that the base class can execute its dispose logic
             base.Dispose(disposing);
         }
+
+        #endregion
+
+        #region Private Delegates
+
+        /// <summary>
+        /// A delegate for the callback of <see cref="BuildProgram"/>.
+        /// </summary>
+        /// <param name="program">The program that was compiled and linked.</param>
+        /// <param name="userData">User-defined data that can be passed to the callback subscription.</param>
+        private delegate void BuildProgramCallback(IntPtr program, IntPtr userData);
 
         #endregion
     }
