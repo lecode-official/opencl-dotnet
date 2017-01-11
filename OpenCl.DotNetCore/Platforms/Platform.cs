@@ -46,7 +46,7 @@ namespace OpenCl.DotNetCore.Platforms
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Name));
+                    this.name = this.GetPlatformInformation<string>(PlatformInformation.Name);
                 return this.name;
             }
         }
@@ -64,7 +64,7 @@ namespace OpenCl.DotNetCore.Platforms
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Vendor));
+                    this.vendor = this.GetPlatformInformation<string>(PlatformInformation.Vendor);
                 return this.vendor;
             }
         }
@@ -82,7 +82,7 @@ namespace OpenCl.DotNetCore.Platforms
             get
             {
                 if (this.version == null)
-                    this.version = new Version(InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Version)));
+                    this.version = new Version(this.GetPlatformInformation<string>(PlatformInformation.Version));
                 return this.version;
             }
         }
@@ -101,7 +101,7 @@ namespace OpenCl.DotNetCore.Platforms
             {
                 if (!this.profile.HasValue)
                 {
-                    string profileName = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Profile));
+                    string profileName = this.GetPlatformInformation<string>(PlatformInformation.Profile);
                     if (profileName == "FULL_PROFILE")
                         this.profile = Profile.Full;
                     else
@@ -124,7 +124,7 @@ namespace OpenCl.DotNetCore.Platforms
             get
             {
                 if (this.extensions == null)
-                    this.extensions = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.Extensions)).Split(' ').ToList();
+                    this.extensions = this.GetPlatformInformation<string>(PlatformInformation.Extensions).Split(' ').ToList();
                 return this.extensions;
             }
         }
@@ -142,11 +142,7 @@ namespace OpenCl.DotNetCore.Platforms
             get
             {
                 if (!this.platformHostTimerResolution.HasValue)
-                {
-                    byte[] rawPlatformInformation = this.GetPlatformInformation(PlatformInformation.PlatformHostTimerResolution);
-                    ulong retrievedPlatformHostTimerResolution = InteropConverter.To<ulong>(rawPlatformInformation);
-                    this.platformHostTimerResolution = (long)retrievedPlatformHostTimerResolution;
-                }
+                    this.platformHostTimerResolution = (long)this.GetPlatformInformation<ulong>(PlatformInformation.PlatformHostTimerResolution);
                 return this.platformHostTimerResolution.Value;
             }
         }
@@ -164,7 +160,7 @@ namespace OpenCl.DotNetCore.Platforms
             get
             {
                 if (this.platformIcdSuffix == null)
-                    this.platformIcdSuffix = InteropConverter.To<string>(this.GetPlatformInformation(PlatformInformation.PlatformIcdSuffix));
+                    this.platformIcdSuffix = this.GetPlatformInformation<string>(PlatformInformation.PlatformIcdSuffix);
                 return this.platformIcdSuffix;
             }
         }
@@ -176,10 +172,11 @@ namespace OpenCl.DotNetCore.Platforms
         /// <summary>
         /// Retrieves the specified information about the OpenCL platform.
         /// </summary>
+        /// <typeparam name="T">The type of the data that is to be returned.</param>
         /// <param name="platformInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetPlatformInformation(PlatformInformation platformInformation)
+        private T GetPlatformInformation<T>(PlatformInformation platformInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
@@ -194,7 +191,7 @@ namespace OpenCl.DotNetCore.Platforms
                 throw new OpenClException("The platform information could not be retrieved.", result);
 
             // Returns the output
-            return output;
+            return InteropConverter.To<T>(output);
         }
 
         #endregion

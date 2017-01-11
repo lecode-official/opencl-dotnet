@@ -44,7 +44,7 @@ namespace OpenCl.DotNetCore.Kernels
             get
             {
                 if (string.IsNullOrWhiteSpace(this.functionName))
-                    this.functionName = InteropConverter.To<string>(this.GetKernelInformation(KernelInformation.FunctionName));
+                    this.functionName = this.GetKernelInformation<string>(KernelInformation.FunctionName);
                 return this.functionName;
             }
         }
@@ -62,11 +62,7 @@ namespace OpenCl.DotNetCore.Kernels
             get
             {
                 if (!this.numberOfArguments.HasValue)
-                {
-                    byte[] rawNumberOfArguments = this.GetKernelInformation(KernelInformation.NumberOfArguments);
-                    uint retrievedNumberOfArguments = InteropConverter.To<uint>(rawNumberOfArguments);
-                    this.numberOfArguments = (int)retrievedNumberOfArguments;
-                }
+                    this.numberOfArguments = (int)this.GetKernelInformation<uint>(KernelInformation.NumberOfArguments);
                 return this.numberOfArguments.Value;
             }
         }
@@ -78,10 +74,11 @@ namespace OpenCl.DotNetCore.Kernels
         /// <summary>
         /// Retrieves the specified information about the OpenCL kernel.
         /// </summary>
+        /// <typeparam name="T">The type of the data that is to be returned.</param>
         /// <param name="kernelInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetKernelInformation(KernelInformation kernelInformation)
+        private T GetKernelInformation<T>(KernelInformation kernelInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
@@ -96,7 +93,7 @@ namespace OpenCl.DotNetCore.Kernels
                 throw new OpenClException("The kernel information could not be retrieved.", result);
 
             // Returns the output
-            return output;
+            return InteropConverter.To<T>(output);
         }
 
         #endregion

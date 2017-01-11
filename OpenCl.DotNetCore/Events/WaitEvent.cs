@@ -59,8 +59,7 @@ namespace OpenCl.DotNetCore.Events
         {
             get
             {
-                byte[] commandExecutionStatusCode = this.GetEventInformation(EventInformation.CommandExecutionStatus);
-                return InteropConverter.To<int>(commandExecutionStatusCode);
+                return this.GetEventInformation<int>(EventInformation.CommandExecutionStatus);
             }
         }
 
@@ -85,10 +84,11 @@ namespace OpenCl.DotNetCore.Events
         /// <summary>
         /// Retrieves the specified information about the OpenCL event.
         /// </summary>
+        /// <typeparam name="T">The type of the data that is to be returned.</param>
         /// <param name="eventInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetEventInformation(EventInformation eventInformation)
+        private T GetEventInformation<T>(EventInformation eventInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
@@ -103,7 +103,7 @@ namespace OpenCl.DotNetCore.Events
                 throw new OpenClException("The event information could not be retrieved.", result);
 
             // Returns the output
-            return output;
+            return InteropConverter.To<T>(output);
         }
 
         #endregion
