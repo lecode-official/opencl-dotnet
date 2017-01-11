@@ -47,7 +47,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// Returns a valid non-zero context and <see cref="errorCode"/> is set to <c>Result.Success</c> if the context is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
         /// <see cref="errorCode"/>.
         /// </returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateContext")]
         public static extern IntPtr CreateContext(
             [In] IntPtr properties,
@@ -80,7 +80,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// <param name="userData">Passed as the user_data argument when <see cref="notificationCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
         /// <param name="errorCode">Return an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
         /// <returns>Returns the created context.</returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateContextFromType")]
         public static extern IntPtr CreateContextFromType(
             [In] IntPtr properties,
@@ -103,7 +103,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         ///
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainContext")]
         public static extern Result CreateContextFromType(
             [In] IntPtr context
@@ -122,7 +122,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseContext")]
         public static extern Result ReleaseContext(
             [In] IntPtr context
@@ -148,7 +148,7 @@ namespace OpenCl.DotNetCore.Interop.Contexts
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetContextInfo")]
         public static extern Result GetContextInformation(
             [In] IntPtr context,

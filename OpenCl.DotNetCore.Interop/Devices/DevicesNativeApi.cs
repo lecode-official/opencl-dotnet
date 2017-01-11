@@ -41,7 +41,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetDeviceIDs")]
         public static extern Result GetDeviceIds(
             [In] IntPtr platform,
@@ -74,7 +74,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 0)]
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetDeviceInfo")]
         public static extern Result GetDeviceInformation(
             [In] IntPtr device,
@@ -115,7 +115,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 2)]
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clCreateSubDevices")]
         public static extern Result CreateSubDevices(
             [In] IntPtr inDevice,
@@ -138,7 +138,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 2)]
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clRetainDevice")]
         public static extern Result RetainDevice(
             [In] IntPtr device
@@ -158,7 +158,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(1, 2)]
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clReleaseDevice")]
         public static extern Result ReleaseDevice(
             [In] IntPtr device
@@ -184,7 +184,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(2, 1)]
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clSetDefaultDeviceCommandQueue")]
         public static extern Result SetDefaultDeviceCommandQueue(
             [In] IntPtr context,
@@ -215,7 +215,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(2, 1)]
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clGetDeviceAndHostTimer")]
         public static extern Result GetDeviceAndHostTimer(
             [In] IntPtr device,
@@ -242,7 +242,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        [IntroducedIn(2, 1)]
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clGetHostTimer")]
         public static extern Result GetHostTimer(
             [In] IntPtr device,
