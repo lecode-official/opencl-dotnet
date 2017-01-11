@@ -48,7 +48,6 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] SVM Allocations API
 - [x] Mark everything with the Obsolete attribute that have been deprecated in OpenCL
 - [x] Mark everything with an attribute that contains the minimum version of OpenCL required
-- [ ] Add attributes to the information enumerations which contains the return type of each entry
 
 ### *__OpenCl.DotNetCore__* Project Todos
 
