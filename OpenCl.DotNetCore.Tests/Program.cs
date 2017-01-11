@@ -108,7 +108,7 @@ namespace OpenCl.DotNetCore.Tests
                             using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, chosenDevice))
                             {
                                 await commandQueue.EnqueueNDRangeKernelAsync(kernel, 1, 4);
-                                float[] resultArray = commandQueue.EnqueueReadBuffer<float>(resultBuffer, 4);
+                                float[] resultArray = await commandQueue.EnqueueReadBufferAsync<float>(resultBuffer, 4);
                                 Console.WriteLine($"Result: ({string.Join(", ", resultArray)})");
                             }
                         }
