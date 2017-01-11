@@ -45,9 +45,9 @@ namespace OpenCl.DotNetCore.Memory
                 if (!this.size.HasValue)
                 {
                     if (Marshal.SizeOf<IntPtr>() == sizeof(long))
-                        this.size = InteropConverter.To<long>(this.GetMemoryObjectInformation(MemoryObjectInformation.Size));
+                        this.size = this.GetMemoryObjectInformation<long>(MemoryObjectInformation.Size);
                     else
-                        this.size = (long)InteropConverter.To<int>(this.GetMemoryObjectInformation(MemoryObjectInformation.Size));
+                        this.size = (long)this.GetMemoryObjectInformation<int>(MemoryObjectInformation.Size);
                 }
                 return this.size.Value;
             }
@@ -66,7 +66,7 @@ namespace OpenCl.DotNetCore.Memory
             get
             {
                 if (!this.flags.HasValue)
-                    this.flags = (MemoryFlag)InteropConverter.To<ulong>(this.GetMemoryObjectInformation(MemoryObjectInformation.Flags));
+                    this.flags = (MemoryFlag)this.GetMemoryObjectInformation<ulong>(MemoryObjectInformation.Flags);
                 return this.flags.Value;
             }
         }
@@ -78,10 +78,11 @@ namespace OpenCl.DotNetCore.Memory
         /// <summary>
         /// Retrieves the specified information about the OpenCL memory object.
         /// </summary>
+        /// <typeparam name="T">The type of the data that is to be returned.</param>
         /// <param name="memoryObjectInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetMemoryObjectInformation(MemoryObjectInformation memoryObjectInformation)
+        private T GetMemoryObjectInformation<T>(MemoryObjectInformation memoryObjectInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
@@ -96,7 +97,7 @@ namespace OpenCl.DotNetCore.Memory
                 throw new OpenClException("The memory object information could not be retrieved.", result);
 
             // Returns the output
-            return output;
+            return InteropConverter.To<T>(output);
         }
 
         #endregion

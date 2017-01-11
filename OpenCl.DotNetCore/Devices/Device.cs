@@ -44,7 +44,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (string.IsNullOrWhiteSpace(this.name))
-                    this.name = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.Name));
+                    this.name = this.GetDeviceInformation<string>(DeviceInformation.Name);
                 return this.name;
             }
         }
@@ -62,7 +62,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (string.IsNullOrWhiteSpace(this.vendor))
-                    this.vendor = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.Vendor));
+                    this.vendor = this.GetDeviceInformation<string>(DeviceInformation.Vendor);
                 return this.vendor;
             }
         }
@@ -80,7 +80,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (string.IsNullOrWhiteSpace(this.driverVersion))
-                    this.driverVersion = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.DriverVersion));
+                    this.driverVersion = this.GetDeviceInformation<string>(DeviceInformation.DriverVersion);
                 return this.driverVersion;
             }
         }
@@ -98,7 +98,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (!this.globalMemorySize.HasValue)
-                    this.globalMemorySize = (long)InteropConverter.To<ulong>(this.GetDeviceInformation(DeviceInformation.GlobalMemorySize));
+                    this.globalMemorySize = (long)this.GetDeviceInformation<ulong>(DeviceInformation.GlobalMemorySize);
                 return this.globalMemorySize.Value;
             }
         }
@@ -116,7 +116,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (!this.addressBits.HasValue)
-                    this.addressBits = (int)InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.AddressBits));
+                    this.addressBits = (int)this.GetDeviceInformation<uint>(DeviceInformation.AddressBits);
                 return this.addressBits.Value;
             }
         }
@@ -134,7 +134,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (!this.maximumClockFrequency.HasValue)
-                    this.maximumClockFrequency = (int)InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.MaximumClockFrequency));
+                    this.maximumClockFrequency = (int)this.GetDeviceInformation<uint>(DeviceInformation.MaximumClockFrequency);
                 return this.maximumClockFrequency.Value;
             }
         }
@@ -152,7 +152,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (!this.isAvailable.HasValue)
-                    this.isAvailable = InteropConverter.To<uint>(this.GetDeviceInformation(DeviceInformation.Available)) == 1;
+                    this.isAvailable = this.GetDeviceInformation<uint>(DeviceInformation.Available) == 1;
                 return this.isAvailable.Value;
             }
         }
@@ -170,7 +170,7 @@ namespace OpenCl.DotNetCore.Devices
             get
             {
                 if (this.builtInKernels == null)
-                    this.builtInKernels = InteropConverter.To<string>(this.GetDeviceInformation(DeviceInformation.BuiltInKernels)).Split(';').ToList();
+                    this.builtInKernels = this.GetDeviceInformation<string>(DeviceInformation.BuiltInKernels).Split(';').ToList();
                 return this.builtInKernels;
             }
         }
@@ -182,10 +182,11 @@ namespace OpenCl.DotNetCore.Devices
         /// <summary>
         /// Retrieves the specified information about the device.
         /// </summary>
+        /// <typeparam name="T">The type of the data that is to be returned.</param>
         /// <param name="deviceInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetDeviceInformation(DeviceInformation deviceInformation)
+        private T GetDeviceInformation<T>(DeviceInformation deviceInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
@@ -200,7 +201,7 @@ namespace OpenCl.DotNetCore.Devices
                 throw new OpenClException("The device information could not be retrieved.", result);
 
             // Returns the output
-            return output;
+            return InteropConverter.To<T>(output);
         }
 
         #endregion

@@ -53,12 +53,13 @@ namespace OpenCl.DotNetCore.Contexts
         /// <summary>
         /// Retrieves the specified information about the program build.
         /// </summary>
+        /// <typeparam name="T">The type of the data that is to be returned.</param>
         /// <param name="program">The handle to the program for which the build information is to be retrieved.</param>
         /// <param name="device">The device for which the build information is to be retrieved.</param>
         /// <param name="programBuildInformation">The kind of information that is to be retrieved.</param>
         /// <exception cref="OpenClException">If the information could not be retrieved, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the specified information.</returns>
-        private byte[] GetProgramBuildInformation(IntPtr program, Device device, ProgramBuildInformation programBuildInformation)
+        private T GetProgramBuildInformation<T>(IntPtr program, Device device, ProgramBuildInformation programBuildInformation)
         {
             // Retrieves the size of the return value in bytes, this is used to later get the full information
             UIntPtr returnValueSize;
@@ -73,7 +74,7 @@ namespace OpenCl.DotNetCore.Contexts
                 throw new OpenClException("The program build information could not be retrieved.", result);
 
             // Returns the output
-            return output;
+            return InteropConverter.To<T>(output);
         }
 
         #endregion
@@ -113,8 +114,7 @@ namespace OpenCl.DotNetCore.Contexts
                     {
                         try
                         {
-                            byte[] programBuildLog = this.GetProgramBuildInformation(builtProgramPointer, device, ProgramBuildInformation.Log);
-                            string buildLog = InteropConverter.To<string>(programBuildLog).Trim();
+                            string buildLog = this.GetProgramBuildInformation<string>(builtProgramPointer, device, ProgramBuildInformation.Log).Trim();
                             if (!string.IsNullOrWhiteSpace(buildLog))
                                 buildLogs.Add(device.Name, buildLog);
                         }
@@ -179,8 +179,7 @@ namespace OpenCl.DotNetCore.Contexts
                 {
                     try
                     {
-                        byte[] programBuildLog = this.GetProgramBuildInformation(programPointer, device, ProgramBuildInformation.Log);
-                        string buildLog = InteropConverter.To<string>(programBuildLog).Trim();
+                        string buildLog = this.GetProgramBuildInformation<string>(programPointer, device, ProgramBuildInformation.Log).Trim();
                         if (!string.IsNullOrWhiteSpace(buildLog))
                             buildLogs.Add(device.Name, buildLog);
                     }
