@@ -216,7 +216,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// a scalar or vector integer or floating-point data type. For example, if <see cref="buffer"/> is to be filled with a pattern of <c>float4</c> values, then <see cref="pattern"/> will be a pointer to a <c>float4</c> value and
         /// <see cref="patternSize"/> will be <c>sizeof(float4)</c>. The maximum value of <see cref="patternSize"/> is the size of the largest integer or floating-point vector data type supported by the OpenCL device. The memory associated with
         /// <see cref="pattern"/> can be reused or freed after the function returns.</param>
-        /// <param name="patternSize">The size of <see cref="patter"/> in bytes.</param>
+        /// <param name="patternSize">The size of <see cref="pattern"/> in bytes.</param>
         /// <param name="offset">The location in bytes of the region being filled in <see cref="buffer"/> and must be a multiple of <see cref="patternSize"/>.</param>
         /// <param name="size">The size in bytes of region being filled in <see cref="buffer"/> and must be a multiple of <see cref="patternSize"/>.</param>
         /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
@@ -829,19 +829,31 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to execute a native C/C++ function not compiled using the OpenCL compiler.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="userFunction"></param>
-        /// <param name="arguments"></param>
-        /// <param name="argumentSize"></param>
-        /// <param name="numberOfMemoryObjects"></param>
-        /// <param name="memoryObjects"></param>
-        /// <param name="argumentsMemoryLocation"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">
+        /// A valid host command-queue. A native user function can only be executed on a command-queue created on a device that has <c>DeviceExecutionCapabilities.NativeKernel</c> capability set in <c>DeviceInformation.ExecutionCapabilities</c>
+        /// return by <see cref="Device.GetDeviceInformation"/>.
+        /// </param>
+        /// <param name="userFunction">A pointer to a host-callable user function.</param>
+        /// <param name="arguments">A pointer to the arguments list that <see cref="userFunction"/> should be called with.</param>
+        /// <param name="argumentSize">The size in bytes of the arguments list that <see cref="arguments"/> points to.</param>
+        /// <param name="numberOfMemoryObjects">The number of buffer objects that are passed in <see cref="arguments"/>.</param>
+        /// <param name="memoryObjects">
+        /// A list of valid buffer objects, if <see cref="numberOfMemoryObjects"/> is greater than 0. The buffer object values specified in <see cref="memoryObjects"/> are memory object handles returned by <see cref="CreateBuffer"/> or <c>null</c>.
+        /// </param>
+        /// <param name="argumentsMemoryLocation">
+        /// A pointer to appropriate locations that <see cref="arguments"/> points to where memory object handles are stored. Before the user function is executed, the memory object handles are replaced by pointers to global memory.
+        /// </param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueNativeKernel")]
         public static extern Result EnqueueNativeKernel(
             [In] IntPtr commandQueue,
@@ -857,13 +869,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a marker command which waits for either a list of events to complete, or all previously enqueued commands to complete.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid host command-queue.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMarkerWithWaitList")]
         public static extern Result EnqueueMarkerWithWaitList(
             [In] IntPtr commandQueue,
@@ -873,13 +890,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// A synchronization point that enqueues a barrier operation.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid host command queue.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueBarrierWithWaitList")]
         public static extern Result EnqueueBarrierWithWaitList(
             [In] IntPtr commandQueue,
@@ -889,17 +911,31 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to free the shared virtual memory allocated using clSVMAlloc or a shared system memory pointer.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="numberOfSvmPointers"></param>
-        /// <param name="svmPointers"></param>
-        /// <param name="svmFreePointersCallback"></param>
-        /// <param name="userData"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid host command-queue.</param>
+        /// <param name="numberOfSvmPointers">The number of SVM pointers stored in <see cref="svmPointers"/>.</param>
+        /// <param name="svmPointers">
+        /// Specify shared virtual memory pointers to be freed. Each pointer in <see cref="svmPointers"/> that was allocated using <see cref="SvmAllocate"/> must have been allocated from the same context from which <see cref="commandQueue"/> was
+        /// created. The memory associated with <see cref="svmPointers"/> can be reused or freed after the function returns.
+        /// </param>
+        /// <param name="svmFreePointersCallback">
+        /// Specifies the callback function to be called to free the SVM pointers. <see cref="svmFreePointersCallback"/> takes four arguments: queue which is the command queue in which <see cref"EnqueueSvmFree"/> was enqueued, the count and list
+        /// of SVM pointers to free and <see cref="userData"/> which is a pointer to user specified data. If <see cref="svmFreePointersCallback"/> is <c>null</c>, all pointers specified in <see cref="svmPointers"/> must be allocated using
+        /// <see cref="SvmAllocate"/> and the OpenCL implementation will free these SVM pointers. <see cref="svmFreePointersCallback"/> must be a valid callback function if any SVM pointer to be freed is a shared system memory pointer i.e. not
+        /// allocated using <see cref="SvmAllocate"/>. If <see cref="svmFreePointersCallback"/> is a valid callback function, the OpenCL implementation will call <see cref="svmFreePointersCallback"/> to free all the SVM pointers specified in
+        /// <see cref="svmPointers"/>.
+        /// </param>
+        /// <param name="userData">Will be passed as the <see cref="userData"/> argument when <see cref="svmFreePointersCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMFree")]
         public static extern Result EnqueueSvmFree(
             [In] IntPtr commandQueue,
@@ -913,19 +949,36 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to do a memcpy operation.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="blockingCopy"></param>
-        /// <param name="destinationPointer"></param>
-        /// <param name="sourcePointer"></param>
-        /// <param name="size"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">
+        /// Refers to the host command-queue in which the read/write command will be queued. If either <see cref="destinationPointer"/> or <see cref="sourcePointer"/> is allocated using <see cref="SvmAllocate"/> then the OpenCL context allocated
+        /// against must match that of <see cref="commandQueue"/>.
+        /// </param>
+        /// <param name="blockingCopy">
+        /// Indicates if the copy operations are blocking or non-blocking.
+        /// If <see cref="blockingCopy"/> is <c>true</c> (1), i.e. the copy command is blocking, <see cref="EnqueueSvmMemoryCopy"/> does not return until the buffer data has been copied into memory pointed to by <see cref="destinationPointer"/>.
+        /// If <see cref="blockingCopy"/> is <c>false</c> (0), i.e. the copy command is non-blocking, <see cref="EnqueueSvmMemoryCopy"/> queues a non-blocking copy command and returns. The contents of the buffer that <see cref="destinationPointer"/>
+        /// point to cannot be used until the copy command has completed. The <see cref="event"/> argument returns an event object which can be used to query the execution status of the read command. When the copy command has completed, the
+        /// contents of the buffer that <see cref="destinationPointer"/> points to can be used by the application.
+        /// </param>
+        /// <param name="destinationPointer">The pointer to a host or SVM memory allocation where data is copied to.</param>
+        /// <param name="sourcePointer">
+        /// The pointer to a memory region where data is copied from. If the memory allocation(s) containing <see cref="destinationPointer"/> and/or <see cref="sourcePointer"/> are allocated using <see cref="SvmAllocate"/> and either is not
+        /// allocated from the same context from which <see cref="commandQueue"/> was created the behavior is undefined.
+        /// </param>
+        /// <param name="size">The size in bytes of data being copied.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMemcpy")]
-        public static extern Result EnqueuesSvmMemoryCopy(
+        public static extern Result EnqueueSvmMemoryCopy(
             [In] IntPtr commandQueue,
             [In] [MarshalAs(UnmanagedType.U4)] uint blockingCopy,
             [In] IntPtr destinationPointer,
@@ -937,17 +990,31 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to fill a region in memory with a pattern of a given pattern size.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="svmPointer"></param>
-        /// <param name="pattern"></param>
-        /// <param name="patternSize"></param>
-        /// <param name="size"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">
+        /// Refers to the host command-queue in which the fill command will be queued. The OpenCL context associated with <see cref="commandQueue"/> and SVM pointer referred to by <see cref="svmPointer"/> must be the same.
+        /// </param>
+        /// <param name="svmPointer">
+        /// A pointer to a memory region that will be filled with <see cref="pattern"/>. It must be aligned to <see cref="patternSize"/> bytes. If <see cref="svmPointer"/> is allocated using <see cref="SvmAllocate"/> then it must be allocated
+        /// from the same context from which <see cref="commandQueue"/> was created. Otherwise the behavior is undefined.
+        /// </param>
+        /// <param name="pattern">
+        /// A pointer to the data pattern of size <see cref="patternSize"/> in bytes. pattern will be used to fill a region in <see cref="buffer"/> starting at <see cref="offset"/> and is <see cref="size"/> bytes in size. The data pattern must be
+        /// a scalar or vector integer or floating-point data type. For example, if <see cref="buffer"/> is to be filled with a pattern of <c>float4</c> values, then <see cref="pattern"/> will be a pointer to a <c>float4</c> value and
+        /// <see cref="patternSize"/> will be <c>sizeof(float4)</c>. The maximum value of <see cref="patternSize"/> is the size of the largest integer or floating-point vector data type supported by the OpenCL device. The memory associated with
+        /// <see cref="pattern"/> can be reused or freed after the function returns.</param>
+        /// <param name="patternSize">The size of <see cref="pattern"/> in bytes.</param>
+        /// <param name="size">The size in bytes of region being filled starting with <see cref="svmPointer"/> and must be a multiple of <see cref="patternSize"/>.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMemFill")]
         public static extern Result EnqueueSvmMemoryFill(
             [In] IntPtr commandQueue,
@@ -961,17 +1028,31 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command that will allow the host to update a region of a SVM buffer.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="blockingMap"></param>
-        /// <param name="mapFlag"></param>
-        /// <param name="svmPointer"></param>
-        /// <param name="size"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">Must be a valid host command-queue.</param>
+        /// <param name="blockingMap">
+        /// Indicates if the map operation is blocking or non-blocking.
+        /// If <see cref="blockingMap"/> is <c>true</c> (1), <see cref="EnqueueSvmMap"/> does not return until the application can access the contents of the SVM region specified by <see cref="svmPointer"/> and <see cref="size"/> on the host.
+        /// If <see cref="blockingMap"/> is <c>false</c> (0), i.e. map operation is non-blocking, the region specified by <see cref="svmPointer"/> and <see cref="size"/> cannot be used until the map command has completed. The <see cref="event"/>
+        /// argument returns an event object which can be used to query the execution status of the map command. When the map command is completed, the application can access the contents of the region specified by <see cref="svmPointer"/> and
+        /// <see cref="size"/>.
+        /// </param>
+        /// <param name="mapFlag">An enumeration with which determines the behavior of the map operation.</param>
+        /// <param name="svmPointer">
+        /// A pointer to a memory region and <see cref="size"/> in bytes that will be updated by the host. If <see cref="svmPointer"/> is allocated using <see cref="SvmAllocate"/> then it must be allocated from the same context from which
+        /// <see cref="commandQueue"/> was created. Otherwise the behavior is undefined.
+        /// </param>
+        /// <param name="size">The size in bytes of the memory region that <see cref="svmPointer"/> points to.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMap")]
         public static extern Result EnqueueSvmMap(
             [In] IntPtr commandQueue,
@@ -985,14 +1066,22 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to indicate that the host has completed updating the region given by <see cref="svmPointer"/> and which was specified in a previous call to <see cref="EnqueueSvmMap"/>.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="svmPointer"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">Must be a valid host command-queue.</param>
+        /// <param name="svmPointer">
+        /// A pointer that was specified in a previous call to <see cref="EnqueueSvmMap"/>. If <see cref="svmPointer"/> is allocated using <see cref="SvmAllocate"/> then it must be allocated from the same context from which
+        /// <see cref="commandQueue"/> was created. Otherwise the behavior is undefined.
+        /// </param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMUnmap")]
         public static extern Result EnqueueSvmUnmap(
             [In] IntPtr commandQueue,
@@ -1003,17 +1092,22 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to indicate which device a set of ranges of SVM allocations should be associated with.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="numberOfSvmPointers"></param>
+        /// <param name="commandQueue">A valid host command queue. The specified set of allocation ranges will be migrated to the OpenCL device associated with <see cref="commandQueue"/>.</param>
+        /// <param name="numberOfSvmPointers">The number of pointers in the specified <see cref="svmPointers"/> array, and the number of sizes in the sizes array, if sizes is not <c>null</c>.</param>
         /// <param name="svmPointers"></param>
-        /// <param name="sizes"></param>
-        /// <param name="memoryMigrationFlags"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="sizes">A pointer to an array of pointers. Each pointer in this array must be within an allocation produced by a call to <see cref="SvmAllocate"/>.</param>
+        /// <param name="memoryMigrationFlags">An enumeration that is used to specify migration options.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMigrateMem")]
         public static extern Result EnqueueSvmMigrateMemory(
             [In] IntPtr commandQueue,
@@ -1031,11 +1125,11 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         #region Public Deprecated Methods
 
         /// <summary>
-        /// 
+        /// Enqueues a marker command.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid host command queue.</param>
+        /// <param name="waitEvent">The event object that serves as marker.</param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMarker")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead.")]
         public static extern Result EnqueueMarker(
@@ -1044,12 +1138,15 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a wait for a specific event or a list of events to complete before any future commands queued in the command-queue are executed.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid command-queue.</param>
+        /// <param name="numberOfEventsInWaitList">Specifies the number of events given by <see cref="eventWaitList"/>.</param>
+        /// <param name="eventWaitList">
+        /// Events specified in <see cref="eventWaitList"/> act as synchronization points. The context associated with events in <see cref="eventWaitList"/> and <see cref="commandQueue"/> must be the same. Each event in <see cref="eventWaitList"/>
+        // must be a valid event object.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueWaitForEvents")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead.")]
         public static extern Result EnqueueWaitForEvents(
@@ -1059,10 +1156,10 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// A synchronization point that enqueues a barrier operation.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid command-queue.</param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueBarrier")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueBarrierWithWaitList instead.")]
         public static extern Result EnqueueBarrier(
@@ -1070,14 +1167,19 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         );
 
         /// <summary>
-        /// 
+        /// Enqueues a command to execute a kernel on a device.
         /// </summary>
-        /// <param name="commandQueue"></param>
-        /// <param name="kernel"></param>
-        /// <param name="numberOfEventsInWaitList"></param>
-        /// <param name="eventWaitList"></param>
-        /// <param name="waitEvent"></param>
-        /// <returns></returns>
+        /// <param name="commandQueue">A valid command-queue. The kernel will be queued for execution on the device associated with <see cref="commandQueue"/>.</param>
+        /// <param name="kernel">A valid kernel object. The OpenCL context associated with <see cref="kernel"/> and <see cref="commandQueue"/> must be the same.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular kernel-instance. Event objects are unique and can be used to identify a particular kernel execution instance later on. If event is <c>null</c>, no event will be created for
+        /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueTask")]
         [Obsolete("This is a deprecated OpenCL 1.2 method.")]
         public static extern Result EnqueueEnqueueTaskBarrier(
