@@ -85,8 +85,7 @@ namespace OpenCl.DotNetCore.CommandQueues
         /// <param name="workDimension">The dimensionality of the work.</param>
         /// <param name="workUnitsPerKernel">The number of work units per kernel.</param>
         /// <exception cref="OpenClException">If the kernel could not be enqueued, then an <see cref="OpenClException"/> is thrown.</exception>
-        /// <returns>Returns an event for the enqueued command.</returns>
-        public WaitEvent EnqueueNDRangeKernel(Kernel kernel, int workDimension, int workUnitsPerKernel)
+        public void EnqueueNDRangeKernel(Kernel kernel, int workDimension, int workUnitsPerKernel)
         {
             // Enqueues the kernel
             IntPtr waitEventPointer;
@@ -95,8 +94,6 @@ namespace OpenCl.DotNetCore.CommandQueues
             // Checks if the kernel was enqueued successfully, if not, then an exception is thrown
             if (result != Result.Success)
                 throw new OpenClException("The kernel could not be enqueued.", result);
-
-            return new WaitEvent(waitEventPointer);
         }
 
         /// <summary>
@@ -106,11 +103,10 @@ namespace OpenCl.DotNetCore.CommandQueues
         /// <param name="workDimension">The dimensionality of the work.</param>
         /// <param name="workUnitsPerKernel">The number of work units per kernel.</param>
         /// <exception cref="OpenClException">If the kernel could not be enqueued, then an <see cref="OpenClException"/> is thrown.</exception>
-        /// <returns>Returns an event for the enqueued command.</returns>
-        public Task<WaitEvent> EnqueueNDRangeKernelAsync(Kernel kernel, int workDimension, int workUnitsPerKernel)
+        public Task EnqueueNDRangeKernelAsync(Kernel kernel, int workDimension, int workUnitsPerKernel)
         {
             // Creates a new task completion source, which is used to signal when the command has completed
-            TaskCompletionSource<WaitEvent> taskCompletionSource = new TaskCompletionSource<WaitEvent>();
+            TaskCompletionSource<bool> taskCompletionSource = new TaskCompletionSource<bool>();
 
             // Enqueues the kernel
             IntPtr waitEventPointer;
@@ -129,7 +125,7 @@ namespace OpenCl.DotNetCore.CommandQueues
                     if (waitEvent.CommandExecutionStatus == CommandExecutionStatus.Error)
                         taskCompletionSource.TrySetException(new OpenClException($"The command completed with the error code {waitEvent.CommandExecutionStatusCode}."));
                     else
-                        taskCompletionSource.TrySetResult(waitEvent);
+                        taskCompletionSource.TrySetResult(true);
                 }
                 catch (Exception exception)
                 {
