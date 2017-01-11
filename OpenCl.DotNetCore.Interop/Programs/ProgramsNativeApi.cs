@@ -38,6 +38,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateProgramWithSource")]
         public static extern IntPtr CreateProgramWithSource(
             [In] IntPtr context,
@@ -88,6 +89,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateProgramWithBinary")]
         public static extern IntPtr CreateProgramWithBinary(
             [In] IntPtr context,
@@ -125,6 +127,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clCreateProgramWithBuiltInKernels")]
         public static extern IntPtr CreateProgramWithBuiltInKernels(
             [In] IntPtr context,
@@ -154,6 +157,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clCreateProgramWithIL")]
         public static extern IntPtr CreateProgramWithIl(
             [In] IntPtr context,
@@ -175,6 +179,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainProgram")]
         public static extern Result RetainProgram(
             [In] IntPtr program
@@ -193,6 +198,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseProgram")]
         public static extern Result ReleaseProgram(
             [In] IntPtr program
@@ -217,6 +223,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// </param>
         /// <param name="userData">Passed as an argument when <see cref="notificationCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clBuildProgram")]
         public static extern Result BuildProgram(
             [In] IntPtr program,
@@ -253,6 +260,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// </param>
         /// <param name="userData">Passed as an argument when <see cref="notificationCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clCompileProgram")]
         public static extern Result CompileProgram(
             [In] IntPtr program,
@@ -297,6 +305,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// <param name="userData">Passed as an argument when <see cref="notificationCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
         /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clLinkProgram")]
         public static extern IntPtr LinkProgram(
             [In] IntPtr context,
@@ -319,6 +328,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.InvalidPlatform</c> if <see cref="platform"/> is not a valid platform.
         /// </returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clUnloadPlatformCompiler")]
         public static extern Result UnloadPlatformCompiler(
             [In] IntPtr platform
@@ -346,6 +356,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetProgramInfo")]
         public static extern Result GetProgramInformation(
             [In] IntPtr program,
@@ -378,6 +389,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetProgramBuildInfo")]
         public static extern Result GetProgramBuildInformation(
             [In] IntPtr program,
@@ -396,6 +408,7 @@ namespace OpenCl.DotNetCore.Interop.Programs
         /// Allows the implementation to release the resources allocated by the OpenCL compiler.
         /// </summary>
         /// <returns>This call currently always returns <c>Result.Success</c>.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clUnloadCompiler")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use UnloadPlatformCompiler instead.")]
         public static extern Result UnloadCompiler();

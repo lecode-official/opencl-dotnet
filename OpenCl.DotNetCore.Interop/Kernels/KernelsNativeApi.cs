@@ -38,6 +38,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateKernel")]
         public static extern IntPtr CreateKernel(
             [In] IntPtr program,
@@ -68,6 +69,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateKernelsInProgram")]
         public static extern Result CreateKernelsInProgram(
             [In] IntPtr program,
@@ -91,6 +93,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clCloneKernel")]
         public static extern IntPtr CloneKernel(
             [In] IntPtr sourceKernel,
@@ -110,6 +113,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainKernel")]
         public static extern Result RetainKernel(
             [In] IntPtr kernel
@@ -128,6 +132,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseKernel")]
         public static extern Result ReleaseKernel(
             [In] IntPtr kernel
@@ -149,6 +154,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// value is changed by a call to <see cref="SetKernelArgument"/> for kernel.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clSetKernelArg")]
         public static extern Result SetKernelArgument(
             [In] IntPtr kernel,
@@ -181,6 +187,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clSetKernelArgSVMPointer")]
         public static extern Result SetKernelArgumentSvmPointer(
             [In] IntPtr kernel,
@@ -209,6 +216,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clSetKernelExecInfo")]
         public static extern Result SetKernelExecutionInformation(
             [In] IntPtr kernel,
@@ -237,6 +245,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetKernelInfo")]
         public static extern Result GetKernelInformation(
             [In] IntPtr kernel,
@@ -267,6 +276,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.InvalidKernel</c> if <see cref="kernel"/> is not a valid kernel object.
         /// </returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clGetKernelArgInfo")]
         public static extern Result GetKernelArgumentInformation(
             [In] IntPtr kernel,
@@ -303,6 +313,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetKernelWorkGroupInfo")]
         public static extern Result GetKernelWorkGroupInformation(
             [In] IntPtr kernel,
@@ -341,6 +352,7 @@ namespace OpenCl.DotNetCore.Interop.Kernels
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clGetKernelSubGroupInfo")]
         public static extern Result GetKernelSubGroupInformation(
             [In] IntPtr kernel,

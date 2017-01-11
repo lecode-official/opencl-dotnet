@@ -33,6 +33,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueReadBuffer")]
         public static extern Result EnqueueReadBuffer(
             [In] IntPtr commandQueue,
@@ -88,6 +89,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueReadBufferRect")]
         public static extern Result EnqueueReadBufferRectangle(
             [In] IntPtr commandQueue,
@@ -132,6 +134,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueWriteBuffer")]
         public static extern Result EnqueueWriteBuffer(
             [In] IntPtr commandQueue,
@@ -188,6 +191,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueWriteBufferRect")]
         public static extern Result EnqueueWriteBufferRectangle(
             [In] IntPtr commandQueue,
@@ -229,6 +233,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueFillBuffer")]
         public static extern Result EnqueueFillBuffer(
             [In] IntPtr commandQueue,
@@ -261,6 +266,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBuffer")]
         public static extern Result EnqueueCopyBuffer(
             [In] IntPtr commandQueue,
@@ -316,6 +322,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBufferRect")]
         public static extern Result EnqueueCopyBufferRectangle(
             [In] IntPtr commandQueue,
@@ -373,6 +380,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueReadImage")]
         public static extern Result EnqueueReadImage(
             [In] IntPtr commandQueue,
@@ -429,6 +437,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueWriteImage")]
         public static extern Result EnqueueWriteImage(
             [In] IntPtr commandQueue,
@@ -473,6 +482,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueFillImage")]
         public static extern Result EnqueueFillImage(
             [In] IntPtr commandQueue,
@@ -526,6 +536,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyImage")]
         public static extern Result EnqueueCopyImage(
             [In] IntPtr commandQueue,
@@ -572,6 +583,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyImageToBuffer")]
         public static extern Result EnqueueCopyImageToBuffer(
             [In] IntPtr commandQueue,
@@ -616,6 +628,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBufferToImage")]
         public static extern Result EnqueueCopyBufferToImage(
             [In] IntPtr commandQueue,
@@ -656,6 +669,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// </param>
         /// <param name="errorCode">Returns an appropriate error code. If <see cref="errorCode"> is <c>null</c>, no error code is returned.</param>
         /// <returns>Returns a pointer that maps a region starting at <see cref="offset"/> and is at least <see cref="size"/> bytes in size. The result of a memory access outside this region is undefined.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueMapBuffer")]
         public static extern IntPtr EnqueueMapBuffer(
             [In] IntPtr commandQueue,
@@ -715,6 +729,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// Returns a pointer that maps a 1D, 2D or 3D region starting at <see cref="origin"/> and is at least <c>region[0]</c> pixels in size for a 1D image, 1D image buffer or 1D image array, <c>(imageRowPitch * region[1])</c> pixels in size for
         /// a 2D image or 2D image array, and <c>(imageSlicePitch * region[2])</c> pixels in size for a 3D image. The result of a memory access outside this region is undefined.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueMapImage")]
         public static extern IntPtr EnqueueMapImage(
             [In] IntPtr commandQueue,
@@ -747,6 +762,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueUnmapMemObject")]
         public static extern Result EnqueueUnmapMemoryObject(
             [In] IntPtr commandQueue,
@@ -777,6 +793,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <see cref="eventWaitList"/> array.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueMigrateMemObjects")]
         public static extern Result EnqueueMigrateMemorysObjects(
             [In] IntPtr commandQueue,
@@ -815,6 +832,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueNDRangeKernel")]
         public static extern Result EnqueueNDRangeKernel(
             [In] IntPtr commandQueue,
@@ -854,6 +872,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueNativeKernel")]
         public static extern Result EnqueueNativeKernel(
             [In] IntPtr commandQueue,
@@ -881,6 +900,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueMarkerWithWaitList")]
         public static extern Result EnqueueMarkerWithWaitList(
             [In] IntPtr commandQueue,
@@ -902,6 +922,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueBarrierWithWaitList")]
         public static extern Result EnqueueBarrierWithWaitList(
             [In] IntPtr commandQueue,
@@ -936,6 +957,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMFree")]
         public static extern Result EnqueueSvmFree(
             [In] IntPtr commandQueue,
@@ -977,6 +999,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMemcpy")]
         public static extern Result EnqueueSvmMemoryCopy(
             [In] IntPtr commandQueue,
@@ -1015,6 +1038,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMemFill")]
         public static extern Result EnqueueSvmMemoryFill(
             [In] IntPtr commandQueue,
@@ -1053,6 +1077,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMap")]
         public static extern Result EnqueueSvmMap(
             [In] IntPtr commandQueue,
@@ -1082,6 +1107,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMUnmap")]
         public static extern Result EnqueueSvmUnmap(
             [In] IntPtr commandQueue,
@@ -1108,6 +1134,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(2, 1)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMigrateMem")]
         public static extern Result EnqueueSvmMigrateMemory(
             [In] IntPtr commandQueue,
@@ -1130,6 +1157,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// <param name="commandQueue">A valid host command queue.</param>
         /// <param name="waitEvent">The event object that serves as marker.</param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueMarker")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead.")]
         public static extern Result EnqueueMarker(
@@ -1147,6 +1175,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         // must be a valid event object.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueWaitForEvents")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead.")]
         public static extern Result EnqueueWaitForEvents(
@@ -1160,6 +1189,7 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// </summary>
         /// <param name="commandQueue">A valid command-queue.</param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueBarrier")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueBarrierWithWaitList instead.")]
         public static extern Result EnqueueBarrier(
@@ -1180,9 +1210,10 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
         /// this kernel execution instance and therefore it will not be possible for the application to query or queue a wait for this particular kernel execution instance.
         /// </param>
         /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clEnqueueTask")]
         [Obsolete("This is a deprecated OpenCL 1.2 method.")]
-        public static extern Result EnqueueEnqueueTaskBarrier(
+        public static extern Result EnqueueTask(
             [In] IntPtr commandQueue,
             [In] IntPtr kernel,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEventsInWaitList,
