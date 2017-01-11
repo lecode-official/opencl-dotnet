@@ -30,6 +30,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// Returns a valid non-zero buffer object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the buffer object is created successfully. Otherwise, it returns a <c>null</c> value and an error value in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateBuffer")]
         public static extern IntPtr CreateBuffer(
             [In] IntPtr context,
@@ -58,6 +59,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// Returns a valid non-zero buffer object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the buffer object is created successfully. Otherwise, it returns a <c>null</c> value and an error value in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clCreateSubBuffer")]
         public static extern IntPtr CreateSubBuffer(
             [In] IntPtr memoryObject,
@@ -80,6 +82,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// Returns a valid non-zero image object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the image object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clCreateImage")]
         public static extern IntPtr CreateImage(
             [In] IntPtr context,
@@ -109,6 +112,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// Returns a valid non-zero pipe object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the pipe object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreatePipe")]
         public static extern IntPtr CreatePipe(
             [In] IntPtr context,
@@ -132,6 +136,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainMemObject")]
         public static extern Result RetainMemoryObject(
             [In] IntPtr memoryObject
@@ -150,38 +155,10 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseMemObject")]
         public static extern Result ReleaseMemoryObject(
             [In] IntPtr memoryObject
-        );
-
-        /// <summary>
-        /// Get information that is common to all memory objects (buffer and image objects).
-        /// </summary>
-        /// <param name="memoryObject">Specifies the memory object being queried.</param>
-        /// <param name="parameterName">Specifies the information to query.</param>
-        /// <param name="parameterValueSize">Used to specify the size in bytes of memory pointed to by <see cref="parameterValue"/>. This size must be greater or equal to the size of the return type.</param>
-        /// <param name="parameterValue">A pointer to memory where the appropriate result being queried is returned. If <see cref="parameterValue"/> is <c>null</c>, it is ignored.</param>
-        /// <param name="parameterValueSizeReturned">The actual size in bytes of data copied to <see cref="parameterValue"/>. If <see cref="parameterValueSizeReturned"/> is <c>null</c>, it is ignored.</param>
-        /// <returns>
-        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
-        /// 
-        /// <c>Result.InvalidMemoryObject</c> if <see cref="memoryObject"/> is not a valid memory object.
-        /// 
-        /// <c>Result.InvalidValue</c> if <see cref="parameterName"/> is not one of the supported values or if size in bytes specified by <see cref="parameterValueSize"/> is less than size of return type and <see cref="parameterValue"/>
-        /// is not a <c>null</c> value or if <see cref="parameterName"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
-        /// 
-        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
-        /// 
-        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
-        /// </returns>
-        [DllImport("OpenCL", EntryPoint = "clGetMemObjectInfo")]
-        public static extern Result GetMemoryObjectInformation(
-            [In] IntPtr memoryObject,
-            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectInformation parameterName,
-            [In] UIntPtr parameterValueSize,
-            [Out] byte[] parameterValue,
-            [Out] out UIntPtr parameterValueSizeReturned
         );
 
         /// <summary>
@@ -206,6 +183,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetSupportedImageFormats")]
         public static extern Result GetSupportedImageFormats(
             [In] IntPtr context,
@@ -214,6 +192,36 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEntries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] ImageFormat[] imageFormats,
             [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfImageFormats
+        );
+
+        /// <summary>
+        /// Get information that is common to all memory objects (buffer and image objects).
+        /// </summary>
+        /// <param name="memoryObject">Specifies the memory object being queried.</param>
+        /// <param name="parameterName">Specifies the information to query.</param>
+        /// <param name="parameterValueSize">Used to specify the size in bytes of memory pointed to by <see cref="parameterValue"/>. This size must be greater or equal to the size of the return type.</param>
+        /// <param name="parameterValue">A pointer to memory where the appropriate result being queried is returned. If <see cref="parameterValue"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="parameterValueSizeReturned">The actual size in bytes of data copied to <see cref="parameterValue"/>. If <see cref="parameterValueSizeReturned"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidMemoryObject</c> if <see cref="memoryObject"/> is not a valid memory object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="parameterName"/> is not one of the supported values or if size in bytes specified by <see cref="parameterValueSize"/> is less than size of return type and <see cref="parameterValue"/>
+        /// is not a <c>null</c> value or if <see cref="parameterName"/> is a value that is available as an extension and the corresponding extension is not supported by the device.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [IntroducedIn(1, 0)]
+        [DllImport("OpenCL", EntryPoint = "clGetMemObjectInfo")]
+        public static extern Result GetMemoryObjectInformation(
+            [In] IntPtr memoryObject,
+            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectInformation parameterName,
+            [In] UIntPtr parameterValueSize,
+            [Out] byte[] parameterValue,
+            [Out] out UIntPtr parameterValueSizeReturned
         );
 
         /// <summary>
@@ -236,6 +244,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetImageInfo")]
         public static extern Result GetImageInformation(
             [In] IntPtr image,
@@ -265,6 +274,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetPipeInfo")]
         public static extern Result GetPipeInformation(
             [In] IntPtr pipe,
@@ -296,6 +306,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clSetMemObjectDestructorCallback")]
         public static extern Result SetMemoryObjectDestructorCallback(
             [In] IntPtr memoryObject,
@@ -329,6 +340,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// Returns a valid non-zero image object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the image object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateImage2D")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateImage instead.")]
         public static extern IntPtr CreateImage2D(
@@ -371,6 +383,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
         /// Returns a valid non-zero image object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the image object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
         /// <see cref="errorCode"/>.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateImage3D")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateImage instead.")]
         public static extern IntPtr CreateImage3D(

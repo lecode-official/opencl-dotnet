@@ -34,6 +34,7 @@ namespace OpenCl.DotNetCore.Interop.Platforms
         /// 
         /// <c>Result.PlatformNotFoundKhr</c> if the cl_khr_icd extension is enabled and no platforms are found.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetPlatformIDs")]
         public static extern Result GetPlatformIds(
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEntries,
@@ -59,6 +60,7 @@ namespace OpenCl.DotNetCore.Interop.Platforms
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedIn(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetPlatformInfo")]
         public static extern Result GetPlatformInformation(
             [In] IntPtr platform,
