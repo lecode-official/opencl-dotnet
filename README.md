@@ -58,6 +58,7 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
 - [x] Add method to compile from Stream/Streams
 - [x] Create a class that converts `byte` arrays into CLR types
 - [x] Implement the `equals` and the `==` operator, which compares the `Handle`
+- [ ] Split the different APIs in sub-namespaces
 - [ ] Make `MemoryObject` abstract and derive `Image`, `Pipe`, and `Buffer` from it
 - [ ] Add `async` methods for all native methods that have an `event`
 - [ ] Create an base class for event and then derive a user event from it, which is returned when calling CreateUserEvent (this should be done to ensure, that SetUserEventStatus can only be called on valid user events)
