@@ -184,16 +184,58 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] out UIntPtr parameterValueSizeReturned
         );
 
+        /// <summary>
+        /// Get the list of image formats supported by an OpenCL implementation.
+        /// </summary>
+        /// <param name="context">A valid OpenCL context on which the image object(s) will be created.</param>
+        /// <param name="flags">An enumeration that is used to specify allocation and usage information about the image memory object being queried.</param>
+        /// <param name="imageType">Describes the image type.</param>
+        /// <param name="numberOfEntries">Specifies the number of entries that can be returned in the memory location given by <see cref="imageFormats"/>.</param>
+        /// <param name="imageFormats">
+        /// A pointer to a memory location where the list of supported image formats are returned. Each entry describes a <see cref="ImageFormat"/> structure supported by the OpenCL implementation. If image_formats is <c>null</c>, it is ignored.
+        /// </param>
+        /// <param name="numberOfImageFormats">The actual number of supported image formats for a specific <see cref="context"/> and values specified by <see cref="flags"/>. If <see cref="numberOfImageFormats"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidContext</c> if <see cref="context"/> is not a valid context.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="flags"/> or <see cref="imageType"/> are not valid or if <see cref="numberOfEntries"/> is 0 and <see cref="imageFormats"/> is not <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetSupportedImageFormats")]
         public static extern Result GetSupportedImageFormats(
             [In] IntPtr context,
             [In] [MarshalAs(UnmanagedType.U8)] MemoryFlag flags,
-            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectType memoryObjectType,
+            [In] [MarshalAs(UnmanagedType.U4)] MemoryObjectType imageType,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEntries,
             [Out] [MarshalAs(UnmanagedType.LPArray)] ImageFormat[] imageFormats,
             [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfImageFormats
         );
 
+        /// <summary>
+        /// Get information specific to an image object created with <see cref="CreateImage"/>.
+        /// </summary>
+        /// <param name="image">Specifies the image object being queried.</param>
+        /// <param name="parameterName">Specifies the information to query.</param>
+        /// <param name="parameterValueSize">Used to specify the size in bytes of memory pointed to by <see cref="parameterValue"/>. This size must be greater or equla to the size of the return type.</param>
+        /// <param name="parameterValue">A pointer to memory where the appropriate result being queried is returned. If <see cref="parameterValue"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="parameterValueSizeReturned">Returns the actual size in bytes of data being queried by <see cref="parameterValue"/>. If <see cref="parameterValueSizeReturned"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidMemoryObject</c> if <see cref="image"/> is not a valid image object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="parameterName"/> is not valid, or if size in bytes specified by <see cref="parameterValueSize"/> is less than the size of return type as described in the table above and
+        /// <see cref="parameterValue"/> is not <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetImageInfo")]
         public static extern Result GetImageInformation(
             [In] IntPtr image,
@@ -203,6 +245,26 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] out UIntPtr parameterValueSizeReturned
         );
 
+        /// <summary>
+        /// Get information specific to a pipe object created with <see cref="CreatePipe"/>.
+        /// </summary>
+        /// <param name="pipe">Specifies the pipe object being queried.</param>
+        /// <param name="parameterName">Specifies the information to query.</param>
+        /// <param name="parameterValueSize">Used to specify the size in bytes of memory pointed to by <see cref="parameterValue"/>. This size must be greater or equla to the size of the return type.</param>
+        /// <param name="parameterValue">A pointer to memory where the appropriate result being queried is returned. If <see cref="parameterValue"/> is <c>null</c>, it is ignored.</param>
+        /// <param name="parameterValueSizeReturned">Returns the actual size in bytes of data being queried by <see cref="parameterValue"/>. If <see cref="parameterValueSizeReturned"/> is <c>null</c>, it is ignored.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidMemoryObject</c> if <see cref="pipe"/> is not a valid pipe object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="parameterName"/> is not valid, or if size in bytes specified by <see cref="parameterValueSize"/> is less than the size of return type as described in the table above and
+        /// <see cref="parameterValue"/> is not <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clGetPipeInfo")]
         public static extern Result GetPipeInformation(
             [In] IntPtr pipe,
@@ -212,6 +274,28 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] out UIntPtr parameterValueSizeReturned
         );
 
+        /// <summary>
+        /// Registers a user callback function with a memory object.
+        /// </summary>
+        /// <param name="memoryObject">A valid memory object.</param>
+        /// <param name="notificationCallback">
+        /// The callback function that can be registered by the application. This callback function may be called asynchronously by the OpenCL implementation. It is the application's responsibility to ensure that the callback function is thread-safe.
+        /// The parameters to this callback function are:
+        /// memoryObject: The memory object being deleted. When the user callback is called by the implementation, this memory object is no longer valid. The memory object is only provided for reference purposes.
+        /// userData: A pointer to user supplied data.
+        /// </param>
+        /// <param name="userData">Will be passed as the userData argument when <see param="notificationCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidMemoryObject</c> if <see cref="memoryObject"/> is not a valid memory object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="notificationCallback"/> is not <c>null</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clSetMemObjectDestructorCallback")]
         public static extern Result SetMemoryObjectDestructorCallback(
             [In] IntPtr memoryObject,
@@ -223,6 +307,28 @@ namespace OpenCl.DotNetCore.Interop.Memory
 
         #region Deprecated Public Methods
 
+        /// <summary>
+        /// Creates a 2D image object.
+        /// </summary>
+        /// <param name="context">A valid OpenCL context on which the image object is to be created.</param>
+        /// <param name="flags">An enumeration that is used to specify allocation and usage information about the image memory object being created.</param>
+        /// <param name="imageFormat">A pointer to a structure that describes format properties of the image to be allocated.</param>
+        /// <param name="imageWidth">The widthof the image in pixels. This must be values greater than or equal to 1.</param>
+        /// <param name="imageHeight">The height of the image in pixels. This must be values greater than or equal to 1.</param>
+        /// <param name="imageRowPitch">
+        /// The scan-line pitch in bytes. This must be 0 if <see cref="hostPointer"/> is <c>null</c> and can be either 0 or greater than or equal to <see cref="imageWidth"/> * size of element in bytes if <see cref="hostPointer"/> is not <c>null</c>.
+        /// If <see cref="hostPointer"/> is not <c>null</c> and <see cref="imageRowPitch"/> is equal to 0, <see cref="imageRowPitch"/> is calculated as <see cref="imageWidth"/> * size of element in bytes. If  <see cref="imageRowPitch"/> is not 0,
+        /// it must be a multiple of the image element size in bytes.
+        /// </param>
+        /// <param name="hostPointer">
+        /// A pointer to the image data that may already be allocated by the application. The size of the buffer that <see cref="hostPointer"/> points to must be greater than or equal to <see cref="imageRowPitch"/> * <see cref="imageHeight"/>.
+        /// The size of each element in bytes must be a power of 2. The image data specified by <see cref="hostPointer"/> is stored as a linear sequence of adjacent scanlines. Each scanline is stored as a linear sequence of image elements.
+        /// </param>
+        /// <param name="errorCode">Will return an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
+        /// <returns>
+        /// Returns a valid non-zero image object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the image object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
+        /// <see cref="errorCode"/>.
+        /// </returns>
         [DllImport("OpenCL", EntryPoint = "clCreateImage2D")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateImage instead.")]
         public static extern IntPtr CreateImage2D(
@@ -236,7 +342,36 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
-        [DllImport("OpenCL", EntryPoint = "clCreateImage2D")]
+        /// <summary>
+        /// Creates a 3D image object.
+        /// </summary>
+        /// <param name="context">A valid OpenCL context on which the image object is to be created.</param>
+        /// <param name="flags">An enumeration that is used to specify allocation and usage information about the image memory object being created.</param>
+        /// <param name="imageFormat">A pointer to a structure that describes format properties of the image to be allocated.</param>
+        /// <param name="imageWidth">The widthof the image in pixels. This must be values greater than or equal to 1.</param>
+        /// <param name="imageHeight">The height of the image in pixels. This must be values greater than or equal to 1.</param>
+        /// <param name="imageDepth">The depth of the image in pixels. This must be values greater than or equal to 1.</param>
+        /// <param name="imageRowPitch">
+        /// The scan-line pitch in bytes. This must be 0 if <see cref="hostPointer"/> is <c>null</c> and can be either 0 or greater than or equal to <see cref="imageWidth"/> * size of element in bytes if <see cref="hostPointer"/> is not <c>null</c>.
+        /// If <see cref="hostPointer"/> is not <c>null</c> and <see cref="imageRowPitch"/> is equal to 0, <see cref="imageRowPitch"/> is calculated as <see cref="imageWidth"/> * size of element in bytes. If  <see cref="imageRowPitch"/> is not 0,
+        /// it must be a multiple of the image element size in bytes.
+        /// </param>
+        /// <param name="imageSlicePitch">
+        /// The size in bytes of each 2D slice in the 3D image. This must be 0 if <see cref="hostPointer"/> is <c>null</c> and can be either 0 or greater than or equal to <see cref="imageRowPitch"/> * <see cref="imageHeight"/> if
+        /// <see cref="hostPointer"/> is not <c>null</c>. If <see cref="hostPointer"/> is not <c>null</c> and <see cref="imageSlicePitch"/> equal to 0, <see cref="imageSlicePitch"/> is calculated as <see cref="imageRowPitch"/> *
+        /// <see cref="imageHeight"/>. If <see cref="imageSlicePitch"/> is not 0, it must be a multiple of the <see cref="imageRowPitch"/>.
+        /// </param>
+        /// <param name="hostPointer">
+        /// A pointer to the image data that may already be allocated by the application. The size of the buffer that <see cref="hostPointer"/> points to must be greater than or equal to <see cref="imageSlicePitch"/> * <see cref="imageDepth"/>.
+        /// The size of each element in bytes must be a power of 2. The image data specified by <see cref="hostPointer"/> is stored as a linear sequence of adjacent 2D slices. Each 2D slice is a linear sequence of adjacent scanlines. Each scanline
+        /// is a linear sequence of image elements.
+        /// </param>
+        /// <param name="errorCode">Will return an appropriate error code. If <see cref="errorCode"/> is <c>null</c>, no error code is returned.</param>
+        /// <returns>
+        /// Returns a valid non-zero image object and <see cref="errorCode"/> is set to <c>Result.Success</c> if the image object is created successfully. Otherwise, it returns a <c>null</c> value with an error value returned in
+        /// <see cref="errorCode"/>.
+        /// </returns>
+        [DllImport("OpenCL", EntryPoint = "clCreateImage3D")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use CreateImage instead.")]
         public static extern IntPtr CreateImage3D(
             [In] IntPtr context,
@@ -246,6 +381,7 @@ namespace OpenCl.DotNetCore.Interop.Memory
             [In] UIntPtr imageHeight,
             [In] UIntPtr imageDepth,
             [In] UIntPtr imageRowPitch,
+            [In] UIntPtr imageSlicePitch,
             [In] IntPtr hostPointer,
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
