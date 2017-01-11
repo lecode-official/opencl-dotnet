@@ -40,7 +40,7 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] Events API
     - [x] Extensions API
     - [x] Kernels API
-    - [ ] Memory API
+    - [x] Memory API
     - [x] Platforms API
     - [x] Profiling API
     - [x] Programs API
@@ -65,4 +65,4 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
 
 ### *__OpenCl.DotNetCore.Tests__* Project Todos
 
-*__Nothing to do here__*
+![Nothing to do here](http://img4.wikia.nocookie.net/__cb20120208030738/meme/es/images/thumb/8/8a/Nothing-to-do-here.jpg/170px-Nothing-to-do-here.jpg)
