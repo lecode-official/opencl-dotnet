@@ -200,12 +200,40 @@ namespace OpenCl.DotNetCore.Contexts
         }
 
         /// <summary>
+        /// Creates a program from the provided source code asynchronously. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="source">The source code from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Task<Program> CreateAndBuildProgramFromStringAsync(string source) => this.CreateAndBuildProgramFromStringAsync(new List<string> { source });
+
+        /// <summary>
         /// Creates a program from the provided source code. The program is created, compiled, and linked.
         /// </summary>
         /// <param name="source">The source code from which the program is to be created.</param>
         /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created program.</returns>
         public Program CreateAndBuildProgramFromString(string source) => this.CreateAndBuildProgramFromString(new List<string> { source });
+
+        /// <summary>
+        /// Creates a program from the provided source streams asynchronously. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="streams">The source streams from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public async Task<Program> CreateAndBuildProgramFromStreamAsync(IEnumerable<Stream> streams)
+        {
+            // Uses a stream reader to read the all streams
+            List<string> sourceList = new List<string>();
+            foreach (Stream source in streams)
+            {
+                using (StreamReader stringReader = new StreamReader(source))
+                    sourceList.Add(await stringReader.ReadToEndAsync());
+            }
+
+            // Compiles the loaded strings
+            return await this.CreateAndBuildProgramFromStringAsync(sourceList);
+        }
 
         /// <summary>
         /// Creates a program from the provided source streams. The program is created, compiled, and linked.
@@ -228,12 +256,40 @@ namespace OpenCl.DotNetCore.Contexts
         }
 
         /// <summary>
+        /// Creates a program from the provided source stream asynchronously. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="stream">The source stream from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Task<Program> CreateAndBuildProgramFromStreamAsync(Stream stream) => this.CreateAndBuildProgramFromStreamAsync(new List<Stream> { stream });
+
+        /// <summary>
         /// Creates a program from the provided source stream. The program is created, compiled, and linked.
         /// </summary>
         /// <param name="stream">The source stream from which the program is to be created.</param>
         /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
         /// <returns>Returns the created program.</returns>
         public Program CreateAndBuildProgramFromStream(Stream stream) => this.CreateAndBuildProgramFromStream(new List<Stream> { stream });
+
+        /// <summary>
+        /// Creates a program from the provided source files asynchronously. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="fileNames">The source files from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public async Task<Program> CreateAndBuildProgramFromFileAsync(IEnumerable<string> fileNames)
+        {
+            // Loads all the source code files and reads them in
+            List<string> sourceList = new List<string>();
+            foreach (string fileName in fileNames)
+            {
+                using (StreamReader streamRreader = File.OpenText(fileName))
+                    sourceList.Add(await streamRreader.ReadToEndAsync());
+            }
+
+            // Compiles and returnes the program
+            return await this.CreateAndBuildProgramFromStringAsync(sourceList);
+        }
 
         /// <summary>
         /// Creates a program from the provided source files. The program is created, compiled, and linked.
@@ -249,6 +305,14 @@ namespace OpenCl.DotNetCore.Contexts
             // Compiles and returnes the program
             return this.CreateAndBuildProgramFromString(sourceList);
         }
+
+        /// <summary>
+        /// Creates a program from the provided source file asynchronously. The program is created, compiled, and linked.
+        /// </summary>
+        /// <param name="fileName">The source file from which the program is to be created.</param>
+        /// <exception cref="OpenClException">If the program could not be created, compiled, or linked, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created program.</returns>
+        public Task<Program> CreateAndBuildProgramFromFileAsync(string fileName) => this.CreateAndBuildProgramFromFileAsync(new List<string> { fileName });
 
         /// <summary>
         /// Creates a program from the provided source file. The program is created, compiled, and linked.
