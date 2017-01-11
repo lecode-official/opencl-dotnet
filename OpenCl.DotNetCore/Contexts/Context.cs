@@ -163,73 +163,71 @@ namespace OpenCl.DotNetCore.Contexts
         public Program CreateAndBuildProgramFromFile(string fileName) => this.CreateAndBuildProgramFromFile(new List<string> { fileName });
 
         /// <summary>
-        /// Creates a new memory object with the specified flags and of the specified size.
+        /// Creates a new buffer with the specified flags and of the specified size.
         /// </summary>
-        /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
-        /// <param name="size">The size of memory that should be allocated for the memory object.</param>
-        /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
-        /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateBuffer(OpenCl.DotNetCore.Memory.MemoryFlag memoryFlags, int size)
+        /// <param name="memoryFlags">The flags, that determines the how the buffer is created and how it can be accessed.</param>
+        /// <param name="size">The size of memory that should be allocated for the buffer.</param>
+        /// <exception cref="OpenClException">If the buffer could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created buffer.</returns>
+        public OpenCl.DotNetCore.Memory.Buffer CreateBuffer(OpenCl.DotNetCore.Memory.MemoryFlag memoryFlags, int size)
         {
-            // Creates a new memory object of the specified size and with the specified memory flags
+            // Creates a new buffer of the specified size and with the specified memory flags
             Result result;
-            IntPtr memoryObjectPointer = MemoryNativeApi.CreateBuffer(this.Handle, (Interop.Memory.MemoryFlag)memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
+            IntPtr bufferPointer = MemoryNativeApi.CreateBuffer(this.Handle, (Interop.Memory.MemoryFlag)memoryFlags, new UIntPtr((uint)size), IntPtr.Zero, out result);
             
-            // Checks if the creation of the memory object was successful, if not, then an exception is thrown
+            // Checks if the creation of the buffer was successful, if not, then an exception is thrown
             if (result != Result.Success)
-                throw new OpenClException("The memory object could not be created.", result);
+                throw new OpenClException("The buffer could not be created.", result);
 
-            // Creates the memory object from the pointer to the memory object and returns it
-            MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
-            return memoryObject;
+            // Creates the buffer from the pointer to the buffer and returns it
+            return new OpenCl.DotNetCore.Memory.Buffer(bufferPointer);
         }
 
         /// <summary>
-        /// Creates a new memory object with the specified flags. The size of memory allocated for the memory object is determined by <see cref="T"/> and the number of elements.
+        /// Creates a new buffer with the specified flags. The size of memory allocated for the buffer is determined by <see cref="T"/> and the number of elements.
         /// </summary>
-        /// <typeparam name="T">The size of the memory object will be determined by the structure specified in the type parameter.</typeparam>
-        /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
-        /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
-        /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateBuffer<T>(OpenCl.DotNetCore.Memory.MemoryFlag memoryFlags, int size) where T : struct => this.CreateBuffer(memoryFlags, Marshal.SizeOf<T>() * size);
+        /// <typeparam name="T">The size of the buffer will be determined by the structure specified in the type parameter.</typeparam>
+        /// <param name="memoryFlags">The flags, that determines the how the buffer is created and how it can be accessed.</param>
+        /// <exception cref="OpenClException">If the buffer could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created buffer.</returns>
+        public OpenCl.DotNetCore.Memory.Buffer CreateBuffer<T>(OpenCl.DotNetCore.Memory.MemoryFlag memoryFlags, int size) where T : struct => this.CreateBuffer(memoryFlags, Marshal.SizeOf<T>() * size);
 
         /// <summary>
-        /// Creates a new memory object with the specified flags for the specified array. The size of memory 1allocated for the memory object is determined by <see cref="T"/> and the number of elements in the array.
+        /// Creates a new buffer with the specified flags for the specified array. The size of memory 1allocated for the buffer is determined by <see cref="T"/> and the number of elements in the array.
         /// </summary>
-        /// <typeparam name="T">The size of the memory object will be determined by the structure specified in the type parameter.</typeparam>
-        /// <param name="memoryFlags">The flags, that determines the how the memory object is created and how it can be accessed.</param>
+        /// <typeparam name="T">The size of the buffer will be determined by the structure specified in the type parameter.</typeparam>
+        /// <param name="memoryFlags">The flags, that determines the how the buffer is created and how it can be accessed.</param>
         /// <param name="value">The value that is to be copied over to the device.</param>
-        /// <exception cref="OpenClException">If the memory object could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
-        /// <returns>Returns the created memory object.</returns>
-        public MemoryObject CreateBuffer<T>(OpenCl.DotNetCore.Memory.MemoryFlag memoryFlags, T[] value) where T : struct
+        /// <exception cref="OpenClException">If the buffer could not be created, then an <see cref="OpenClException"/> is thrown.</exception>
+        /// <returns>Returns the created buffer.</returns>
+        public OpenCl.DotNetCore.Memory.Buffer CreateBuffer<T>(OpenCl.DotNetCore.Memory.MemoryFlag memoryFlags, T[] value) where T : struct
         {
-            // Tries to create the memory object, if anything goes wrong, then it is crucial to free the allocated memory
-            IntPtr hostMemoryObjectPointer = IntPtr.Zero;
+            // Tries to create the buffer, if anything goes wrong, then it is crucial to free the allocated memory
+            IntPtr hostBufferPointer = IntPtr.Zero;
             try
             {
                 // Determines the size of the specified value and creates a pointer that points to the data inside the structure
                 int size = Marshal.SizeOf<T>() * value.Length;
-                hostMemoryObjectPointer = Marshal.AllocHGlobal(size);
+                hostBufferPointer = Marshal.AllocHGlobal(size);
                 for (int i = 0; i < value.Length; i++)
-                    Marshal.StructureToPtr(value[i], IntPtr.Add(hostMemoryObjectPointer, i * Marshal.SizeOf<T>()), false);
+                    Marshal.StructureToPtr(value[i], IntPtr.Add(hostBufferPointer, i * Marshal.SizeOf<T>()), false);
 
-                // Creates a new memory object for the specified value
+                // Creates a new buffer for the specified value
                 Result result;
-                IntPtr memoryObjectPointer = MemoryNativeApi.CreateBuffer(this.Handle, (Interop.Memory.MemoryFlag)memoryFlags, new UIntPtr((uint)size), hostMemoryObjectPointer, out result);
+                IntPtr bufferPointer = MemoryNativeApi.CreateBuffer(this.Handle, (Interop.Memory.MemoryFlag)memoryFlags, new UIntPtr((uint)size), hostBufferPointer, out result);
 
-                // Checks if the creation of the memory object was successful, if not, then an exception is thrown
+                // Checks if the creation of the buffer was successful, if not, then an exception is thrown
                 if (result != Result.Success)
-                    throw new OpenClException("The memory object could not be created.", result);
+                    throw new OpenClException("The buffer could not be created.", result);
 
-                // Creates the memory object from the pointer to the memory object and returns it
-                MemoryObject memoryObject = new MemoryObject(memoryObjectPointer);
-                return memoryObject;
+                // Creates the buffer from the pointer to the buffer and returns it
+                return new OpenCl.DotNetCore.Memory.Buffer(bufferPointer);
             }
             finally
             {
                 // Deallocates the host memory allocated for the value
-                if (hostMemoryObjectPointer != IntPtr.Zero)
-                    Marshal.FreeHGlobal(hostMemoryObjectPointer);
+                if (hostBufferPointer != IntPtr.Zero)
+                    Marshal.FreeHGlobal(hostBufferPointer);
             }
         }
 

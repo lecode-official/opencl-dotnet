@@ -13,7 +13,7 @@ namespace OpenCl.DotNetCore.Memory
     /// <summary>
     /// Represents an OpenCL memory object.
     /// </summary>
-    public class MemoryObject : HandleBase
+    public abstract class MemoryObject : HandleBase
     {
         #region Constructors
 

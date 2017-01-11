@@ -75,29 +75,29 @@ namespace OpenCl.DotNetCore.Tests
                     using (Kernel kernel = program.CreateKernel("matvec_mult"))
                     {
                         // Creates the memory objects for the input arguments of the kernel
-                        MemoryObject matrix = context.CreateBuffer(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
+                        Memory.Buffer matrixBuffer = context.CreateBuffer(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[]
                         {
                              0f,  2f,  4f,  6f,
                              8f, 10f, 12f, 14f,
                             16f, 18f, 20f, 22f,
                             24f, 26f, 28f, 30f
                         });
-                        MemoryObject vector = context.CreateBuffer(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
-                        MemoryObject result = context.CreateBuffer<float>(MemoryFlag.WriteOnly, 4);
+                        Memory.Buffer vectorBuffer = context.CreateBuffer(MemoryFlag.ReadOnly | MemoryFlag.CopyHostPointer, new float[] { 0f, 3f, 6f, 9f });
+                        Memory.Buffer resultBuffer = context.CreateBuffer<float>(MemoryFlag.WriteOnly, 4);
 
                         // Tries to execute the kernel
                         try
                         {
                             // Sets the arguments of the kernel
-                            kernel.SetKernelArgument(0, matrix);
-                            kernel.SetKernelArgument(1, vector);
-                            kernel.SetKernelArgument(2, result);
+                            kernel.SetKernelArgument(0, matrixBuffer);
+                            kernel.SetKernelArgument(1, vectorBuffer);
+                            kernel.SetKernelArgument(2, resultBuffer);
                             
                             // Creates a command queue, executes the kernel, and retrieves the result
                             using (CommandQueue commandQueue = CommandQueue.CreateCommandQueue(context, chosenDevice))
                             {
                                 commandQueue.EnqueueNDRangeKernel(kernel, 1, 4);
-                                float[] resultArray = commandQueue.EnqueueReadBuffer<float>(result, 4);
+                                float[] resultArray = commandQueue.EnqueueReadBuffer<float>(resultBuffer, 4);
                                 Console.WriteLine($"Result: ({string.Join(", ", resultArray)})");
                             }
                         }
@@ -107,9 +107,9 @@ namespace OpenCl.DotNetCore.Tests
                         }
 
                         // Disposes of the memory objects
-                        matrix.Dispose();
-                        vector.Dispose();
-                        result.Dispose();
+                        matrixBuffer.Dispose();
+                        vectorBuffer.Dispose();
+                        resultBuffer.Dispose();
                     }
                 }
             }
