@@ -38,6 +38,7 @@ namespace OpenCl.DotNetCore.Interop.SvmAllocations
         /// - <see cref="alignment"/> is not a power of two or the OpenCL implementation cannot support the specified alignment for at least one device in <see cref="context"/>
         /// - There was a failure to allocate resources
         /// </returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clSVMAlloc")]
         public static extern IntPtr SvmAllocate(
             [In] IntPtr context,
@@ -52,6 +53,7 @@ namespace OpenCl.DotNetCore.Interop.SvmAllocations
         /// </summary>
         /// <param name="context">A valid OpenCL context used to create the SVM buffer.</param>
         /// <param name="svmPointer">Must be the value returned by a call to <see cref="SvmAllocate"/>. If a <c>null</c> pointer is passed in <see cref="svmPointer"/>, no action occurs.</param>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clSVMFree")]
         public static extern void SvmFree(
             [In] IntPtr context,

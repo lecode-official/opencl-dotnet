@@ -38,7 +38,7 @@ namespace OpenCl.DotNetCore.Interop.Profiling
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
-        /// <returns></returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetEventProfilingInfo")]
         public static extern Result GetEventProfilingInformation(
             [In] IntPtr eventHandle,

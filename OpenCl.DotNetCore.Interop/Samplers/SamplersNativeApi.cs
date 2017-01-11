@@ -40,6 +40,7 @@ namespace OpenCl.DotNetCore.Interop.Samplers
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(2, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateSamplerWithProperties")]
         public static extern IntPtr CreateSamplerWithProperties(
             [In] IntPtr context,
@@ -60,6 +61,7 @@ namespace OpenCl.DotNetCore.Interop.Samplers
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainSampler")]
         public static extern Result RetainSample(
             [In] IntPtr sampler
@@ -78,6 +80,7 @@ namespace OpenCl.DotNetCore.Interop.Samplers
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseSampler")]
         public static extern Result ReleaseSampler(
             [In] IntPtr sampler
@@ -103,6 +106,7 @@ namespace OpenCl.DotNetCore.Interop.Samplers
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetSamplerInfo")]
         public static extern Result GetSamplerInformation(
             [In] IntPtr sampler,
@@ -140,9 +144,10 @@ namespace OpenCl.DotNetCore.Interop.Samplers
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clCreateSampler")]
         [Obsolete("This is a deprecated OpenCL 1.2 method, please use CreateImage instead.")]
-        public static extern IntPtr CreateSample(
+        public static extern IntPtr CreateSampler(
             [In] IntPtr context,
             [In] [MarshalAs(UnmanagedType.U4)] uint normalizedCoordinates,
             [In] [MarshalAs(UnmanagedType.U4)] AddressingMode addressingMode,

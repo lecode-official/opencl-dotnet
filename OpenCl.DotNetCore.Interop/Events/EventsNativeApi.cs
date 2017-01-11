@@ -36,6 +36,7 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clWaitForEvents")]
         public static extern Result WaitForEvents(
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfEvents,
@@ -62,6 +63,7 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetEventInfo")]
         public static extern Result GetEventInformation(
             [In] IntPtr eventPointer,
@@ -87,6 +89,7 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clCreateUserEvent")]
         public static extern IntPtr CreateUserEvent(
             [In] IntPtr context,
@@ -106,6 +109,7 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clRetainEvent")]
         public static extern Result RetainEvent(
             [In] IntPtr eventPointer
@@ -130,6 +134,7 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clReleaseEvent")]
         public static extern Result ReleaseEvent(
             [In] IntPtr eventPointer
@@ -157,6 +162,7 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
         /// </returns>
+        [IntroducedInOpenCl(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clSetUserEventStatus")]
         public static extern Result SetUserEventStatus(
             [In] IntPtr eventPointer,
@@ -186,7 +192,18 @@ namespace OpenCl.DotNetCore.Interop.Events
         /// <see cref="userData"/> is a pointer to user supplied data.
         /// </param>
         /// <param name="userData">Will be passed as the <see cref="userData"/> argument when <see cref="notificationCallback"/> is called. <see cref="userData"/> can be <c>null</c>.</param>
-        /// <returns></returns>
+        /// <returns>
+        /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following:
+        /// 
+        /// <c>Result.InvalidEvent</c> if <see cref="event"/> is not a valid event object.
+        /// 
+        /// <c>Result.InvalidValue</c> if <see cref="notificationCallback"/> is <c>null</c> or if <see cref="commandExecutionCallbackType"/> is not <c>CommandExecutionStatus.Complete</c>.
+        /// 
+        /// <c>Result.OutOfResources</c> if there is a failure to allocate resources required by the OpenCL implementation on the device.
+        /// 
+        /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
+        /// </returns>
+        [IntroducedInOpenCl(1, 1)]
         [DllImport("OpenCL", EntryPoint = "clSetEventCallback")]
         public static extern Result SetEventCallback(
             [In] IntPtr eventPointer,

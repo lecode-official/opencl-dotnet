@@ -30,6 +30,7 @@ namespace OpenCl.DotNetCore.Interop.Extensions
         /// implementing those functions. However, portable applications cannot rely on this behavior. Function pointer type definitions must be declared for all extensions that add API entrypoints. These type definitions are a required part of
         /// the extension interface, to be provided in an appropriate header (such as cl_ext.h if the extension is an OpenCL extension, or cl_gl_ext.h if the extension is an OpenCL/OpenGL sharing extension).
         /// </returns>
+        [IntroducedInOpenCl(1, 2)]
         [DllImport("OpenCL", EntryPoint = "clGetExtensionFunctionAddressForPlatform")]
         public static extern IntPtr GetExtensionFunctionAddressForPlatform(
             [In] IntPtr platform,
@@ -53,6 +54,7 @@ namespace OpenCl.DotNetCore.Interop.Extensions
         /// behavior. Function pointer type definitions must be declared for all extensions that add API entrypoints. These type definitions are a required part of the extension interface, to be provided in an appropriate header (such as
         /// cl_ext.h if the extension is an OpenCL extension, or cl_gl_ext.h if the extension is an OpenCL/OpenGL sharing extension).
         /// </returns>
+        [IntroducedInOpenCl(1, 0)]
         [DllImport("OpenCL", EntryPoint = "clGetExtensionFunctionAddress")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use GetExtensionFunctionAddressForPlatform instead.")]
         public static extern IntPtr GetExtensionFunctionAddress(
