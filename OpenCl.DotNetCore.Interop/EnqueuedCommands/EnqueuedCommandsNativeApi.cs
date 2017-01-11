@@ -46,13 +46,55 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// Enqueue command to read from a 2D or 3D rectangular region from a buffer object to host memory.
+        /// </summary>
+        /// <param name="commandQueue">Is is a valid host command-queue in which the read command will be queued. <see cref="commandQueue"/> and <see cref="buffer"/> must be created with the same OpenCL context.</param>
+        /// <param name="buffer">Refers to a valid buffer object.</param>
+        /// <param name="blockingRead">
+        /// Indicates if the read operations are blocking or non-blocking.
+        /// If <see cref="blockingRead"/> is <c>true</c> (1) i.e. the read command is blocking, <see cref="EnqueueReadBufferRectangle"/> does not return until the buffer data has been read and copied into memory pointed to by <see cref="pointer"/>.
+        /// If <see cref="blockingRead"/> is <c>false</c> (0) i.e. the read command is non-blocking, <see cref="EnqueueReadBufferRectangle"/> queues a non-blocking read command and returns. The contents of the buffer that <see cref="pointer"/>
+        /// points to cannot be used until the read command has completed. The event argument argument returns an event object which can be used to query the execution status of the read command. When the read command has completed, the contents
+        /// of the buffer that <see cref="pointer"/> points to can be used by the application.
+        /// </param>
+        /// <param name="bufferOrigin">
+        /// The (x, y, z) offset in the memory region associated with <see cref="buffer"/>. For a 2D rectangle region, the z value given by <c>bufferOrigin[2]</c> should be 0. The offset in bytes is computed as
+        /// <c>bufferOrigin[2] * bufferSlicePitch + bufferOrigin[1] * bufferRowPitch + bufferOrigin[0]</c>.
+        /// </param>
+        /// <param name="hostOrigin">
+        /// The (x, y, z) offset in the memory region pointed to by <see cref="pointer"/>. For a 2D rectangle region, the z value given by <c>hostOrigin[2]</c> should be 0. The offset in bytes is computed as
+        /// <c>hostOrigin[2] * hostSlicePitch + hostOrigin[1] * hostRowPitch + hostOrigin[0]</c>.
+        /// </param>
+        /// <param name="region">
+        /// The (width in bytes, height in rows, depth in slices) of the 2D or 3D rectangle being read or written. For a 2D rectangle copy, the depth value given by <c>region[2]</c> should be 1. The values in <see cref="region"/> cannot be 0.
+        /// </param>
+        /// <param name="bufferRowPitch">The length of each row in bytes to be used for the memory region associated with <see cref="buffer"/>. If <see cref="bufferRowPitch"/> is 0, <see cref="bufferRowPitch"/> is computed as <c>region[0]</c>.</param>
+        /// <param name="bufferSlicePitch">
+        /// The length of each 2D slice in bytes to be used for the memory region associated with <see cref="buffer"/>. If <see cref="bufferSlicePitch"/> is 0, <see cref="bufferSlicePitch"/> is computed as <c>region[1] * bufferRowPitch</c>.
+        /// </param>
+        /// <param name="hostRowPitch">The length of each row in bytes to be used for the memory region pointed to by <see cref="pointer"/>. If <see cref="hostRowPitch"/> is 0, <see cref="hostRowPitch"/> is computed as <c>region[0]</c>.</param>
+        /// <param name="hostSlicePitch">
+        /// The length of each 2D slice in bytes to be used for the memory region pointed to by <see cref="pointer"/>. If <see cref="hostSlicePitch"/> is 0, <see cref="hostSlicePitch"/> is computed as <c>region[1] * hostRowPitch</c>.
+        /// </param>
+        /// <param name="pointer">The pointer to buffer in host memory where data is to be read into.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular read command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueReadBufferRect")]
-        public static extern Result EnqueueREadBufferRectangle(
+        public static extern Result EnqueueReadBufferRectangle(
             [In] IntPtr commandQueue,
             [In] IntPtr buffer,
             [In] [MarshalAs(UnmanagedType.U4)] uint blockingRead,
-            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] bufferOffset,
-            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] hostOffset,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] bufferOrigin,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] hostOrigin,
             [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] region,
             [In] UIntPtr bufferRowPitch,
             [In] UIntPtr bufferSlicePitch,
@@ -64,6 +106,32 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// Enqueue commands to write to a buffer object from host memory.
+        /// </summary>
+        /// <param name="commandQueue">Is a valid host command-queue in which the write command will be queued. <see cref="commandQueue"/> and <see cref="buffer"/> must be created with the same OpenCL context.</param>
+        /// <param name="buffer">Refers to a valid buffer object.</param>
+        /// <param name="blockingWrite">
+        /// Indicates if the write operations are blocking or non-blocking.
+        /// If <see cref="blockingWrite"/> is <c>true</c> (1), the OpenCL implementation copies the data referred to by <see cref="pointer"/> and enqueues the write operation in the command-queue. The memory pointed to by <see cref="pointer"/> can
+        /// be reused by the application after the <see cref="EnqueueWriteBuffer"/> call returns.
+        /// If blocking_write is <c>false</c> (0), the OpenCL implementation will use <see cref="pointer"/> to perform a non-blocking write. As the write is non-blocking the implementation can return immediately. The memory pointed to by
+        /// <see cref="pointer"/> cannot be reused by the application after the call returns. The <see cref="event"/> argument returns an event object which can be used to query the execution status of the write command. When the write command
+        /// has completed, the memory pointed to by <see cref="pointer"/> can then be reused by the application.
+        /// </param>
+        /// <param name="offset">The offset in bytes in the buffer object to write to.</param>
+        /// <param name="size">The size in bytes of data being written.</param>
+        /// <param name="pointer">The pointer to buffer in host memory where data is to be written from.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular write command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueWriteBuffer")]
         public static extern Result EnqueueWriteBuffer(
             [In] IntPtr commandQueue,
@@ -77,13 +145,56 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
         
+        /// <summary>
+        /// Enqueue command to write a 2D or 3D rectangular region to a buffer object from host memory.
+        /// </summary>
+        /// <param name="commandQueue">Is a valid host command-queue in which the write command will be queued. <see cref="commandQueue"/> and <see cref="buffer"/> must be created with the same OpenCL context.</param>
+        /// <param name="buffer">Refers to a valid buffer object.</param>
+        /// <param name="blockingWrite">
+        /// Indicates if the write operations are blocking or non-blocking.
+        /// If <see cref="blockingWrite"/> is <c>true</c> (1), the OpenCL implementation copies the data referred to by <see cref="pointer"/> and enqueues the write operation in the command-queue. The memory pointed to by <see cref="pointer"/> can
+        /// be reused by the application after the <see cref="clEnqueueWriteBufferRect"/> call returns.
+        /// If blocking_write is <c>false</c> (0), the OpenCL implementation will use <see cref="pointer"/> to perform a non-blocking write. As the write is non-blocking the implementation can return immediately. The memory pointed to by
+        /// <see cref="pointer"/> cannot be reused by the application after the call returns. The <see cref="event"/> argument returns an event object which can be used to query the execution status of the write command. When the write command
+        /// has completed, the memory pointed to by <see cref="pointer"/> can then be reused by the application.
+        /// </param>
+        /// <param name="bufferOrigin">
+        /// The (x, y, z) offset in the memory region associated with <see cref="buffer"/>. For a 2D rectangle region, the z value given by <c>bufferOrigin[2]</c> should be 0. The offset in bytes is computed as
+        /// <c>bufferOrigin[2] * bufferSlicePitch + bufferOrigin[1] * bufferRowPitch + bufferOrigin[0]</c>.
+        /// </param>
+        /// <param name="hostOrigin">
+        /// The (x, y, z) offset in the memory region pointed to by <see cref="pointer"/>. For a 2D rectangle region, the z value given by <c>hostOrigin[2]</c> should be 0. The offset in bytes is computed as
+        /// <c>hostOrigin[2] * hostSlicePitch + hostOrigin[1] * hostRowPitch + hostOrigin[0]</c>.
+        /// </param>
+        /// <param name="region">
+        /// The (width in bytes, height in rows, depth in slices) of the 2D or 3D rectangle being read or written. For a 2D rectangle copy, the depth value given by <c>region[2]</c> should be 1. The values in <see cref="region"/> cannot be 0.
+        /// </param>
+        /// <param name="bufferRowPitch">The length of each row in bytes to be used for the memory region associated with <see cref="buffer"/>. If <see cref="bufferRowPitch"/> is 0, <see cref="bufferRowPitch"/> is computed as <c>region[0]</c>.</param>
+        /// <param name="bufferSlicePitch">
+        /// The length of each 2D slice in bytes to be used for the memory region associated with <see cref="buffer"/>. If <see cref="bufferSlicePitch"/> is 0, <see cref="bufferSlicePitch"/> is computed as <c>region[1] * bufferRowPitch</c>.
+        /// </param>
+        /// <param name="hostRowPitch">The length of each row in bytes to be used for the memory region pointed to by <see cref="pointer"/>. If <see cref="hostRowPitch"/> is 0, <see cref="hostRowPitch"/> is computed as <c>region[0]</c>.</param>
+        /// <param name="hostSlicePitch">
+        /// The length of each 2D slice in bytes to be used for the memory region pointed to by <see cref="pointer"/>. If <see cref="hostSlicePitch"/> is 0, <see cref="hostSlicePitch"/> is computed as <c>region[1] * hostRowPitch</c>.
+        /// </param>
+        /// <param name="pointer">The pointer to buffer in host memory where data is to be written from.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular write command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueWriteBufferRect")]
         public static extern Result EnqueueWriteBufferRectangle(
             [In] IntPtr commandQueue,
             [In] IntPtr buffer,
             [In] [MarshalAs(UnmanagedType.U4)] uint blockingWrite,
-            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] bufferOffset,
-            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] hostOffset,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] bufferOrigin,
+            [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] hostOrigin,
             [In] [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] region,
             [In] UIntPtr bufferRowPitch,
             [In] UIntPtr bufferSlicePitch,
@@ -95,6 +206,29 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// Enqueues a command to fill a buffer object with a pattern of a given pattern size.
+        /// </summary>
+        /// <param name="commandQueue">Is a valid host command-queue in which the write command will be queued. <see cref="commandQueue"/> and <see cref="buffer"/> must be created with the same OpenCL context.</param>
+        /// <param name="buffer">Refers to a valid buffer object.</param>
+        /// <param name="pattern">
+        /// A pointer to the data pattern of size <see cref="patternSize"/> in bytes. pattern will be used to fill a region in <see cref="buffer"/> starting at <see cref="offset"/> and is <see cref="size"/> bytes in size. The data pattern must be
+        /// a scalar or vector integer or floating-point data type. For example, if <see cref="buffer"/> is to be filled with a pattern of <c>float4</c> values, then <see cref="pattern"/> will be a pointer to a <c>float4</c> value and
+        /// <see cref="patternSize"/> will be <c>sizeof(float4)</c>. The maximum value of <see cref="patternSize"/> is the size of the largest integer or floating-point vector data type supported by the OpenCL device. The memory associated with
+        /// <see cref="pattern"/> can be reused or freed after the function returns.</param>
+        /// <param name="patternSize">The size of <see cref="patter"/> in bytes.</param>
+        /// <param name="offset">The location in bytes of the region being filled in <see cref="buffer"/> and must be a multiple of <see cref="patternSize"/>.</param>
+        /// <param name="size">The size in bytes of region being filled in <see cref="buffer"/> and must be a multiple of <see cref="patternSize"/>.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular write command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueFillBuffer")]
         public static extern Result EnqueueFillBuffer(
             [In] IntPtr commandQueue,
@@ -108,6 +242,25 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// Enqueues a command to copy from one buffer object to another.
+        /// </summary>
+        /// <param name="commandQueue">Is a valid host command-queue in which the write command will be queued. <see cref="commandQueue"/> and <see cref="buffer"/> must be created with the same OpenCL context.</param>
+        /// <param name="sourceBuffer">A valid source buffer object.</param>
+        /// <param name="destinationBuffer">A valid destination buffer object.</param>
+        /// <param name="sourceOffset">The offset where to begin copying data from <see cref="sourceBuffer"/>.</param>
+        /// <param name="destinationOffset">The offset where to begin copying data into <see cref="destinationBuffer"/>.</param>
+        /// <param name="size">Refers to the size in bytes to copy.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular write command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBuffer")]
         public static extern Result EnqueueCopyBuffer(
             [In] IntPtr commandQueue,
@@ -121,6 +274,48 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// Enqueues a command to copy a 2D or 3D rectangular region from a buffer object to another buffer object.
+        /// </summary>
+        /// <param name="commandQueue">
+        /// The host command-queue in which the copy command will be queued. The OpenCL context associated with <see cref="commandQueue"/>, <see cref="sourceBuffer"/>, and <see cref="destinationBuffer"/> must be the same.
+        /// </param>
+        /// <param name="sourceBuffer">A valid source buffer object.</param>
+        /// <param name="destinationBuffer">A valid destination buffer object.</param>
+        /// <param name="sourceOrigin">
+        /// The (x, y, z) offset in the memory region associated with <see cref="sourceBuffer"/>. For a 2D rectangle region, the z value given by <c>sourceOrigin[2]</c> should be 0. The offset in bytes is computed as
+        /// <c>sourceOrigin[2] * sourceSlicePitch + sourceOrigin[1] * sourceRowPitch + sourceOrigin[0]</c>.
+        /// </param>
+        /// <param name="destinationOrigin">
+        /// The (x, y, z) offset in the memory region associated with <see cref="destinationBuffer"/>. For a 2D rectangle region, the z value given by <c>destinationOrigin[2]</c> should be 0. The offset in bytes is computed as
+        /// <c>destinationOrigin[2] * destinationSlicePitch + destinationOrigin[1] * destinationRowPitch + destinationOrigin[0]</c>.
+        /// </param>
+        /// <param name="region">
+        /// The (width in bytes, height in rows, depth in slices) in bytes of the 2D or 3D rectangle being copied. For a 2D rectangle, the depth value given by <c>region[2]</c> should be 1. The values in <see cref="region"/> cannot be 0.
+        /// </param>
+        /// <param name="sourceRowPitch">
+        /// The length of each row in bytes to be used for the memory region associated with <see cref="sourceBuffer"/>. If <see cref="sourceRowPitch"/> is 0, <see cref="sourceRowPitch"/> is computed as <c>region[0]</c>.
+        /// </param>
+        /// <param name="sourceSlicePitch">
+        /// The length of each 2D slice in bytes to be used for the memory region associated with <see cref="sourceBuffer"/>. If <see cref="sourceSlicePitch"/> is 0, <see cref="sourceSlicePitch"/> is computed as <c>region[1] * sourceRowPitch</c>.
+        /// </param>
+        /// <param name="destinationRowPitch">
+        /// The length of each row in bytes to be used for the memory region associated with <see cref="destinationBuffer"/>. If <see cref="destinationRowPitch"/> is 0, <see cref="destinationRowPitch"/> is computed as <c>region[0]</c>.
+        /// </param>
+        /// <param name="destinationSlicePitch">
+        /// The length of each 2D slice in bytes to be used for the memory region associated with <see cref="destinationBuffer"/>. If <see cref="destinationSlicePitch"/> is 0, <see cref="destinationSlicePitch"/> is computed as
+        /// <c>region[1] * destinationRowPitch</c>.
+        /// </param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular write command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBufferRect")]
         public static extern Result EnqueueCopyBufferRectangle(
             [In] IntPtr commandQueue,
@@ -138,6 +333,46 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// Enqueue commands to read from an image or image array object to host memory.
+        /// </summary>
+        /// <param name="commandQueue">Is a valid host command-queue in which the read command will be queued. commandQueue and buffer must be created with the same OpenCL context.</param>
+        /// <param name="image">Refers to a valid image or image array object.</param>
+        /// <param name="blockingRead">
+        /// Indicates if the read operations are blocking or non-blocking.
+        /// If <see cref="blockingRead"/> is <c>true</c> (1) i.e. the read command is blocking, <see cref="EnqueueReadImage"/> does not return until the buffer data has been read and copied into memory pointed to by <see cref="pointer"/>.
+        /// If <see cref="blockingRead"/> is <c>false</c> (0) i.e. the read command is non-blocking, <see cref="EnqueueReadImage"/> queues a non-blocking read command and returns. The contents of the buffer that <see cref="pointer"/>
+        /// points to cannot be used until the read command has completed. The event argument argument returns an event object which can be used to query the execution status of the read command. When the read command has completed, the contents
+        /// of the buffer that <see cref="pointer"/> points to can be used by the application.
+        /// </param>
+        /// <param name="origin">
+        /// Defines the (x, y, z) offset in pixels in the 1D, 2D, or 3D image, the (x, y) offset and the image index in the image array or the (x) offset and the image index in the 1D image array. If <see cref="image"/> is a 2D image object,
+        /// <c>origin[2]</c> must be 0. If <see cref="image"/> is a 1D image or 1D image buffer object, <c>origin[1]</c> and <c>origin[2]</c> must be 0. If <see cref="image"/> is a 1D image array object, <c>origin[2]</c> must be 0. If
+        /// <see cref="image"/> is a 1D image array object, <c>origin[1]</c> describes the image index in the 1D image array. If <see cref="image"/> is a 2D image array object, <c>origin[2]</c> describes the image index in the 2D image array.
+        /// </param>
+        /// <param name="region">
+        /// Defines the (width, height, depth) in pixels of the 1D, 2D or 3D rectangle, the (width, height) in pixels of the 2D rectangle and the number of images of a 2D image array or the (width) in pixels of the 1D rectangle and the number of
+        /// images of a 1D image array. If image is a 2D image object, region[2] must be 1. If image is a 1D image or 1D image buffer object, region[1] and region[2] must be 1. If image is a 1D image array object, region[2] must be 1. The values in region cannot be 0.
+        /// </param>
+        /// <param name="rowPitch">
+        /// The length of each row in bytes. This value must be greater than or equal to the element size in bytes * width. If <see cref="rowPitch"/> is set to 0, the appropriate row pitch is calculated based on the size of each element in bytes
+        /// multiplied by width.
+        /// </param>
+        /// <param name="slicePitch">
+        /// Size in bytes of the 2D slice of the 3D region of a 3D image or each image of a 1D or 2D image array being read. This must be 0 if <see cref="image"/> is a 1D or 2D image. Otherwise this value must be greater than or equal to
+        /// <c>rowPitch * height</c>. If <see cref="slicePitch"/> is set to 0, the appropriate slice pitch is calculated based on the <c>rowPitch * height</c>.
+        /// </param>
+        /// <param name="pointer">The pointer to a buffer in host memory where image data is to be read from.</param>
+        /// <param name="numberOfEventsInWaitList">The number of event in <see cref="eventWaitList"/>. If <see cref="eventWaitList"/> is <c>null</c>, then <see cref="numberOfEventsInWaitList"/ must be 0.</param>
+        /// <param name="eventWaitList">
+        /// Specify events that need to complete before this particular command can be executed. If <see cref="eventWaitList"/> is <c>null</c>, then this particular command does not wait on any event to complete.
+        /// </param>
+        /// <param name="waitEvent">
+        /// Returns an event object that identifies this particular write command and can be used to query or queue a wait for this particular command to complete. event can be <c>null</c> in which case it will not be possible for the application
+        /// to query the status of this command or queue a wait for this command to complete. If the <see cref="eventWaitList"/> and the event arguments are not <c>null</c>, the event argument should not refer to an element of the
+        /// <see cref="eventWaitList"/> array.
+        /// </param>
+        /// <returns>Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns an error.</returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueReadImage")]
         public static extern Result EnqueueReadImage(
             [In] IntPtr commandQueue,
@@ -153,6 +388,21 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="image"></param>
+        /// <param name="blockingWrite"></param>
+        /// <param name="origin"></param>
+        /// <param name="region"></param>
+        /// <param name="inputRowPitch"></param>
+        /// <param name="inputSlicePitch"></param>
+        /// <param name="pointer"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueWriteImage")]
         public static extern Result EnqueueWriteImage(
             [In] IntPtr commandQueue,
@@ -168,6 +418,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="image"></param>
+        /// <param name="fillColor"></param>
+        /// <param name="origin"></param>
+        /// <param name="region"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueFillImage")]
         public static extern Result EnqueueFillImage(
             [In] IntPtr commandQueue,
@@ -180,6 +442,19 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="sourceImage"></param>
+        /// <param name="destinationImage"></param>
+        /// <param name="sourceOrigin"></param>
+        /// <param name="destinationOrigin"></param>
+        /// <param name="region"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyImage")]
         public static extern Result EnqueueCopyImage(
             [In] IntPtr commandQueue,
@@ -193,6 +468,19 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="sourceImage"></param>
+        /// <param name="destinationBuffer"></param>
+        /// <param name="sourceOrigin"></param>
+        /// <param name="region"></param>
+        /// <param name="destinationOffset"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyImageToBuffer")]
         public static extern Result EnqueueCopyImageToBuffer(
             [In] IntPtr commandQueue,
@@ -206,6 +494,19 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="sourceBuffer"></param>
+        /// <param name="destinationImage"></param>
+        /// <param name="sourceOffset"></param>
+        /// <param name="destinationOrigin"></param>
+        /// <param name="region"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueCopyBufferToImage")]
         public static extern Result EnqueueCopyBufferToImage(
             [In] IntPtr commandQueue,
@@ -219,6 +520,20 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="buffer"></param>
+        /// <param name="blockingMap"></param>
+        /// <param name="mapFlag"></param>
+        /// <param name="offset"></param>
+        /// <param name="size"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <param name="errorCode"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMapBuffer")]
         public static extern IntPtr EnqueueMapBuffer(
             [In] IntPtr commandQueue,
@@ -233,6 +548,22 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="image"></param>
+        /// <param name="blockingMap"></param>
+        /// <param name="mapFlag"></param>
+        /// <param name="origin"></param>
+        /// <param name="region"></param>
+        /// <param name="imageRowPitch"></param>
+        /// <param name="imageSlicePitch"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <param name="errorCode"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMapImage")]
         public static extern IntPtr EnqueueMapImage(
             [In] IntPtr commandQueue,
@@ -249,6 +580,16 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] [MarshalAs(UnmanagedType.I4)] out Result errorCode
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="memoryObject"></param>
+        /// <param name="mappedPointer"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueUnmapMemObject")]
         public static extern Result EnqueueUnmapMemoryObject(
             [In] IntPtr commandQueue,
@@ -259,6 +600,17 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="numberOfMemoryObjects"></param>
+        /// <param name="memoryObjects"></param>
+        /// <param name="memoryMigrationFlags"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMigrateMemObjects")]
         public static extern Result EnqueueMigrateMemorysObjects(
             [In] IntPtr commandQueue,
@@ -310,6 +662,20 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="userFunction"></param>
+        /// <param name="arguments"></param>
+        /// <param name="argumentSize"></param>
+        /// <param name="numberOfMemoryObjects"></param>
+        /// <param name="memoryObjects"></param>
+        /// <param name="argumentsMemoryLocation"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueNativeKernel")]
         public static extern Result EnqueueNativeKernel(
             [In] IntPtr commandQueue,
@@ -324,6 +690,14 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMarkerWithWaitList")]
         public static extern Result EnqueueMarkerWithWaitList(
             [In] IntPtr commandQueue,
@@ -332,6 +706,14 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueBarrierWithWaitList")]
         public static extern Result EnqueueBarrierWithWaitList(
             [In] IntPtr commandQueue,
@@ -340,6 +722,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="numberOfSvmPointers"></param>
+        /// <param name="svmPointers"></param>
+        /// <param name="svmFreePointersCallback"></param>
+        /// <param name="userData"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMFree")]
         public static extern Result EnqueueSvmFree(
             [In] IntPtr commandQueue,
@@ -352,6 +746,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="blockingCopy"></param>
+        /// <param name="destinationPointer"></param>
+        /// <param name="sourcePointer"></param>
+        /// <param name="size"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMemcpy")]
         public static extern Result EnqueuesSvmMemoryCopy(
             [In] IntPtr commandQueue,
@@ -364,6 +770,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="svmPointer"></param>
+        /// <param name="pattern"></param>
+        /// <param name="patternSize"></param>
+        /// <param name="size"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMemFill")]
         public static extern Result EnqueueSvmMemoryFill(
             [In] IntPtr commandQueue,
@@ -376,6 +794,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="blockingMap"></param>
+        /// <param name="mapFlag"></param>
+        /// <param name="svmPointer"></param>
+        /// <param name="size"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMap")]
         public static extern Result EnqueueSvmMap(
             [In] IntPtr commandQueue,
@@ -388,6 +818,15 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="svmPointer"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMUnmap")]
         public static extern Result EnqueueSvmUnmap(
             [In] IntPtr commandQueue,
@@ -397,6 +836,18 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [Out] out IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="numberOfSvmPointers"></param>
+        /// <param name="svmPointers"></param>
+        /// <param name="sizes"></param>
+        /// <param name="memoryMigrationFlags"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueSVMMigrateMem")]
         public static extern Result EnqueueSvmMigrateMemory(
             [In] IntPtr commandQueue,
@@ -413,6 +864,12 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
 
         #region Public Deprecated Methods
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueMarker")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead.")]
         public static extern Result EnqueueMarker(
@@ -420,6 +877,13 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [In] IntPtr waitEvent
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueWaitForEvents")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueMarkerWithWaitList instead.")]
         public static extern Result EnqueueWaitForEvents(
@@ -428,12 +892,26 @@ namespace OpenCl.DotNetCore.Interop.EnqueuedCommands
             [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] eventWaitList
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueBarrier")]
         [Obsolete("This is a deprecated OpenCL 1.1 method, please use EnqueueBarrierWithWaitList instead.")]
         public static extern Result EnqueueBarrier(
             [In] IntPtr commandQueue
         );
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="commandQueue"></param>
+        /// <param name="kernel"></param>
+        /// <param name="numberOfEventsInWaitList"></param>
+        /// <param name="eventWaitList"></param>
+        /// <param name="waitEvent"></param>
+        /// <returns></returns>
         [DllImport("OpenCL", EntryPoint = "clEnqueueTask")]
         [Obsolete("This is a deprecated OpenCL 1.2 method.")]
         public static extern Result EnqueueEnqueueTaskBarrier(
