@@ -53,9 +53,9 @@ namespace OpenCl.DotNetCore.Interop.Platforms
         /// <returns>
         /// Returns <c>Result.Success</c> if the function is executed successfully. Otherwise, it returns the following: (The OpenCL specification does not describe the order of precedence for error codes returned by API calls)
         /// 
-        /// <c>Result.InvalidPlatform</c> if platform is not a valid platform.!--
+        /// <c>Result.InvalidPlatform</c> if platform is not a valid platform.
         /// 
-        /// <c>Result.InvalidValue</c> if <see cref="parameterName"/> is not one of the supported values or if size in bytes specified by <see cref="parameterValueSize"/> is less than size of return type and <see cref="parameterValue"/ is
+        /// <c>Result.InvalidValue</c> if <see cref="parameterName"/> is not one of the supported values or if size in bytes specified by <see cref="parameterValueSize"/> is less than size of return type and <see cref="parameterValue"/> is
         /// not a <c>null</c> value.
         /// 
         /// <c>Result.OutOfHostMemory</c> if there is a failure to allocate resources required by the OpenCL implementation on the host.
