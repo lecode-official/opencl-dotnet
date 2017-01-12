@@ -48,6 +48,8 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] SVM Allocations API
 - [x] Mark everything with the Obsolete attribute that have been deprecated in OpenCL
 - [x] Mark everything with an attribute that contains the minimum version of OpenCL required
+- [ ] Fix `DllNotFoundException` on macOS
+- [ ] Fix compilation and linking problems for Intel platform (maybe only on Windows)
 
 ### *__OpenCl.DotNetCore__* Project Todos
 
