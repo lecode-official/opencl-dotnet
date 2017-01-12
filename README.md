@@ -18,6 +18,8 @@ sudo apt install ocl-icd-opencl-dev
 
 Then you have to install the correct drivers for your platform, e.g. the graphics adapter, and the OpenCL platform of choice. For example for Nvidia you have to install the CUDA framework.
 
+*__More information on installation and setup will follow soon.__*
+
 ## Running the Sample
 
 You can try the test application, that comes with this repository. It just performs a simple multiplication of a matrix with a vector. To build and run the sample application, you can do the following:
@@ -30,7 +32,7 @@ dotnet restore
 cd ..
 cd OpenCl.DotNetCore.Interop
 dotnet restore
-cd
+cd ..
 cd OpenCl.DotNetCore.Tests
 dotnet restore
 dotnet build
