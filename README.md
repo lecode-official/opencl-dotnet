@@ -5,6 +5,47 @@ This is an OpenCL wrapper for .NET Core, which implements the .NET Standard Prof
 and Xamarin. The project aims at implementing the full OpenCL 2.1 standard on a low-level PInvoke level and create a wrapper, which exposes most of the functionality in a more CLR-style fashion. More abstract wrappers are planned for the future.
 This wrapper should help with implementing image manipulation software as well as with machine learning (especially deep learning). Once the components have reached a certain maturity, they will be released to *__NuGet__*.
 
+## Installation
+
+In order to use OpenCL you have to install OpenCL. Under macOS you are in luck, because macOS has been shipping with OpenCL ever since Snow Leopard and you have to do nothing more, to get everything set up. Many standard Windows installations
+also alread ship with OpenCL installed. If you have a custom setup, then installing the correct drivers should suffice. Under Linux things are a little more complicated. First of all you have to install the ICD loader. For example under Ubuntu
+and Debian based systems you can do it like so:
+
+```bash
+sudo apt update
+sudo apt install ocl-icd-opencl-dev
+```
+
+Then you have to install the correct drivers for your platform, e.g. the graphics adapter, and the OpenCL platform of choice. For example for Nvidia you have to install the CUDA framework.
+
+## Running the Sample
+
+You can try the test application, that comes with this repository. It just performs a simple multiplication of a matrix with a vector. To build and run the sample application, you can do the following:
+
+```bash
+git clone https://github.com/lecode-official/opencl-dotnet.git
+cd opencl-dotnet
+cd OpenCl.DotNetCore
+dotnet restore
+cd ..
+cd OpenCl.DotNetCore.Interop
+dotnet restore
+cd
+cd OpenCl.DotNetCore.Tests
+dotnet restore
+dotnet build
+dotnet run
+```
+
+## Troubleshooting
+
+When your are experiencing a `DllNotFoundException` on macOS, then please make sure that you have the OpenCL framework in your library load path:
+
+```bash
+export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/System/Library/Frameworks/OpenCL.framework/OpenCL
+dotnet run
+```
+
 ## Roadmap
 
 In the following sections the roadmap to a stable 0.1.0-beta release is mapped out.
@@ -48,7 +89,6 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] SVM Allocations API
 - [x] Mark everything with the Obsolete attribute that have been deprecated in OpenCL
 - [x] Mark everything with an attribute that contains the minimum version of OpenCL required
-- [ ] Fix `DllNotFoundException` on macOS
 - [ ] Fix compilation and linking problems for Intel platform (maybe only on Windows)
 
 ### *__OpenCl.DotNetCore__* Project Todos
