@@ -10,7 +10,7 @@ namespace OpenCl.DotNetCore.Events
     /// <summary>
     /// Represents an OpenCL event, which has been created by the user and is not bound to a command enqueued on the command queue.
     /// </summary>
-    public class UserEvent : WaitEvent
+    public class UserEvent : AwaitableEvent
     {
         #region Constructors
 

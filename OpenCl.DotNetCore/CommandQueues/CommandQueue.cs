@@ -63,15 +63,15 @@ namespace OpenCl.DotNetCore.CommandQueues
                 throw new OpenClException("The memory object could not be read.", result);
 
             // Subscribes to the completed event of the wait event that was returned, when the command finishes, the task completion source is resolved
-            WaitEvent waitEvent = new WaitEvent(waitEventPointer);
-            waitEvent.OnCompleted += (sender, e) =>
+            AwaitableEvent awaitableEvent = new AwaitableEvent(waitEventPointer);
+            awaitableEvent.OnCompleted += (sender, e) =>
             {
                 try
                 {
                     // Checks if the command was executed successfully, if not, then an exception is thrown
-                    if (waitEvent.CommandExecutionStatus == CommandExecutionStatus.Error)
+                    if (awaitableEvent.CommandExecutionStatus == CommandExecutionStatus.Error)
                     {
-                        taskCompletionSource.TrySetException(new OpenClException($"The command completed with the error code {waitEvent.CommandExecutionStatusCode}."));
+                        taskCompletionSource.TrySetException(new OpenClException($"The command completed with the error code {awaitableEvent.CommandExecutionStatusCode}."));
                         return;
                     }
 
@@ -92,7 +92,7 @@ namespace OpenCl.DotNetCore.CommandQueues
                     // Finally the allocated memory has to be freed and the allocated resources are disposed of
                     if (resultValuePointer != IntPtr.Zero)
                         Marshal.FreeHGlobal(resultValuePointer);
-                    waitEvent.Dispose();
+                    awaitableEvent.Dispose();
                 }
             };
 
@@ -162,13 +162,13 @@ namespace OpenCl.DotNetCore.CommandQueues
                 throw new OpenClException("The kernel could not be enqueued.", result);
 
             // Subscribes to the completed event of the wait event that was returned, when the command finishes, the task completion source is resolved
-            WaitEvent waitEvent = new WaitEvent(waitEventPointer);
-            waitEvent.OnCompleted += (sender, e) =>
+            AwaitableEvent awaitableEvent = new AwaitableEvent(waitEventPointer);
+            awaitableEvent.OnCompleted += (sender, e) =>
             {
                 try
                 {
-                    if (waitEvent.CommandExecutionStatus == CommandExecutionStatus.Error)
-                        taskCompletionSource.TrySetException(new OpenClException($"The command completed with the error code {waitEvent.CommandExecutionStatusCode}."));
+                    if (awaitableEvent.CommandExecutionStatus == CommandExecutionStatus.Error)
+                        taskCompletionSource.TrySetException(new OpenClException($"The command completed with the error code {awaitableEvent.CommandExecutionStatusCode}."));
                     else
                         taskCompletionSource.TrySetResult(true);
                 }
@@ -178,7 +178,7 @@ namespace OpenCl.DotNetCore.CommandQueues
                 }
                 finally
                 {
-                    waitEvent.Dispose();
+                    awaitableEvent.Dispose();
                 }
             };
             return taskCompletionSource.Task;
