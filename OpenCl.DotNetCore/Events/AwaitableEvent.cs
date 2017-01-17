@@ -12,39 +12,40 @@ using OpenCl.DotNetCore.Interop.Events;
 namespace OpenCl.DotNetCore.Events
 {
     /// <summary>
-    /// Represents an event, which is returned by all OpenCL methods, that take longer. They can be used await asynchronous API calls.
+    /// Represents an event, which is returned by all OpenCL methods, that take longer. They can be used await asynchronous API calls. This class is awaitable and can be used with the C# <c>await</c> keyword. Please not, that when
+    /// the awaitable event is awaited, then it is auto-disposed, but when the awaitable event is not awaited, then it must be disposed of manually.
     /// </summary>
-    public class WaitEvent : HandleBase
+    public class AwaitableEvent : HandleBase
     {
         #region Constructors
 
         /// <summary>
-        /// Initializes a new <see cref="WaitEvent"/> instance.
+        /// Initializes a new <see cref="AwaitableEvent"/> instance.
         /// </summary>
         /// <param name="handle">The handle to the OpenCL event.</param>
-        public WaitEvent(IntPtr handle)
+        public AwaitableEvent(IntPtr handle)
             : base(handle)
         {
             // Subscribes to the event callbacks of the OpenCL event, so that a CLR event can be raised
             EventsNativeApi.SetEventCallback(
                 this.Handle,
                 (int)CommandExecutionStatus.Queued,
-                Marshal.GetFunctionPointerForDelegate(new WaitEventCallback((waitEvent, userData) => this.OnQueued?.Invoke(this, new EventArgs()))),
+                Marshal.GetFunctionPointerForDelegate(new AwaitableEventCallback((waitEvent, userData) => this.OnQueued?.Invoke(this, new EventArgs()))),
                 IntPtr.Zero);
             EventsNativeApi.SetEventCallback(
                 this.Handle,
                 (int)CommandExecutionStatus.Submitted,
-                Marshal.GetFunctionPointerForDelegate(new WaitEventCallback((waitEvent, userData) => this.OnSubmitted?.Invoke(this, new EventArgs()))),
+                Marshal.GetFunctionPointerForDelegate(new AwaitableEventCallback((waitEvent, userData) => this.OnSubmitted?.Invoke(this, new EventArgs()))),
                 IntPtr.Zero);
             EventsNativeApi.SetEventCallback(
                 this.Handle,
                 (int)CommandExecutionStatus.Running,
-                Marshal.GetFunctionPointerForDelegate(new WaitEventCallback((waitEvent, userData) => this.OnRunning?.Invoke(this, new EventArgs()))),
+                Marshal.GetFunctionPointerForDelegate(new AwaitableEventCallback((waitEvent, userData) => this.OnRunning?.Invoke(this, new EventArgs()))),
                 IntPtr.Zero);
             EventsNativeApi.SetEventCallback(
                 this.Handle,
                 (int)CommandExecutionStatus.Complete,
-                Marshal.GetFunctionPointerForDelegate(new WaitEventCallback((waitEvent, userData) => this.OnCompleted?.Invoke(this, new EventArgs()))),
+                Marshal.GetFunctionPointerForDelegate(new AwaitableEventCallback((waitEvent, userData) => this.OnCompleted?.Invoke(this, new EventArgs()))),
                 IntPtr.Zero);
         }
 
@@ -115,7 +116,7 @@ namespace OpenCl.DotNetCore.Events
         /// </summary>
         /// <param name="waitEvent">A pointer to the OpenCL event object.</param>
         /// <param name="userData">User-defined data that can be passed to the event subscription.</param>
-        private delegate void WaitEventCallback(IntPtr waitEvent, IntPtr userData);
+        private delegate void AwaitableEventCallback(IntPtr waitEvent, IntPtr userData);
 
         #endregion
 
