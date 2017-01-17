@@ -91,7 +91,6 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
     - [x] SVM Allocations API
 - [x] Mark everything with the Obsolete attribute that have been deprecated in OpenCL
 - [x] Mark everything with an attribute that contains the minimum version of OpenCL required
-- [ ] Fix compilation and linking problems for Intel platform (maybe only on Windows)
 
 ### *__OpenCl.DotNetCore__* Project Todos
 
@@ -106,6 +105,8 @@ In the following sections the roadmap to a stable 0.1.0-beta release is mapped o
 - [x] Make `MemoryObject` abstract and derive `Image`, `Pipe`, and `Buffer` from it
 - [x] Add `async` methods for all native methods that have an `event`
 - [x] Create an base class for event and then derive a user event from it, which is returned when calling CreateUserEvent (this should be done to ensure, that SetUserEventStatus can only be called on valid user events)
+- [ ] Fix compilation and linking problems for Intel platform (maybe only on Windows)
+- [ ] Make `WaitEvent` awaitable (maybe even rename it to `AwaitableEvent`)
 
 ### *__OpenCl.DotNetCore.Tests__* Project Todos
 
