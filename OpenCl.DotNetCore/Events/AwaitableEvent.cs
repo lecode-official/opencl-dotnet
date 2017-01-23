@@ -2,7 +2,9 @@
 #region Using Directives
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using OpenCl.DotNetCore.CommandQueues;
 using OpenCl.DotNetCore.Interop;
 using OpenCl.DotNetCore.Interop.Events;
@@ -105,6 +107,26 @@ namespace OpenCl.DotNetCore.Events
 
             // Returns the output
             return InteropConverter.To<T>(output);
+        }
+
+        #endregion
+
+        #region Public Methods
+
+        public TaskAwaiter<CommandExecutionStatus> GetAwaiter()
+        {
+            var taskCompletionSource = new TaskCompletionSource<CommandExecutionStatus>();
+            this.OnCompleted += (sender, e) =>
+            {
+                taskCompletionSource.TrySetResult(this.CommandExecutionStatus);
+                this.Dispose();
+            };
+            if (this.CommandExecutionStatus == CommandExecutionStatus.Complete || this.CommandExecutionStatus == CommandExecutionStatus.Error)
+            {
+                taskCompletionSource.TrySetResult(this.CommandExecutionStatus);
+                this.Dispose();
+            }
+            return taskCompletionSource.Task.GetAwaiter();
         }
 
         #endregion
