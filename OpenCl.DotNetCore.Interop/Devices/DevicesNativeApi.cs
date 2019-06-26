@@ -119,7 +119,7 @@ namespace OpenCl.DotNetCore.Interop.Devices
         [DllImport("OpenCL", EntryPoint = "clCreateSubDevices")]
         public static extern Result CreateSubDevices(
             [In] IntPtr inDevice,
-            [In] IntPtr properties,
+            [In] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] properties,
             [In] [MarshalAs(UnmanagedType.U4)] uint numberOfDevices,
             [Out] [MarshalAs(UnmanagedType.LPArray)] IntPtr[] outDevices,
             [Out] [MarshalAs(UnmanagedType.U4)] out uint numberOfDevicesReturned
