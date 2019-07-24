@@ -1,4 +1,4 @@
-
+﻿
 # OpenCL.NET
 
 This is an OpenCL wrapper for .NET Core, which implements the .NET Standard Profile and therefore should run cross-platform on Linux, macOS, and Windows, as well as on many different .NET implementations, such as .NET Core, Mono, .NET Framework,
@@ -27,21 +27,13 @@ You can try the test application, that comes with this repository. It just perfo
 ```bash
 git clone https://github.com/lecode-official/opencl-dotnet.git
 cd opencl-dotnet
-cd OpenCl.DotNetCore
-dotnet restore
-cd ..
-cd OpenCl.DotNetCore.Interop
-dotnet restore
-cd ..
 cd OpenCl.DotNetCore.Tests
-dotnet restore
-dotnet build
 dotnet run
 ```
 
 ## Troubleshooting
 
-When your are experiencing a `DllNotFoundException` on macOS, then please make sure that you have the OpenCL framework in your library load path:
+When you are experiencing a `DllNotFoundException` on macOS, then please make sure that you have the OpenCL framework in your library load path:
 
 ```bash
 export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:/System/Library/Frameworks/OpenCL.framework/OpenCL
